@@ -1,0 +1,8 @@
+<ImageButton
+        android:id="@+id/imgBtnView"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="103dp"
+        android:layout_height="103dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:layout_margin="5dp"/>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">FOPO</string>
+    <string name="navigation_drawer_open">네비게이션 드로워 열기</string>
+    <string name="navigation_drawer_close">네비게이션 드로워 닫기</string>
+    <string name="nav_header_title">FOPO님, 안녕하세요!</string>
+    <string name="nav_header_subtitle">새 알림이 없습니다 :)</string>
+    <string name="nav_header_desc">네비게이션 헤더</string>
+    <string name="action_settings">환경 설정</string>
+
+    <string name="menu_home">모아보기</string>
+    <string name="menu_camera">카메라</string>
+    <string name="menu_fopomap">포포맵</string>
+    <string name="menu_setting">환경 설정</string>
+    <string name="menu_help">도움말</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
