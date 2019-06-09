@@ -7,12 +7,9 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.nfc.Tag
-import android.os.Environment
-import android.provider.MediaStore
-import android.support.v4.content.FileProvider
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
+import android.support.v7.app.AppCompatActivity
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -20,21 +17,14 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
-
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modImageResizeUtils
-import kotlinx.android.synthetic.main.content_fopozone.*
 import kotlinx.android.synthetic.main.activity_write.*
-
 import java.io.ByteArrayOutputStream
-
 import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.ArrayList
-import java.util.Date
+import java.util.*
 
 class WriteActivity : AppCompatActivity() {
 
@@ -226,9 +216,8 @@ class WriteActivity : AppCompatActivity() {
 
         val options = BitmapFactory.Options()
         val originalBm = BitmapFactory.decodeFile(tempFile!!.absolutePath, options)
-        Log.d(TAG, "setImage : " + tempFile!!.absolutePath)
+        //Log.d(TAG, "setImage : " + tempFile!!.absolutePath)
 
-        Log.d(TAG,"Plz send me msg : " + encode(originalBm))
         imageView.setImageBitmap(originalBm)
         imageBtn_add.visibility = View.INVISIBLE    //이미지 가져온후 사진 추가버튼 숨기기
 
