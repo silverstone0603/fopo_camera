@@ -51,6 +51,11 @@
                 android:windowSoftInputMode="stateAlwaysHidden"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+                android:name=".WriteActivity"
+                android:windowSoftInputMode="stateAlwaysHidden"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <provider
                 android:name="android.support.v4.content.FileProvider"
                 android:authorities="com.teamfopo.fopo.provider"

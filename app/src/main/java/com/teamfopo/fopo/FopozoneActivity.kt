@@ -4,27 +4,31 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.service.media.MediaBrowserService
+import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v4.app.Fragment
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.Toast
 import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modListProcess
+import kotlinx.android.synthetic.main.content_fopozone.*
 
-class FopozoneActivity : Fragment() {
+class FopozoneActivity : Fragment(), View.OnClickListener {
 
     private val TAG = "MainActivity"
     private var trackableGestureDetector: GestureDetector? = null
-    private var viewRoot: View? = null
     private var actLayoutInflater: LayoutInflater? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // setContentView(R.layout.content_camera)
+
     }
 
     override fun onCreateView(
@@ -34,17 +38,15 @@ class FopozoneActivity : Fragment() {
         // Inflate the layout for this fragment
         var viewRoot: View = inflater.inflate(R.layout.content_fopozone, container, false)
 
-        this.viewRoot = viewRoot
-
         //this.actInflater =
         this.actLayoutInflater = inflater
 
-        initFragment()
+        initFragment(viewRoot)
 
         return viewRoot
     }
 
-    fun initFragment(){
+    fun initFragment(viewRoot: View){
 
         // var thread = ThreadClass()
         // thread.start()
@@ -58,7 +60,10 @@ class FopozoneActivity : Fragment() {
 
         var getBoardList = modBoardProcess().GetList()
         var brdList = getBoardList.execute("1").get()
-        getListView(brdList)
+        getListView(viewRoot, brdList)
+
+        var btnWrite: Button = viewRoot.findViewById(R.id.btnWrite) as Button
+        btnWrite.setOnClickListener(this)
     }
 
     inner class ThreadClass : Thread() {
@@ -76,7 +81,7 @@ class FopozoneActivity : Fragment() {
 
     }
 
-    fun getListView(brdList: Array<modListProcess>) {
+    fun getListView(viewRoot: View, brdList: Array<modListProcess>) {
 
         val inflater = actLayoutInflater!!.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         var glItem = viewRoot!!.findViewById(R.id.glBoardList) as GridLayout
@@ -107,6 +112,15 @@ class FopozoneActivity : Fragment() {
                 }
 
             }
+        }
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.btnWrite -> {
+                startActivity(Intent(super.getContext(),WriteActivity::class.java))
+            }else -> {
+        }
         }
     }
 }
