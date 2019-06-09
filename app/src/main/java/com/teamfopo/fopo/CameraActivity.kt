@@ -1,11 +1,12 @@
 package com.teamfopo.fopo
 
-
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
+import android.widget.Button
 import android.widget.Toast
 import com.google.ar.core.Point
 import com.google.ar.core.TrackingState
@@ -16,18 +17,25 @@ import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
+import com.gun0912.tedpermission.PermissionListener
 import com.teamfopo.fopo.nodes.PointCloudNode
+import java.nio.ByteBuffer
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+
 /**
  * A simple [Fragment] subclass.
  *
  */
-class CameraActivity : Fragment() {
+class CameraActivity : Fragment(), View.OnClickListener {
+
+    private var isCamera: Boolean? = true
+    private var isPermission: Boolean? = true
 
     private val TAG = "MainActivity"
     private var trackableGestureDetector: GestureDetector? = null
@@ -38,7 +46,7 @@ class CameraActivity : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // setContentView(R.layout.content_camera)
+        //setContentView(R.layout.content_camera)
     }
 
     override fun onCreateView(
@@ -49,12 +57,13 @@ class CameraActivity : Fragment() {
         var viewCamera: View
         viewCamera = inflater.inflate(R.layout.content_camera, container, false)
 
-        initArFragment()
+        tedPermission(viewCamera)
+        initArFragment(viewCamera)
 
         return viewCamera
     }
 
-    fun initArFragment(){
+    fun initArFragment(viewRoot: View){
         /*
             AR Fragment 생성 부분
         */
@@ -102,6 +111,10 @@ class CameraActivity : Fragment() {
                 }
             }
         )
+
+        // Capture the Image
+        var btnCapture: Button = viewRoot.findViewById(R.id.btnCapture) as Button
+        btnCapture.setOnClickListener(this)
 
     }
 
@@ -152,4 +165,105 @@ class CameraActivity : Fragment() {
         }
         Log.i(this.TAG, "Tracking state: ${frame!!.camera.trackingState}")
     }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.btnCapture -> {
+                Toast.makeText(context,"사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
+            }else -> {
+        }
+        }
+    }
+
+    fun onCameraClick(buffer: ByteBuffer, width : Int, height: Int): Bitmap {
+
+        buffer.rewind()
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        bitmap.copyPixelsFromBuffer(buffer)
+        return bitmap
+    }
+
+    fun getScreenShot(view: View): Bitmap {
+        val screenView = view.rootView
+        screenView.isDrawingCacheEnabled = true
+        val bitmap = Bitmap.createBitmap(screenView.drawingCache)
+        screenView.isDrawingCacheEnabled = false
+        return bitmap
+    }
+
+    /**
+    private val REQUIRED_PERMISSIONS =
+        arrayOf<String>(Manifest.permission .WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+    */
+
+    /**
+     * Check to see we have the necessary permissions for this app.
+     */
+
+    /*
+    fun hasCameraPermission(activity: Activity): Boolean {
+        for (p in REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(activity, p) != PackageManager.PERMISSION_GRANTED) {
+                return false
+            }
+        }
+        return true
+    }
+    */
+
+    /**
+     * Check to see we have the necessary permissions for this app,
+     * and ask for them if we don't.
+     */
+
+    /**
+    fun requestCameraPermission(activity: Activity) {
+        ActivityCompat.requestPermissions(
+            activity, REQUIRED_PERMISSIONS,
+            CAMERA_PERMISSION_CODE
+        )
+    }
+    */
+
+
+    /**
+     * Check to see if we need to show the rationale for this permission.
+     */
+
+
+    /**
+    fun shouldShowRequestPermissionRationale(activity: Activity): Boolean {
+        for (p in REQUIRED_PERMISSIONS) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, p)) {
+                return true
+            }
+        }
+        return false
+    }
+    */
+
+    private fun tedPermission(viewRoot: View) {
+
+        val permissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+                // 권한 요청 성공
+                isPermission = true
+            }
+            override fun onPermissionDenied(deniedPermissions: ArrayList<String>) {
+                // 권한 요청 실패
+                isPermission = false
+            }
+        }
+
+        /*
+        TedPermission.with()
+            .setPermissionListener(permissionListener)
+            .setRationaleMessage(resources.getString(R.string.permission_2))
+            .setDeniedMessage(resources.getString(R.string.permission_1))
+            .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+            .check()
+            */
+
+    }
+
 }
