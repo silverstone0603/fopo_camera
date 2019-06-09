@@ -255,6 +255,7 @@ class CameraActivity : Fragment(), View.OnClickListener {
             }
         }
 
+
         /*
         TedPermission.with()
             .setPermissionListener(permissionListener)
