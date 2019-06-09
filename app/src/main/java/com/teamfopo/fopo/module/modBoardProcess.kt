@@ -98,7 +98,7 @@ class modBoardProcess {
             var aa = params[0]
             var url = "http://106.10.51.32/ajax_process/photo_process"
             val requestBody: RequestBody = FormBody.Builder()
-                .add("type", "load")
+                .add("photo_type", "load")
                 .add("file_no", "$aa")
                 .build()
 
@@ -213,6 +213,44 @@ class modBoardProcess {
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","deleted")
                 .add("re_no", "$re_no")
+                .build()
+
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
+
+            val response : Response = client.newCall(request).execute()
+            var str = response.body()?.string()!!
+
+            return str
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+        }
+    }
+
+    inner class Write: AsyncTask<String, Long, String>() {
+        override fun onPreExecute() {
+            super.onPreExecute()
+        }
+
+        override fun doInBackground(vararg params: String?): String {
+            var mem_no = params[0]
+            var zone_no = params[1]
+            var brd_content = params[2]
+
+            var filedata = params[3]
+
+            var url = "http://106.10.51.32/ajax_process/board_process"
+            val requestBody : RequestBody = FormBody.Builder()
+                .add("type","write")
+                .add("mem_no", "$mem_no")
+                .add("zone_no", "$zone_no")
+                .add("brd_content", "$brd_content")
+                .add("filedata", "$filedata")
                 .build()
 
             val client = OkHttpClient()
