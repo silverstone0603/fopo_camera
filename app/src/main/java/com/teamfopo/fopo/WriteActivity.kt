@@ -62,11 +62,9 @@ class WriteActivity : AppCompatActivity() {
             if (isPermission!!)
                 goToAlbum()
         }
-
     }
 
     private fun goToImageUpload() {
-
         var getBitmapImageToString = image_bitmapToString
 
         var str_content = edit_oneLine.text.toString()
@@ -74,13 +72,13 @@ class WriteActivity : AppCompatActivity() {
         var getImageUpload = modBoardProcess().Write()
         var uploadResult = getImageUpload.execute("1","1","$str_content", "$getBitmapImageToString").get()
 
+        Toast.makeText(this, "$uploadResult", Toast.LENGTH_SHORT).show()
         var brd_no = Integer.parseInt(uploadResult.trim())
 
         val i = Intent(this@WriteActivity, ViewActivity::class.java)
         i.putExtra("m_select", brd_no)
         startActivityForResult(i, 1)
         finish()
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
