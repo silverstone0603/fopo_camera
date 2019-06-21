@@ -22,9 +22,7 @@ class ViewActivity : AppCompatActivity() {
     var selectedReplyItem = -1
     var istoggle:Boolean = true
 
-    var re_depth:String = "0"
     var re_orgin:String = "NULL"
-
 
     var likeCnt = 20 // 임시로 써놓은 좋아요 개수 ( 게시글 뷰할때 서버에서 받아온당 )
     var isLike = false // 임시로 써놓은 좋아요 여부 ( true false의 값은 서버에서 받아온당 )
@@ -51,7 +49,7 @@ class ViewActivity : AppCompatActivity() {
                 var re_content: String = edit_reply.text.toString()
 
                 var ReplyWrite = modBoardProcess().ReplyWrite()
-                ReplyWrite.execute("$getInt", "1", "$re_content", "$re_depth", "$re_orgin")
+                ReplyWrite.execute("1", "$getInt", "1", "$re_orgin", "$re_content")
 
                 ViewReplyLists("$getInt", true)
             }
@@ -76,8 +74,6 @@ class ViewActivity : AppCompatActivity() {
                 txtFilterInfo.visibility = View.INVISIBLE
             }
         }
-
-
     }   //onCreate 끝부분
 
     private fun SetPicture(getBrd_no: Int) {
@@ -94,7 +90,7 @@ class ViewActivity : AppCompatActivity() {
         bitmap = getSelectImage.execute(brdInfo.file_no).get()
 
         selectPic_imageView.setImageBitmap(bitmap)  //이미지 뿌려주기
-        txtID.text=brdInfo.mem_nickname+"님이 공유한 사진"
+        txtID.text=brdInfo.mem_nick+"님이 공유한 사진"
         content_TextView.text=brdInfo.brd_content
     }
 
@@ -109,14 +105,14 @@ class ViewActivity : AppCompatActivity() {
         txtReplyCount.text = "$replyCount" + "개의 댓글이 있습니다."
 
         for ( i in 0..ReplyListsInfo.size - 1 ) {
-            if ( ReplyListsInfo[i].re_depth == 0 ) {
+            if ( ReplyListsInfo[i].rre_no == 0 ) {
 
                 val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater //시스템 서비스에서 inflater객체 호출
                 inflater.inflate(R.layout.item_reply, llReply, true) //서브 xml을 메모리에 띄워 container에 추가한다
                 getReplyItem(brd_no, ReplyListsInfo[i])
 
                 for (j in i..ReplyListsInfo.size - 1) {
-                    if (ReplyListsInfo[j].re_orgin == ReplyListsInfo[i].re_no) {
+                    if (ReplyListsInfo[j].rre_no == ReplyListsInfo[i].re_no) {
                         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater //시스템 서비스에서 inflater객체 호출
                         inflater.inflate(R.layout.item_reply, llReply, true) //서브 xml을 메모리에 띄워 container에 추가한다
                         getReplyItem(brd_no, ReplyListsInfo[j])
@@ -138,7 +134,6 @@ class ViewActivity : AppCompatActivity() {
         preReplyItem = - 1
         selectedReplyItem = -1
         istoggle = true
-        re_depth = "0"
         re_orgin= "NULL"
     }
 
@@ -153,13 +148,12 @@ class ViewActivity : AppCompatActivity() {
         var llReplyItem = llReply.getChildAt(llReplyChild).findViewById(R.id.llReply_Item) as LinearLayout
         var llReply_Item_wrap = llReply.getChildAt(llReplyChild).findViewById(R.id.llReply_Item_wrap) as LinearLayout
 
-        if ( replyInfo.re_depth == 1 ) {
+        if ( replyInfo.rre_no > 0 ) {
             llReplyItem.setPadding(50,0,0,0)
         }
 
         llReply_Item_wrap.setOnClickListener(View.OnClickListener { v ->
-            if ( replyInfo.re_depth == 0 ) {
-                re_depth = "1"
+            if ( replyInfo.rre_no == 0 ) {
                 re_orgin = replyInfo.re_no.toString()
 
                 selectedReplyItem = llReply.indexOfChild(llReply_Item_wrap)
@@ -168,7 +162,6 @@ class ViewActivity : AppCompatActivity() {
 
                 if ( selectedReplyItem == preReplyItem ) {
                     if ( istoggle ) {
-                        re_depth = "0"
                         re_orgin = "NULL"
                         llReply_Item_wrap.setBackgroundColor(Color.WHITE)
                         istoggle = !istoggle
@@ -217,7 +210,7 @@ class ViewActivity : AppCompatActivity() {
             popup.show()//Popup Menu 보이기
         })
 
-        txtID.text = replyInfo.mem_nickname
+        txtID.text = replyInfo.mem_nick
         txtReply.text = replyInfo.re_comment
         txtReplyDate.text = "· " + replyInfo.re_date
     }
