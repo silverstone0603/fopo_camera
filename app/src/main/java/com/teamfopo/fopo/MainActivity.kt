@@ -32,6 +32,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     var bundleMain: Bundle? = null
 
+    //회원가입 엑티비티
+    val actRegister = SignUpActivity()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +60,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navView.setNavigationItemSelectedListener(this)
 
         navView.setCheckedItem(R.id.nav_camera)
-        setFragment(actCamera)
+        //setFragment(actCamera)
+
+        //회원가입 먼저 실행하기.
+        setFragment(actRegister)
 
         initLayoutAction()
 
