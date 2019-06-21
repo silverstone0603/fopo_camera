@@ -27,7 +27,7 @@ public class MarkerClusterRenderer extends DefaultClusterRenderer<MarkerMyItems>
 
     @Override
     protected void onBeforeClusterItemRendered(MarkerMyItems item, MarkerOptions markerOptions) { // 5
-        markerImageView.setImageResource(R.drawable.marker);  // 6
+        markerImageView.setImageResource(R.drawable.img_marker);  // 6
         Bitmap icon = iconGenerator.makeIcon();  // 7
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(325f));
         markerOptions.title(item.getTitle());

@@ -117,7 +117,6 @@
                             android:text="Write"
                             android:layout_margin="@dimen/fab_margin"/>
                 </RelativeLayout>
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

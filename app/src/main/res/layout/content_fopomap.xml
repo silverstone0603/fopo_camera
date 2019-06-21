@@ -9,19 +9,34 @@
         tools:context=".FopomapActivity">
     <!-- tools:showIn="@layout/app_bar_main" -->
 
-    <LinearLayout
+    <FrameLayout
+            android:id="@+id/fopomap_container"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp">
+            android:layout_marginBottom="50dp"/>
 
-        <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".MapsActivity" />
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom">
 
+        <Button
+                android:id="@+id/btnMap"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="포포맵"/>
+        <Button
+                android:id="@+id/btnWrite"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="글쓰기"/>
+        <Button
+                android:id="@+id/btnFriend"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="친구 목록"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
