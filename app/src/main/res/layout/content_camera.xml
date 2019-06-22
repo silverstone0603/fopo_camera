@@ -9,6 +9,7 @@
         tools:context=".MainActivity">
     <!-- tools:showIn="@layout/app_bar_main" -->
 
+
     <fragment android:name="com.google.ar.sceneform.ux.ArFragment"
               android:id="@+id/fopo_ar_fragment"
               android:layout_width="0dp"
@@ -22,7 +23,47 @@
             android:layout_marginRight="100dp"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:gravity="bottom" android:id="@+id/linearLayout" app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="top" android:id="@+id/camera_top_layout" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+                android:id="@+id/camera_gps_lat"
+                android:text="위도값 : "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/camera_gps_lng"
+                android:text="경도값 : "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/camera_gps_alt"
+                android:text="고도값 : "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/camera_gps_height"
+                android:text="높이값 : "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <ToggleButton
+                android:id="@+id/toggle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="위치 정보 On"
+                android:textOn="위치 정보 Off"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:gravity="bottom" android:id="@+id/camera_bottom_layout" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
         <Button
