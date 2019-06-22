@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.Toast
+import com.google.ar.core.Anchor
 import com.google.ar.core.Point
 import com.google.ar.core.TrackingState
 import com.google.ar.sceneform.*
@@ -16,9 +17,10 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.TedPermission
 import com.teamfopo.fopo.nodes.PointCloudNode
 import java.nio.ByteBuffer
+
+
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -108,7 +110,22 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         var btnCapture: Button = viewRoot.findViewById(R.id.btnCapture) as Button
         btnCapture.setOnClickListener(this)
 
-        // arFragment!!.setOnTapArPlaneListener(this)
+        /*
+        arFragment!!.setOnTapArPlaneListener { hitResult, plane, motionEvent ->
+            val anchor = hitResult.createAnchor()
+
+            ModelRenderable.builder()
+                .setSource(this.activity, Uri.parse("fopoMarker.sfb"))
+                .build()
+                .thenAccept({ modelRenderable -> addModelToScene(anchor, modelRenderable) })
+                .exceptionally({ throwable ->
+                    val builder = AlertDialog.Builder(this.context)
+                    builder.setMessage(throwable.message)
+                        .show()
+                    null
+                })
+        }
+        */
 
     }
 
@@ -136,7 +153,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         val frame = arSceneView.arFrame
         if (frame != null && frame.camera.trackingState == TrackingState.TRACKING) {
             for (hit in frame.hitTest(motionEvent)) {
-                Log.i(this.TAG, "Distance to a hit: ${hit.distance}")
+                Log.i(this.TAG, "적중 거리 : ${hit.distance}")
+                Toast.makeText(this.context,"적중 거리 : ${hit.distance}",Toast.LENGTH_SHORT).show()
                 val trackable = hit.trackable
                 if (trackable is Point) {
                     // Anchor down
@@ -155,6 +173,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                     andy.select()
                 }
                 Log.i(this.TAG, "Instance of ${trackable.javaClass.name}")
+                Toast.makeText(this.context,"인스턴스 이름 : ${trackable.javaClass.name}",Toast.LENGTH_SHORT).show()
             }
         }
         Log.i(this.TAG, "Tracking state: ${frame!!.camera.trackingState}")
@@ -167,6 +186,15 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
             }else -> {
         }
         }
+    }
+
+    private fun addModelToScene(anchor: Anchor, modelRenderable: ModelRenderable) {
+        val anchorNode = AnchorNode(anchor)
+        val transformableNode = TransformableNode(arFragment!!.getTransformationSystem())
+        transformableNode.setParent(anchorNode)
+        transformableNode.renderable = modelRenderable
+        arFragment!!.getArSceneView().scene.addChild(anchorNode)
+        transformableNode.select()
     }
 
     fun onCameraClick(buffer: ByteBuffer, width : Int, height: Int): Bitmap {
@@ -186,15 +214,14 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     }
 
     override fun onSceneTouch(p0: HitTestResult?, p1: MotionEvent?): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return true
     }
 
     override fun onPeekTouch(hitTestResult: HitTestResult?, motionEvent: MotionEvent?) {
-        TODO("not implemented") //To change body of created functions use File | Settings |
-        // arFragment!!.onPeekTouch(hitTestResult, motionEvent)
+        arFragment!!.onPeekTouch(hitTestResult, motionEvent)
 
         if (hitTestResult!!.node != null) {
-            Toast.makeText(this.activity, "노드를 터치 했습니다.", Toast.LENGTH_LONG).show()
+            // Toast.makeText(this.context, "노드를 터치 했습니다.", Toast.LENGTH_LONG).show()
             Log.d(TAG, "Touching a Sceneform node")
         }
 
@@ -213,13 +240,14 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                 isPermission = false
             }
         }
-
+        /*
         TedPermission.with(view!!.context)
             .setPermissionListener(permissionListener)
             .setRationaleMessage(resources.getString(R.string.permission_2))
             .setDeniedMessage(resources.getString(R.string.permission_1))
             .setPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA)
             .check()
+            */
 
     }
 

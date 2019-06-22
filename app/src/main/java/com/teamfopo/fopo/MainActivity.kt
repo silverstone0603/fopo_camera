@@ -65,12 +65,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navView.setNavigationItemSelectedListener(this)
 
         navView.setCheckedItem(R.id.nav_camera)
-        //setFragment(actCamera)
-
-        //회원가입 먼저 실행하기.
-        //setFragment(actRegister)
-        //로그인 먼저 실행하기.
-        setFragment(actAuth)
+        setFragment(actCamera)
 
         initLayoutAction()
 
