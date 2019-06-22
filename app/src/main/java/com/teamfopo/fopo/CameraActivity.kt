@@ -10,14 +10,13 @@ import android.widget.Button
 import android.widget.Toast
 import com.google.ar.core.Point
 import com.google.ar.core.TrackingState
-import com.google.ar.sceneform.AnchorNode
-import com.google.ar.sceneform.FrameTime
-import com.google.ar.sceneform.Node
+import com.google.ar.sceneform.*
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
 import com.teamfopo.fopo.nodes.PointCloudNode
 import java.nio.ByteBuffer
 
@@ -32,12 +31,11 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class CameraActivity : Fragment(), View.OnClickListener {
-
+class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, Scene.OnPeekTouchListener {
     private var isCamera: Boolean? = true
     private var isPermission: Boolean? = true
 
-    private val TAG = "MainActivity"
+    private val TAG = "CameraActivity"
     private var trackableGestureDetector: GestureDetector? = null
 
     private var arFragment: ArFragment? = null
@@ -90,15 +88,9 @@ class CameraActivity : Fragment(), View.OnClickListener {
             }
 
         // set on tap listener
-        arFragment!!.arSceneView.scene.addOnPeekTouchListener { hitTestResult, motionEvent ->
-            arFragment!!.onPeekTouch(hitTestResult, motionEvent)
+        arFragment!!.arSceneView.scene.addOnPeekTouchListener(this)
+        arFragment!!.arSceneView.scene.setOnTouchListener(this)
 
-            if (hitTestResult.node != null) {
-                Log.i(TAG, "Touching a Sceneform node")
-            }
-
-            trackableGestureDetector!!.onTouchEvent(motionEvent)
-        }
         trackableGestureDetector = GestureDetector(this.activity,
             object : GestureDetector.SimpleOnGestureListener() {
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
@@ -191,56 +183,21 @@ class CameraActivity : Fragment(), View.OnClickListener {
         return bitmap
     }
 
-    /**
-    private val REQUIRED_PERMISSIONS =
-        arrayOf<String>(Manifest.permission .WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-    */
+    override fun onSceneTouch(p0: HitTestResult?, p1: MotionEvent?): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
-    /**
-     * Check to see we have the necessary permissions for this app.
-     */
+    override fun onPeekTouch(hitTestResult: HitTestResult?, motionEvent: MotionEvent?) {
+        TODO("not implemented") //To change body of created functions use File | Settings |
+        arFragment!!.onPeekTouch(hitTestResult, motionEvent)
 
-    /*
-    fun hasCameraPermission(activity: Activity): Boolean {
-        for (p in REQUIRED_PERMISSIONS) {
-            if (ContextCompat.checkSelfPermission(activity, p) != PackageManager.PERMISSION_GRANTED) {
-                return false
-            }
+        if (hitTestResult!!.node != null) {
+            Toast.makeText(this.activity, "노드를 터치 했습니다.", Toast.LENGTH_LONG).show()
+            Log.d(TAG, "Touching a Sceneform node")
         }
-        return true
+
+        trackableGestureDetector!!.onTouchEvent(motionEvent)
     }
-    */
-
-    /**
-     * Check to see we have the necessary permissions for this app,
-     * and ask for them if we don't.
-     */
-
-    /**
-    fun requestCameraPermission(activity: Activity) {
-        ActivityCompat.requestPermissions(
-            activity, REQUIRED_PERMISSIONS,
-            CAMERA_PERMISSION_CODE
-        )
-    }
-    */
-
-
-    /**
-     * Check to see if we need to show the rationale for this permission.
-     */
-
-
-    /**
-    fun shouldShowRequestPermissionRationale(activity: Activity): Boolean {
-        for (p in REQUIRED_PERMISSIONS) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, p)) {
-                return true
-            }
-        }
-        return false
-    }
-    */
 
     private fun tedPermission(viewRoot: View) {
 
@@ -255,14 +212,12 @@ class CameraActivity : Fragment(), View.OnClickListener {
             }
         }
 
-        /*
-        TedPermission.with()
+        TedPermission.with(view!!.context)
             .setPermissionListener(permissionListener)
             .setRationaleMessage(resources.getString(R.string.permission_2))
             .setDeniedMessage(resources.getString(R.string.permission_1))
-            .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+            .setPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA)
             .check()
-            */
 
     }
 

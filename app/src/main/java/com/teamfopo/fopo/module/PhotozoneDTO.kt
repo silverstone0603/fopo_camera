@@ -1,4 +1,4 @@
-package com.teamfopo.fopo
+package com.teamfopo.fopo.module
 
 
 import android.os.AsyncTask

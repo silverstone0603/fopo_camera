@@ -1,5 +1,6 @@
 package com.teamfopo.fopo
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -59,6 +60,8 @@ class FopomapActivity : Fragment(), View.OnClickListener {
                 setChildFragment(MapActivity())
             }R.id.btnWrite -> {
                 Toast.makeText(context,"글쓰기", Toast.LENGTH_LONG).show()
+                val writeIntent = Intent(activity, WriteActivity::class.java)
+                startActivity(writeIntent)
             }R.id.btnFriend -> {
                 Toast.makeText(context,"친구 목록", Toast.LENGTH_LONG).show()
             }else -> {

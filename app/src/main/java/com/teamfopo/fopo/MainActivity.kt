@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        JavaClassTest().printPhotozoneList()
         /*
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->

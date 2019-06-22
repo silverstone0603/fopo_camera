@@ -7,9 +7,9 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +18,18 @@ import android.widget.Toast;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.skt.Tmap.TMapTapi;
+import com.teamfopo.fopo.module.PhotozoneDTO;
+import com.teamfopo.fopo.module.modPhotoProcess;
 import com.teamfopo.fopo.nodes.MarkerClusterRenderer;
 import com.teamfopo.fopo.nodes.MarkerMyItems;
 
@@ -40,7 +45,8 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
     private TMapTapi tmaptapi;
 
     private ClusterManager<MarkerMyItems> mClusterManager;
-    private JavaClassTest test;
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 438;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,26 +104,24 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
         });
     }
 
-    @Nullable
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        Log.d("MapActivity", "Map 생성이 준비 완료되었습니다.");
-        /*
-        if (ActivityCompat.checkSelfPermission(super.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(super.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        Log.d("MapActivity", "Map 생성이 준비 중입니다.");
+
+        if (ContextCompat.checkSelfPermission(this.getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this.getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d("MapActivity", "Map 생성 중 권한이 충분치 않아 권한을 요청합니다.");
+
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
             return;
         }
-        */
-        //mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMapToolbarEnabled(false);
+
+        Log.d("MapActivity", "Map 생성에 대한 권한을 승인받아 지도를 구성합니다.");
+
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(true);
 
         tmaptapi = new TMapTapi(super.getContext());
         // Add a marker in Sydney and move the camera
@@ -171,6 +175,8 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
             }
         });
         mClusterManager.setRenderer(new MarkerClusterRenderer(getActivity(), googleMap, mClusterManager));
+
+        Log.d("MapActivity", "Map 생성 작업을 완료하였습니다.");
     }
 
     public double getDistance(LatLng LatLng1, LatLng LatLng2) {
@@ -245,6 +251,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 intent.addCategory(Intent.CATEGORY_APP_BROWSER);
             } else {
+
                 float lat = (float) latLng.latitude;
                 float lng = (float) latLng.longitude;
                 tmaptapi.invokeRoute("테스트", lng, lat);
