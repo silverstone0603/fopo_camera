@@ -35,7 +35,7 @@ import com.teamfopo.fopo.nodes.MarkerMyItems;
 
 import java.util.ArrayList;
 
-public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
+public class MapActivity extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -141,8 +141,35 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
         mMap.setOnMarkerClickListener(mClusterManager);
         // mMap.setOnMarkerClickListener(this);
 
-        mMap.setOnMapLongClickListener(this);
+        //mMap.setOnMapLongClickListener(this);
+        mMap.setOnInfoWindowLongClickListener(new com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener(){
+            @Override
+            public void onInfoWindowLongClick(Marker marker) {
+                Toast.makeText(getContext(), "인포윈도우 롱클릭", Toast.LENGTH_SHORT).show();
+                tmaptapi.setSKTMapAuthentication("6fae3939-c16b-45ad-ba81-d9c6054d4728");
+                boolean isTmapApp = tmaptapi.isTmapApplicationInstalled();
 
+                if (isTmapApp == false) {
+                    ArrayList result = tmaptapi.getTMapDownUrl();
+                    Uri uri = (Uri) Uri.parse(String.valueOf(result));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    intent.addCategory(Intent.CATEGORY_APP_BROWSER);
+                } else {
+                    Toast.makeText(getContext(), "목적지까지 안내하기 위해 TMap으로 전환합니다.", Toast.LENGTH_SHORT).show();
+                    double tmplat = marker.getPosition().latitude;
+                    double tmplng = marker.getPosition().longitude;
+                    for(int i=0;i<PhotozoneDTO.length;i++){
+                        if(PhotozoneDTO[i].getZone_lng() == tmplng && PhotozoneDTO[i].getZone_lat() == tmplat){
+
+                            int Zone_no = PhotozoneDTO[i].getZone_no();
+                            Toast.makeText(getContext(), Zone_no + " 번 인포 윈도우"+tmplat+"/"+tmplng, Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                    //tmaptapi.invokeRoute("test",lat,lng);
+                }
+            }
+        });
         mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MarkerMyItems>() {
             @Override
             public boolean onClusterClick(Cluster<MarkerMyItems> myItem) {
@@ -153,14 +180,16 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
         });
         addItems();
         permission();
-
         mMap.setOnInfoWindowClickListener(new com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener(){
             @Override
             public void onInfoWindowClick(Marker marker) {
 
-                Toast.makeText(getContext(), marker.getTitle() + " 인포 윈도우 클릭", Toast.LENGTH_SHORT).show();
-
-
+                for(int i=0;i<PhotozoneDTO.length;i++){
+                    if(PhotozoneDTO[i].getZone_lng() == marker.getPosition().longitude && PhotozoneDTO[i].getZone_lat() == marker.getPosition().latitude){
+                        int Zone_no = PhotozoneDTO[i].getZone_no();
+                        Toast.makeText(getContext(), Zone_no + " 번 인포 윈도우", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 
@@ -243,7 +272,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
                 }
         }
     }
-
+/*
     @Override
     public void onMapLongClick(LatLng latLng) {
         if(MyLocation == latLng){
@@ -261,20 +290,8 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
                 Toast.makeText(super.getContext(), "목적지까지 안내하기 위해 TMap으로 전환합니다.", Toast.LENGTH_SHORT).show();
                 float lat = (float) latLng.latitude;
                 float lng = (float) latLng.longitude;
-                MarkerMyItems marker = new MarkerMyItems(lat,lng);
-
-                for (int i = 0; i < PhotozoneDTO.length; i++) {
-                    float tmpLat = (float) PhotozoneDTO[i].getZone_lat();
-                    float tmpLng = (float) PhotozoneDTO[i].getZone_lng();
-                    Log.d("MapActivity",lat+":"+ tmpLat + " / "+lng+":"+tmpLng);
-                    if(lat==tmpLat && lng==tmpLng) {
-                        Toast.makeText(super.getContext(), PhotozoneDTO[i].getZone_placename() + " / 전달 받은 값", Toast.LENGTH_LONG).show();
-                        // tmaptapi.invokeRoute("FOPO에서 선택한 목적지", lng, lat);
-                        break;
-                    }
-                }
 
             }
         }
-    }
+    }*/
 }
