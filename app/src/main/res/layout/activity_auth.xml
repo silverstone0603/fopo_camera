@@ -1,12 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             android:layout_width="match_parent"
-                                             android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout
+         xmlns:android="http://schemas.android.com/apk/res/android"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
 
     <FrameLayout
             android:id="@+id/authlayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+        <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+        <EditText
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/idInput"
+                android:layout_centerHorizontal="true"
+                android:hint="ID"
+                android:inputType="text"
+                android:layout_marginTop="151dp" />
+
+        <EditText
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/passwordInput"
+                android:layout_centerHorizontal="true"
+                android:hint="Password"
+                android:layout_below="@+id/idInput"
+                android:inputType="textPassword"/>
+
+        <Button
+                android:layout_width="150dp"
+                android:layout_height="55dp"
+                android:text="로그인"
+                android:id="@+id/loginButton"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/passwordInput"
+                android:layout_toLeftOf="@+id/registerButon"/>
+
+        <Button
+                android:layout_width="150dp"
+                android:layout_height="55dp"
+                android:text="회원가입"
+                android:id="@+id/registerButon"
+                android:textAllCaps="false"
+                android:layout_alignTop="@+id/loginButton"
+                android:layout_alignRight="@+id/passwordInput"/>
+
+        </RelativeLayout>
+
+
     </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>

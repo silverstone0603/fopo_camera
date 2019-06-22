@@ -32,11 +32,11 @@ class FopomapActivity : Fragment(), View.OnClickListener {
         var btnGo: Button = viewRoot.findViewById(R.id.btnGoGo) as Button
         btnGo.setOnClickListener(this)
 
-        initFragment()
 
-        return viewRoot
-    }
+    initFragment()
 
+    return viewRoot
+}
 
     fun initFragment(){
         /*

@@ -1,8 +1,6 @@
 package com.teamfopo.fopo.module
 
 import android.os.AsyncTask
-import com.google.gson.Gson
-import com.google.gson.JsonParser
 import okhttp3.*
 
 class modMemProcess {
@@ -42,4 +40,5 @@ class modMemProcess {
             super.onPostExecute(result)
         }
     }
+
 }

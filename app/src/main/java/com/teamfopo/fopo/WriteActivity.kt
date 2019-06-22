@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.util.Base64
@@ -24,6 +25,8 @@ import com.teamfopo.fopo.module.modImageResizeUtils
 import kotlinx.android.synthetic.main.activity_write.*
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 
 class WriteActivity : AppCompatActivity() {
@@ -183,7 +186,7 @@ class WriteActivity : AppCompatActivity() {
     /**
      * 폴더 및 파일 만들기
      */
-/*
+
 
     @Throws(IOException::class)
     private fun createImageFile(): File {
@@ -202,7 +205,7 @@ class WriteActivity : AppCompatActivity() {
 
         return image
     }
-*/
+
 
 
     /**
