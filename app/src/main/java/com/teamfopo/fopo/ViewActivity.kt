@@ -24,7 +24,7 @@ class ViewActivity : AppCompatActivity() {
 
     var re_orgin:String = "NULL"
 
-    var likeCnt = 20 // 임시로 써놓은 좋아요 개수 ( 게시글 뷰할때 서버에서 받아온당 )
+    var likeCnt = 0 // 임시로 써놓은 좋아요 개수 ( 게시글 뷰할때 서버에서 받아온당 )
     var isLike = false // 임시로 써놓은 좋아요 여부 ( true false의 값은 서버에서 받아온당 )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ class ViewActivity : AppCompatActivity() {
                 var re_content: String = edit_reply.text.toString()
 
                 var ReplyWrite = modBoardProcess().ReplyWrite()
-                ReplyWrite.execute("1", "$getInt", "1", "$re_orgin", "$re_content")
+                ReplyWrite.execute("3", "$getInt", "1", "$re_orgin", "$re_content")
 
                 ViewReplyLists("$getInt", true)
             }

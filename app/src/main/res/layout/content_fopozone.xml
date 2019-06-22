@@ -83,40 +83,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
-
                     </LinearLayout>
                  </GridLayout>
-
-                <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                    <!--
-                    <ImageButton
-                            android:id="@+id/imageButtonWrite"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginEnd="20dp"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:background="@drawable/img_write"/>
-                            -->
-                    <Button
-                            android:id="@+id/btnWrite"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginEnd="20dp"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginBottom="20dp"
-                            android:layout_gravity="bottom|end"
-                            android:text="Write"
-                            android:layout_margin="@dimen/fab_margin"/>
-                </RelativeLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

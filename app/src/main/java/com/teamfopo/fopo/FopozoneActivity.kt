@@ -25,9 +25,12 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
     private var trackableGestureDetector: GestureDetector? = null
     private var actLayoutInflater: LayoutInflater? = null
 
+    var zone_no = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // setContentView(R.layout.content_camera)
+
 
     }
 
@@ -35,6 +38,9 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        if (arguments != null) {
+            zone_no = arguments!!.getString("zone_no")
+        }
         // Inflate the layout for this fragment
         var viewRoot: View = inflater.inflate(R.layout.content_fopozone, container, false)
 
@@ -44,6 +50,9 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
         initFragment(viewRoot)
 
         return viewRoot
+
+
+
     }
 
     fun initFragment(viewRoot: View){
@@ -59,17 +68,15 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
         */
 
         var getBoardList = modBoardProcess().GetList()
-        var brdList = getBoardList.execute("1").get()
+        var brdList = getBoardList.execute(zone_no).get()
         getListView(viewRoot, brdList)
 
-        var btnWrite: Button = viewRoot.findViewById(R.id.btnWrite) as Button
-        btnWrite.setOnClickListener(this)
     }
 
     inner class ThreadClass : Thread() {
         override fun run() {
-            var getBoardList = modBoardProcess().GetList()
-            var brdList = getBoardList.execute("1").get()
+            //var getBoardList = modBoardProcess().GetList()
+            //var brdList = getBoardList.execute("1").get()
 
             /*
             runOnUiThread {
@@ -117,10 +124,7 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btnWrite -> {
-                startActivity(Intent(super.getContext(),WriteActivity::class.java))
-            }else -> {
-        }
+            // 클릭 이벤트..
         }
     }
 }

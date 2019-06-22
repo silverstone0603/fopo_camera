@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -183,7 +185,26 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
                 for(int i=0;i<PhotozoneDTO.length;i++){
                     if(PhotozoneDTO[i].getZone_lng() == marker.getPosition().longitude && PhotozoneDTO[i].getZone_lat() == marker.getPosition().latitude){
                         int Zone_no = PhotozoneDTO[i].getZone_no();
+
                         Toast.makeText(getContext(), Zone_no + " 번 인포 윈도우", Toast.LENGTH_SHORT).show();
+
+                        Fragment fragment = new FopozoneActivity();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("zone_no", Zone_no+"");
+                        fragment.setArguments(bundle);
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace( R.id.fopomap_container, fragment );
+                        fragmentTransaction.commit();
+
+
+                        //Intent intent = new Intent(MapActivity.super.getContext(),ViewActivity.class);
+                        //intent.putExtra("m_select", Zone_no);
+                        //startActivityForResult(intent,Zone_no);//액티비티 띄우기
+
+                        //val i = Intent(super.getContext(), ViewActivity::class.java)
+                        //i.putExtra("m_select", test)
+                        //startActivityForResult(i, 1)
                     }
                 }
             }

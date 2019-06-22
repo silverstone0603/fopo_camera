@@ -2,19 +2,17 @@ package com.teamfopo.fopo
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.teamfopo.fopo.module.modAuthProcess
+import com.teamfopo.fopo.module.modDBMS
+import com.teamfopo.fopo.module.modSysData
 import kotlinx.android.synthetic.main.activity_auth.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import com.teamfopo.fopo.module.modDBMS
-import com.teamfopo.fopo.module.modService
-import com.teamfopo.fopo.module.modSysData
 
 class AuthActivity : Fragment(), View.OnClickListener {
 
