@@ -48,7 +48,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
     private PhotozoneDTO[] PhotozoneDTO;
 
     private ClusterManager<MarkerMyItems> mClusterManager;
-
+    boolean isTmapApp;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 438;
 
     @Override
@@ -67,9 +67,6 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         }else{
             GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
         }
-
-
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         Log.d("MapActivity", "Map 액티비티 생성 완료");
@@ -110,6 +107,14 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        tmaptapi = new TMapTapi(super.getContext());
+
+        tmaptapi.setSKTMapAuthentication("6fae3939-c16b-45ad-ba81-d9c6054d4728");
+
+        tmaptapi.isTmapApplicationInstalled();
+
+        isTmapApp = tmaptapi.isTmapApplicationInstalled();
+
         Log.d("MapActivity", "Map 생성이 준비 중입니다.");
 
         if (ContextCompat.checkSelfPermission(this.getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -126,10 +131,8 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
-        tmaptapi = new TMapTapi(super.getContext());
         // Add a marker in Sydney and move the camera
         LatLng 포토존 = new LatLng(35.89627845671536, 128.6223662256039);
-        //mMap.addMarker(new MarkerOptions().position(포토존).title("영진전문대학교"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(포토존));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f));
 
@@ -139,34 +142,27 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         mMap.setOnCameraIdleListener(mClusterManager);
 
         mMap.setOnMarkerClickListener(mClusterManager);
-        // mMap.setOnMarkerClickListener(this);
-
-        //mMap.setOnMapLongClickListener(this);
         mMap.setOnInfoWindowLongClickListener(new com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener(){
             @Override
             public void onInfoWindowLongClick(Marker marker) {
-                Toast.makeText(getContext(), "인포윈도우 롱클릭", Toast.LENGTH_SHORT).show();
-                tmaptapi.setSKTMapAuthentication("6fae3939-c16b-45ad-ba81-d9c6054d4728");
-                boolean isTmapApp = tmaptapi.isTmapApplicationInstalled();
 
+                isTmapApp = tmaptapi.isTmapApplicationInstalled();
                 if (isTmapApp == false) {
                     ArrayList result = tmaptapi.getTMapDownUrl();
                     Uri uri = (Uri) Uri.parse(String.valueOf(result));
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     intent.addCategory(Intent.CATEGORY_APP_BROWSER);
                 } else {
-                    Toast.makeText(getContext(), "목적지까지 안내하기 위해 TMap으로 전환합니다.", Toast.LENGTH_SHORT).show();
                     double tmplat = marker.getPosition().latitude;
                     double tmplng = marker.getPosition().longitude;
                     for(int i=0;i<PhotozoneDTO.length;i++){
                         if(PhotozoneDTO[i].getZone_lng() == tmplng && PhotozoneDTO[i].getZone_lat() == tmplat){
-
+                            Toast.makeText(getContext(), "목적지까지 안내하기 위해 TMap으로 전환합니다.", Toast.LENGTH_SHORT).show();
                             int Zone_no = PhotozoneDTO[i].getZone_no();
-                            Toast.makeText(getContext(), Zone_no + " 번 인포 윈도우"+tmplat+"/"+tmplng, Toast.LENGTH_SHORT).show();
-
+                            tmaptapi.invokeRoute(PhotozoneDTO[i].getZone_placename(),Float.parseFloat(String.valueOf(tmplng)),Float.parseFloat(String.valueOf(tmplat)));
                         }
                     }
-                    //tmaptapi.invokeRoute("test",lat,lng);
+
                 }
             }
         });
@@ -198,7 +194,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
             public boolean onMarkerClick(Marker marker) {
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),14.0f));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),17.0f));
 
                 mMarker = marker;
 
