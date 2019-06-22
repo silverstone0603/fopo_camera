@@ -149,21 +149,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_home -> {
                 supportActionBar?.title = "모아보기"
                 makeText(this@MainActivity, "모아보기를 선택했습니다.", LENGTH_SHORT).show()
-                Snackbar.make(toolbar,"모아보기를 눌렀습니다.",Snackbar.LENGTH_SHORT).show()
 
                 setFragment(actHome)
             }
             R.id.nav_camera -> {
                 supportActionBar?.title = "카메라"
                 makeText(this@MainActivity, "카메라를 선택했습니다.", LENGTH_SHORT).show()
-                Snackbar.make(toolbar,"카메라를 눌렀습니다.",Snackbar.LENGTH_SHORT).show()
 
                 setFragment(actCamera)
             }
             R.id.nav_fopomap -> {
                 supportActionBar?.title = "포포맵"
                 makeText(this@MainActivity, "포포맵을 선택했습니다.", LENGTH_SHORT).show()
-                Snackbar.make(toolbar,"포포맵을 눌렀습니다.",Snackbar.LENGTH_SHORT).show()
 
                 setFragment(actFopomap)
                 // setFragment(actFopozone)
@@ -172,14 +169,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_setting -> {
                 supportActionBar?.title = "환경 설정"
                 makeText(this@MainActivity, "환경 설정을 선택했습니다.", LENGTH_SHORT).show()
-                Snackbar.make(toolbar,"환경 설정을 눌렀습니다.",Snackbar.LENGTH_SHORT).show()
 
                 setFragment(actSetting)
             }
             R.id.nav_help -> {
                 supportActionBar?.title = "도움말"
                 makeText(this@MainActivity, "도움말을 선택했습니다.", LENGTH_SHORT).show()
-                Snackbar.make(toolbar,"도움말을 눌렀습니다.",Snackbar.LENGTH_SHORT).show()
 
                 setFragment(actHelp)
             }

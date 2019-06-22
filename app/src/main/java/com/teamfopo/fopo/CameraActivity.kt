@@ -8,16 +8,17 @@ import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.Toast
-import com.google.ar.core.Anchor
-import com.google.ar.core.Point
-import com.google.ar.core.TrackingState
+import android.widget.ToggleButton
+import com.google.ar.core.*
 import com.google.ar.sceneform.*
 import com.google.ar.sceneform.math.Quaternion
+import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import com.gun0912.tedpermission.PermissionListener
 import com.teamfopo.fopo.nodes.PointCloudNode
+import java.lang.Math.*
 import java.nio.ByteBuffer
 
 
@@ -33,7 +34,7 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, Scene.OnPeekTouchListener {
+class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, Scene.OnPeekTouchListener, Scene.OnUpdateListener {
     private var isCamera: Boolean? = true
     private var isPermission: Boolean? = true
 
@@ -92,6 +93,26 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         // set on tap listener
         arFragment!!.arSceneView.scene.addOnPeekTouchListener(this)
         arFragment!!.arSceneView.scene.setOnTouchListener(this)
+        arFragment!!.arSceneView.scene.addOnUpdateListener(this)
+        arFragment!!.setOnTapArPlaneListener { hitResult: HitResult, plane: Plane, motionEvent: MotionEvent ->
+            /*
+            if (markerRenderable == null) {
+                Toast.makeText(this.context,"해당 위치에 node가 없습니다",Toast.LENGTH_LONG).show()
+            }else {
+                // Create the Anchor.
+                val anchor = hitResult.createAnchor()
+                val anchorNode = AnchorNode(anchor)
+                anchorNode.setParent(arFragment!!.getArSceneView().scene)
+
+                // Create the transformable andy and add it to the anchor.
+                val andy = TransformableNode(arFragment!!.getTransformationSystem())
+                andy.setParent(anchorNode)
+                andy.renderable = markerRenderable
+                andy.select()
+                Toast.makeText(this.context,"해당 위치에 새로운 node가 생성 되었습니다",Toast.LENGTH_LONG).show()
+            }
+            */
+        }
 
         trackableGestureDetector = GestureDetector(this.activity,
             object : GestureDetector.SimpleOnGestureListener() {
@@ -107,6 +128,9 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         )
 
         // Capture the Image
+        var btnLocation: ToggleButton = viewRoot.findViewById(R.id.btnLocation) as ToggleButton
+        btnLocation.setOnClickListener(this)
+
         var btnCapture: Button = viewRoot.findViewById(R.id.btnCapture) as Button
         btnCapture.setOnClickListener(this)
 
@@ -126,6 +150,10 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                 })
         }
         */
+
+
+
+        // 제발 되게 해주세요
 
     }
 
@@ -153,10 +181,10 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         val frame = arSceneView.arFrame
         if (frame != null && frame.camera.trackingState == TrackingState.TRACKING) {
             for (hit in frame.hitTest(motionEvent)) {
-                Log.i(this.TAG, "적중 거리 : ${hit.distance}")
-                Toast.makeText(this.context,"적중 거리 : ${hit.distance}",Toast.LENGTH_SHORT).show()
+                Log.d("ARCore", "적중 거리 : ${hit.distance}")
+                // Toast.makeText(this.context,"적중 거리 : ${hit.distance}",Toast.LENGTH_SHORT).show()
                 val trackable = hit.trackable
-                if (trackable is Point) {
+                if (trackable is Plane) {
                     // Anchor down
                     val anchor = hit.createAnchor()
                     val anchorNode = AnchorNode(anchor)
@@ -171,9 +199,12 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                     andy.setParent(node)
                     andy.renderable = markerRenderable
                     andy.select()
+
+                    Toast.makeText(this.context,"앵커가 생성되고 선택 되었습니다",Toast.LENGTH_LONG).show()
+
+                    Log.d("ARCore", "인스턴스 이름 : ${trackable.javaClass.name}")
+                    // Toast.makeText(this.context,"인스턴스 이름 : ${trackable.javaClass.name}",Toast.LENGTH_SHORT).show()
                 }
-                Log.i(this.TAG, "Instance of ${trackable.javaClass.name}")
-                Toast.makeText(this.context,"인스턴스 이름 : ${trackable.javaClass.name}",Toast.LENGTH_SHORT).show()
             }
         }
         Log.i(this.TAG, "Tracking state: ${frame!!.camera.trackingState}")
@@ -182,7 +213,10 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btnCapture -> {
-                Toast.makeText(context,"사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
+            }
+            R.id.btnLocation -> {
+                Toast.makeText(context, "GPS On/Off 버튼입니다", Toast.LENGTH_LONG).show()
             }else -> {
         }
         }
@@ -213,7 +247,9 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         return bitmap
     }
 
-    override fun onSceneTouch(p0: HitTestResult?, p1: MotionEvent?): Boolean {
+    override fun onSceneTouch(hitTestResult: HitTestResult?, motionEvent: MotionEvent?): Boolean {
+        Toast.makeText(this.context,"터치 : "+hitTestResult!!.node.toString(),Toast.LENGTH_SHORT).show()
+        Log.d("ARCore", "터치 : "+motionEvent?.getY().toString() + ","+motionEvent?.getY().toString())
         return true
     }
 
@@ -222,7 +258,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
 
         if (hitTestResult!!.node != null) {
             // Toast.makeText(this.context, "노드를 터치 했습니다.", Toast.LENGTH_LONG).show()
-            Log.d(TAG, "Touching a Sceneform node")
+            Log.d("ARCore", "Sceneform 노드를 터치하고 있습니다.")
         }
 
         trackableGestureDetector!!.onTouchEvent(motionEvent)
@@ -249,6 +285,79 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
             .check()
             */
 
+    }
+
+    fun getDegre(latSource: Double, lngSource: Double, latDestination: Double, lngDestination: Double):Double{
+        val lat1:Double = latSource/180 * Math.PI
+        val lng1:Double = lngSource/180 * Math.PI
+        val lat2:Double = latDestination/180 * Math.PI
+        val lng2:Double = lngDestination/180 * Math.PI
+
+        val y = sin(lng2 - lng1)*cos(lat2)
+        val x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lng2 - lng1)
+
+        val tan2 = atan2(y, x)
+        val degre = tan2 * 180 / Math.PI
+        if (degre < 0) {
+            return degre+360
+        }else {
+            return degre
+        }
+    }
+
+    override fun onUpdate(frameTime: FrameTime) {
+        val frame = arFragment!!.getArSceneView().getArFrame()
+        if (frame != null) {
+            // Log.d("ARCore","onUpdate 메소드 실행중입니다.")
+            for (o in frame.getUpdatedTrackables(Plane::class.java)) {
+                val plane = o as Plane
+                if (plane.getTrackingState() === TrackingState.TRACKING) {
+                    arFragment!!.getPlaneDiscoveryController().hide()
+                    val iterableAnchor = frame.getUpdatedAnchors().iterator()
+                    if (!iterableAnchor.hasNext()) {
+                        // method(plane, frame)
+                        makeAr(plane, frame)
+                    }
+                }
+            }
+        }
+
+    }
+
+    fun makeAr(plane: Plane, frame: Frame) {
+
+        for (k in 0..9) {
+            if (getDegre(35.8931,128.622,35.8963,128.6)>= 160 && getDegre(35.8931,128.622,35.8963,128.6) <= 170) {
+                Toast.makeText(this.context, "walk", Toast.LENGTH_SHORT).show()
+                val hitTest = frame.hitTest(screenCenter().x, screenCenter().y)
+
+                val hitTestIterator = hitTest.iterator()
+
+                while (hitTestIterator.hasNext()) {
+                    val hitResult = hitTestIterator.next() as HitResult
+
+                    // val modelAnchor = null
+                    val modelAnchor = plane.createAnchor(hitResult.hitPose)
+
+                    val anchorNode = AnchorNode(modelAnchor)
+                    anchorNode.setParent(arFragment!!.getArSceneView().getScene())
+
+                    val transformableNode = TransformableNode(arFragment!!.getTransformationSystem())
+                    transformableNode.setParent(anchorNode)
+                    transformableNode.renderable = this.markerRenderable
+
+                    val x = modelAnchor.getPose().tx()
+                    val y = modelAnchor.getPose().compose(Pose.makeTranslation(0f, 0f, 0f)).ty()
+
+                    transformableNode.worldPosition = Vector3(x, y, (-k).toFloat())
+                }
+            }
+        }
+    }
+
+    private fun screenCenter(): Vector3 {
+        val vw = activity!!.findViewById<View>(android.R.id.content)
+        return Vector3(vw.width / 2f, vw.height / 2f, 0f)
     }
 
 }
