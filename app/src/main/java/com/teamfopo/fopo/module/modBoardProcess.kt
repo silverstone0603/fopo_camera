@@ -8,11 +8,10 @@ import com.google.gson.JsonParser
 import okhttp3.*
 
 data class modListProcess(var brd_no: Int, var file_no: Int)
-data class modViewProcess(var mem_nickname: String, var file_no: Int, var brd_content: String, var brd_like: Int)
-data class modReplyProcess(var re_no: Int, var mem_nickname: String, var re_comment: String, var re_depth: Int, var re_orgin: Int, var re_date: String)
+data class modViewProcess(var mem_nick: String, var file_no: Int, var brd_content: String, var brd_like: Int)
+data class modReplyProcess(var re_no: Int, var mem_nick: String, var rre_no: Int, var re_comment: String, var re_date: String)
 
 class modBoardProcess {
-
     inner class GetList : AsyncTask<String, Long, Array<modListProcess>>() {
         override fun onPreExecute() {
             super.onPreExecute()
@@ -128,20 +127,20 @@ class modBoardProcess {
         }
 
         override fun doInBackground(vararg params: String?): String {
-            var brd_no = params[0]
-            var mem_no = params[1]
-            var re_comment = params[2]
-            var re_depth = params[3]
-            var re_orgin = params[4]
+            var zone_no = params[0]
+            var brd_no = params[1]
+            var mem_no = params[2]
+            var rre_no = params[3]
+            var re_comment = params[4]
 
             var url = "http://106.10.51.32/ajax_process/reply_process"
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","write")
+                .add("zone_no", "$zone_no")
                 .add("brd_no", "$brd_no")
                 .add("mem_no", "$mem_no")
+                .add("rre_no", "$rre_no")
                 .add("re_comment", "$re_comment")
-                .add("re_depth", "$re_depth")
-                .add("re_orgin", "$re_orgin")
                 .build()
 
             val client = OkHttpClient()
@@ -241,7 +240,6 @@ class modBoardProcess {
             var mem_no = params[0]
             var zone_no = params[1]
             var brd_content = params[2]
-
             var filedata = params[3]
 
             var url = "http://106.10.51.32/ajax_process/board_process"

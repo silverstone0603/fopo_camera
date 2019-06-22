@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        JavaClassTest().printPhotozoneList()
         /*
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
@@ -101,7 +102,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onClick(v: View?) {
         Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
         when (v?.id) {
-            R.id.btnGoGo -> {
+            R.id.btnMap -> {
                 println("Test Message")
             }else -> {
                 println("Test Message")
@@ -168,8 +169,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 makeText(this@MainActivity, "포포맵을 선택했습니다.", LENGTH_SHORT).show()
                 Snackbar.make(toolbar,"포포맵을 눌렀습니다.",Snackbar.LENGTH_SHORT).show()
 
-                setFragment(actFopozone)
-                // setFragment(actFopomap)
+                setFragment(actFopomap)
+                // setFragment(actFopozone)
 
             }
             R.id.nav_setting -> {
