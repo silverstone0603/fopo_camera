@@ -51,6 +51,8 @@ class FopomapActivity : Fragment(), View.OnClickListener {
             AR Fragment 생성 부분
         */
 
+        setChildFragment(MapActivity())
+
     }
 
     override fun onClick(v: View?) {
