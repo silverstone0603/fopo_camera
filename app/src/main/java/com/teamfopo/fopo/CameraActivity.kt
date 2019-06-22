@@ -108,6 +108,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         var btnCapture: Button = viewRoot.findViewById(R.id.btnCapture) as Button
         btnCapture.setOnClickListener(this)
 
+        // arFragment!!.setOnTapArPlaneListener(this)
+
     }
 
     fun onFrame(frameTime: FrameTime) {
@@ -189,7 +191,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
 
     override fun onPeekTouch(hitTestResult: HitTestResult?, motionEvent: MotionEvent?) {
         TODO("not implemented") //To change body of created functions use File | Settings |
-        arFragment!!.onPeekTouch(hitTestResult, motionEvent)
+        // arFragment!!.onPeekTouch(hitTestResult, motionEvent)
 
         if (hitTestResult!!.node != null) {
             Toast.makeText(this.activity, "노드를 터치 했습니다.", Toast.LENGTH_LONG).show()
