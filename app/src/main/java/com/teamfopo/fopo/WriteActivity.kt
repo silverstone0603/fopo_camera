@@ -73,7 +73,7 @@ class WriteActivity : AppCompatActivity() {
         var str_content = edit_oneLine.text.toString()
 
         var getImageUpload = modBoardProcess().Write()
-        var uploadResult = getImageUpload.execute("1","1","$str_content", "$getBitmapImageToString").get()
+        var uploadResult = getImageUpload.execute("1","3","$str_content", "$getBitmapImageToString").get()
 
         Toast.makeText(this, "$uploadResult", Toast.LENGTH_SHORT).show()
         var brd_no = Integer.parseInt(uploadResult.trim())

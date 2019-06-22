@@ -79,5 +79,4 @@ class FopomapActivity : Fragment(), View.OnClickListener {
             childFt.commit()
         }
     }
-
 }

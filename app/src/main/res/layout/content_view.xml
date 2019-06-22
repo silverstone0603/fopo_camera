@@ -13,6 +13,34 @@
     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
                   android:orientation="vertical">
 
+        d<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:orientation="horizontal"
+                >
+
+            <!-- <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/img_left_icon"
+                    android:layout_gravity="center"/> -->
+
+            <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="게시글 보기"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+        </LinearLayout>
+
 
         <ScrollView
                 android:layout_width="match_parent"
@@ -78,8 +106,8 @@
                                     android:id="@+id/txtLike"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-                                    android:text="♡20"
-                                    android:textColor="@color/colorAccent"
+                                    android:text="♡0"
+                                    android:textColor="@color/colorPrimaryDark"
                                     android:textSize="20sp" android:textStyle="bold"/>
                         </LinearLayout>
 
@@ -114,7 +142,7 @@
                                 android:text="fopo_team님이 공유한 사진"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" android:id="@+id/txtID"
-                                android:textColor="@color/colorAccent" android:textSize="17sp"/>
+                                android:textColor="@color/colorPrimaryDark" android:textSize="17sp"/>
 
                         <TextView
                                 android:layout_width="match_parent"
@@ -142,7 +170,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginTop="-1dp"
-                                android:text="3개의 댓글이 있습니다." android:textSize="15sp"/>
+                                android:text="0개의 댓글이 있습니다." android:textSize="15sp"/>
                     </LinearLayout>
 
                     <!-- 댓글부분 -->

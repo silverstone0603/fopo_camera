@@ -1,12 +1,17 @@
 package com.teamfopo.fopo.module
 
-class modService {
+import android.app.Service
+import android.content.Intent
+import android.os.IBinder
+
+class modService: Service() {
     var mem_id=""
     var token=""
     var logindate=""
     var lastdate=""
 
-    fun getMemID(): String {
-        return this.mem_id
+    override fun onBind(intent: Intent?): IBinder? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
 }
