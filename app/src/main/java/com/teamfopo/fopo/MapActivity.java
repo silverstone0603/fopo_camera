@@ -40,6 +40,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
     private TMapTapi tmaptapi;
 
     private ClusterManager<MarkerMyItems> mClusterManager;
+    private JavaClassTest test;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,7 +117,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
         }
         */
         //mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMapToolbarEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
 
         tmaptapi = new TMapTapi(super.getContext());
         // Add a marker in Sydney and move the camera
@@ -144,6 +145,13 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
         });
         addItems();
         permission();
+
+        mMap.setOnInfoWindowClickListener(new com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener(){
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Toast.makeText(getContext(), marker.getTitle() + " 인포 윈도우 클릭", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mMap.setOnMarkerClickListener(new com.google.android.gms.maps.GoogleMap.OnMarkerClickListener() {
             @Override
@@ -177,36 +185,29 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
 
         return distance;
     }
-/*
-    @Override
-    public boolean onMarkerClick(Marker marker){
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f));
-        String snippet = String.format("%.2f", getDistance(marker.getPosition(),MyLocation)/1000);
-
-        if(getDistance(marker.getPosition(),MyLocation) == 0) marker.setSnippet("현재위치 입니다.");
-
-        else marker.setSnippet("이곳까지의 거리는 " + snippet +"km 입니다.");
-
-        marker.showInfoWindow();
-        return true;
-    }
-*/
 
     private void addItems(){
-        double lat = 35.89627845671536;
-        double lng = 128.6223662256039;
+        PhotozoneDTO[] PhotozoneDTO = null;
 
-        for(int i=0; i<10;i++) {
-            double offset = i / 60d;
-            String title = i + "번 포토존";
-            lat = lat + offset;
-            lng = lng + offset;
-            String snippet = "이곳까지의 거리는 15km입니다.\n 경로보기->";
-            LatLng 포토존 = new LatLng(lat, lng);
-            MarkerMyItems offsetItem = new MarkerMyItems(lat, lng, title, snippet);
-            mClusterManager.addItem(offsetItem);
+        modPhotoProcess photoProcess = new modPhotoProcess();
+        modPhotoProcess.listPhotoZone listPhotoZone = photoProcess.new listPhotoZone();
+
+        try {
+            PhotozoneDTO = listPhotoZone.execute().get();
+            System.out.println("포토존 목록");
+
+            for (int i = 0; i < PhotozoneDTO.length; i++) {
+                String title = PhotozoneDTO[i].getZone_no()+"번 포토존 : "+PhotozoneDTO[i].getZone_placename();
+                double lat = PhotozoneDTO[i].getZone_lat();
+                double lng = PhotozoneDTO[i].getZone_lng();
+                String snippet = "이곳까지의 거리는 15km입니다.\n 경로보기->";
+
+                MarkerMyItems offsetItem = new MarkerMyItems(lat, lng, title, snippet);
+
+                mClusterManager.addItem(offsetItem);
+            }
+        } catch (Exception e) {
+            Log.d("printList Method Error", e.toString());
         }
     }
 /*
