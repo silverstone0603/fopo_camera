@@ -159,7 +159,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback, GoogleM
             public void onInfoWindowClick(Marker marker) {
 
                 Toast.makeText(getContext(), marker.getTitle() + " 인포 윈도우 클릭", Toast.LENGTH_SHORT).show();
-                
+
 
             }
         });
