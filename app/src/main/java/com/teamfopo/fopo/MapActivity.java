@@ -3,6 +3,7 @@ package com.teamfopo.fopo;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Camera;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
@@ -97,10 +99,9 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
             public void onSuccess(Location location) {
                 if (location != null) {
                     MyLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    /*mMap.addMarker(new MarkerOptions()
-                            .position(myLocation).title("현재 위치")
-                            .position(myLocation).snippet("위도 : " + String.valueOf(location.getLatitude()) + ", 경도 : " + String.valueOf(location.getLongitude())));*/
+                    Log.d("Mapactivity","MyLocation 에 현재위치 저장 완료");
+
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),location.getLongitude()),17.0f));
                 }
             }
         });
@@ -116,6 +117,8 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         tmaptapi.isTmapApplicationInstalled();
 
         isTmapApp = tmaptapi.isTmapApplicationInstalled();
+
+
 
         Log.d("MapActivity", "Map 생성이 준비 중입니다.");
 
@@ -134,9 +137,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
         // Add a marker in Sydney and move the camera
-        LatLng 포토존 = new LatLng(35.89627845671536, 128.6223662256039);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(포토존));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f));
+
 
 
         mClusterManager = new ClusterManager<MarkerMyItems>(getActivity(), mMap);
@@ -144,6 +145,9 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         mMap.setOnCameraIdleListener(mClusterManager);
 
         mMap.setOnMarkerClickListener(mClusterManager);
+        addItems();
+        permission();
+
         mMap.setOnInfoWindowLongClickListener(new com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener(){
             @Override
             public void onInfoWindowLongClick(Marker marker) {
@@ -176,8 +180,8 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
                 return true;
             }
         });
-        addItems();
-        permission();
+
+
         mMap.setOnInfoWindowClickListener(new com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener(){
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -232,6 +236,7 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
         mClusterManager.setRenderer(new MarkerClusterRenderer(getActivity(), googleMap, mClusterManager));
 
         Log.d("MapActivity", "Map 생성 작업을 완료하였습니다.");
+
     }
 
     public double getDistance(LatLng LatLng1, LatLng LatLng2) {
@@ -269,14 +274,6 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
             Log.d("printList Method Error", e.toString());
         }
     }
-/*
-    public void onLastLocationButtonClicked(View view) {
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng((MyLocation)));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f));
-
-    }
-    */
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -289,26 +286,4 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
                 }
         }
     }
-/*
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-        if(MyLocation == latLng){
-            Toast.makeText(super.getContext(), "현재 위치에서는 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
-        }else {
-            tmaptapi.setSKTMapAuthentication("6fae3939-c16b-45ad-ba81-d9c6054d4728");
-            boolean isTmapApp = tmaptapi.isTmapApplicationInstalled();
-
-            if (isTmapApp == false) {
-                ArrayList result = tmaptapi.getTMapDownUrl();
-                Uri uri = (Uri) Uri.parse(String.valueOf(result));
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.addCategory(Intent.CATEGORY_APP_BROWSER);
-            } else {
-                Toast.makeText(super.getContext(), "목적지까지 안내하기 위해 TMap으로 전환합니다.", Toast.LENGTH_SHORT).show();
-                float lat = (float) latLng.latitude;
-                float lng = (float) latLng.longitude;
-
-            }
-        }
-    }*/
 }
