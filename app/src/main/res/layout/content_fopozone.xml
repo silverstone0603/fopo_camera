@@ -28,15 +28,16 @@
                 //포토존 게시물 제목 (주소)
                 <TextView
                         android:id="@+id/addTitle_textView"
-                        android:text="대구광역시 북구 복현로 35"
+                        android:text="수성못"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorPrimaryDark"
                         android:textSize="18sp"/>
 
 
             </LinearLayout>
 
+            <!--
             <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,7 +55,7 @@
                         android:textSize="18sp" android:textColor="@color/colorPrimaryDark"/>
 
             </LinearLayout>
-
+            -->
         </LinearLayout>
 
 

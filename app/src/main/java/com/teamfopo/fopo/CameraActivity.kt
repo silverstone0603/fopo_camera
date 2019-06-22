@@ -1,5 +1,8 @@
 package com.teamfopo.fopo
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -33,6 +36,7 @@ private const val ARG_PARAM2 = "param2"
  *
  */
 class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, Scene.OnPeekTouchListener, Scene.OnUpdateListener {
+
     private var isCamera: Boolean? = true
     private var isPermission: Boolean? = true
 
@@ -42,6 +46,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     private var arFragment: ArFragment? = null
     private lateinit var markerRenderable: ModelRenderable
     private lateinit var pointCloudNode: PointCloudNode
+
+    private var strTitle = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -224,6 +230,19 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
             }
             R.id.btnFopozone -> {
                 Toast.makeText(context, "해당 포토존으로 이동합니다", Toast.LENGTH_LONG).show()
+                // Set title bar
+                (activity as MainActivity).setActionBarTitle("포포맵")
+                (activity as MainActivity).setTestGOGO()
+                //val fragment1 = FopomapActivity()
+                val fragment2 = FopozoneActivity()
+                val bundle = Bundle()
+                bundle.putString("zone_no", "3")
+                fragment2.arguments = bundle
+                val fragmentManager = fragmentManager
+                val fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(R.id.fraMain, fragment2)
+                fragmentTransaction.commit()
+
             }else -> {
         }
         }

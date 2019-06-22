@@ -47,15 +47,7 @@ class SettingActivity : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btnFopozones -> {
-                val fragment1 = FopomapActivity()
-                val fragment2 = FopozoneActivity()
-                val bundle = Bundle()
-                bundle.putString("zone_no", "3")
-                fragment1.arguments = bundle
-                val fragmentManager = fragmentManager
-                val fragmentTransaction = fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(R.id.setting_wrap, fragment1)
-                fragmentTransaction.commit()
+
             }
         }
     }
