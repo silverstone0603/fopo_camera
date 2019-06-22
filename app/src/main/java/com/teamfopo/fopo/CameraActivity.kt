@@ -22,8 +22,6 @@ import java.lang.Math.*
 import java.nio.ByteBuffer
 
 
-
-
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -95,23 +93,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         arFragment!!.arSceneView.scene.setOnTouchListener(this)
         arFragment!!.arSceneView.scene.addOnUpdateListener(this)
         arFragment!!.setOnTapArPlaneListener { hitResult: HitResult, plane: Plane, motionEvent: MotionEvent ->
-            /*
-            if (markerRenderable == null) {
-                Toast.makeText(this.context,"해당 위치에 node가 없습니다",Toast.LENGTH_LONG).show()
-            }else {
-                // Create the Anchor.
-                val anchor = hitResult.createAnchor()
-                val anchorNode = AnchorNode(anchor)
-                anchorNode.setParent(arFragment!!.getArSceneView().scene)
-
-                // Create the transformable andy and add it to the anchor.
-                val andy = TransformableNode(arFragment!!.getTransformationSystem())
-                andy.setParent(anchorNode)
-                andy.renderable = markerRenderable
-                andy.select()
                 Toast.makeText(this.context,"해당 위치에 새로운 node가 생성 되었습니다",Toast.LENGTH_LONG).show()
-            }
-            */
         }
 
         trackableGestureDetector = GestureDetector(this.activity,
@@ -133,6 +115,9 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
 
         var btnCapture: Button = viewRoot.findViewById(R.id.btnCapture) as Button
         btnCapture.setOnClickListener(this)
+
+        var btnFopozone: Button = viewRoot.findViewById(R.id.btnFopozone) as Button
+        btnFopozone.setOnClickListener(this)
 
         /*
         arFragment!!.setOnTapArPlaneListener { hitResult, plane, motionEvent ->
@@ -183,12 +168,27 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
             for (hit in frame.hitTest(motionEvent)) {
                 Log.d("ARCore", "적중 거리 : ${hit.distance}")
                 // Toast.makeText(this.context,"적중 거리 : ${hit.distance}",Toast.LENGTH_SHORT).show()
+
+                Log.d("ARCore", "선택 개체 정보 : ${hit.hitPose.toString()}")
+
                 val trackable = hit.trackable
                 if (trackable is Plane) {
                     // Anchor down
                     val anchor = hit.createAnchor()
                     val anchorNode = AnchorNode(anchor)
                     anchorNode.setParent(arSceneView.scene)
+
+                    /*
+                    markerRenderable.let{
+                        Node().apply{
+                            setParent(anchorNode)
+                            renderable = it
+                            localPosition = Vector3(-0.0f, 0.0f, 0.0f)
+                        }
+
+                        Toast.makeText(this.context,"개체 : 앵커가 생성되고 선택 되었습니다",Toast.LENGTH_LONG).show()
+                    }
+                    */
 
                     val node = Node()
                     node.setParent(anchorNode)
@@ -200,10 +200,14 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                     andy.renderable = markerRenderable
                     andy.select()
 
-                    Toast.makeText(this.context,"앵커가 생성되고 선택 되었습니다",Toast.LENGTH_LONG).show()
+                    Toast.makeText(this.context,"개체 : 앵커가 생성되고 선택 되었습니다",Toast.LENGTH_LONG).show()
 
                     Log.d("ARCore", "인스턴스 이름 : ${trackable.javaClass.name}")
-                    // Toast.makeText(this.context,"인스턴스 이름 : ${trackable.javaClass.name}",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.context,"인스턴스 이름 : ${trackable.javaClass.name}",Toast.LENGTH_SHORT).show()
+
+
+                }else if (trackable is Point){
+                    Toast.makeText(this.context,"개체 : 앵커가 선택 되었습니다",Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -217,6 +221,9 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
             }
             R.id.btnLocation -> {
                 Toast.makeText(context, "GPS On/Off 버튼입니다", Toast.LENGTH_LONG).show()
+            }
+            R.id.btnFopozone -> {
+                Toast.makeText(context, "해당 포토존으로 이동합니다", Toast.LENGTH_LONG).show()
             }else -> {
         }
         }
@@ -248,8 +255,12 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     }
 
     override fun onSceneTouch(hitTestResult: HitTestResult?, motionEvent: MotionEvent?): Boolean {
-        Toast.makeText(this.context,"터치 : "+hitTestResult!!.node.toString(),Toast.LENGTH_SHORT).show()
-        Log.d("ARCore", "터치 : "+motionEvent?.getY().toString() + ","+motionEvent?.getY().toString())
+        if(hitTestResult!!.node !== null){
+            // Toast.makeText(this.context,"터치 : "+hitTestResult!!.node.toString(),Toast.LENGTH_SHORT).show()
+            Log.d("ARCore", "터치 : "+motionEvent?.getY().toString() + ","+motionEvent?.getY().toString())
+        }else{
+            Log.d("ARCore", "터치 : 개체가 없습니다")
+        }
         return true
     }
 
@@ -258,7 +269,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
 
         if (hitTestResult!!.node != null) {
             // Toast.makeText(this.context, "노드를 터치 했습니다.", Toast.LENGTH_LONG).show()
-            Log.d("ARCore", "Sceneform 노드를 터치하고 있습니다.")
+            // Log.d("ARCore", "Sceneform 노드를 터치하고 있습니다.")
         }
 
         trackableGestureDetector!!.onTouchEvent(motionEvent)
@@ -306,6 +317,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     }
 
     override fun onUpdate(frameTime: FrameTime) {
+        /*
         val frame = arFragment!!.getArSceneView().getArFrame()
         if (frame != null) {
             // Log.d("ARCore","onUpdate 메소드 실행중입니다.")
@@ -321,6 +333,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                 }
             }
         }
+        */
 
     }
 

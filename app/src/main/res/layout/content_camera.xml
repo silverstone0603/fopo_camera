@@ -72,6 +72,13 @@
                 android:text="Capture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
+        <Button
+                android:id="@+id/btnFopozone"
+                android:text="포토존 이동"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
