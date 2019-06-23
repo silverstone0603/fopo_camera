@@ -1,11 +1,9 @@
 package com.teamfopo.fopo
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.support.v7.app.AppCompatActivity
 import com.teamfopo.fopo.module.modDBMS
-import com.teamfopo.fopo.module.modSysData
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,8 +22,6 @@ class SplashActivity : AppCompatActivity() {
             var intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-
-        startActivity(intent)
         finish()
     }
 }

@@ -1,116 +1,137 @@
 package com.teamfopo.fopo
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
-import com.teamfopo.fopo.module.modAuthProcess
-import com.teamfopo.fopo.module.modDBMS
-import com.teamfopo.fopo.module.modSysData
-import kotlinx.android.synthetic.main.activity_auth.*
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import kotlinx.android.synthetic.main.app_bar_main.*
 
-class AuthActivity : Fragment(), View.OnClickListener {
+class AuthActivity : AppCompatActivity(), View.OnClickListener{
 
-    companion object {
-        fun newInstance(): Fragment {
-            var fb: AuthActivity = AuthActivity()
-            return fb
-        }
-    }
+    val actLogin = LoginActivity()
+    val actSignUp = SignUpActivity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.content_camera)
+        setContentView(R.layout.activity_auth)
+
+        setFragment(actLogin)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    // 뒤로가기 버튼 입력시간이 담길 long 객체
+    private var pressedTime: Long = 0
 
-        // Inflate the layout for this fragment
-        var viewRoot: View = inflater!!.inflate(R.layout.activity_auth, container, false)
-        var btnGoToLogin: Button = viewRoot.findViewById(R.id.loginButton) as Button
-        var btnGoToSignUp: Button = viewRoot.findViewById(R.id.registerButon) as Button
+    // 리스너 객체 생성
+    private var mBackListener: MainActivity.OnBackPressedListener? = null
 
-        btnGoToLogin.setOnClickListener(this)
-        btnGoToSignUp.setOnClickListener(this)
-
-        //initFragment()
-
-        return viewRoot
+    // 리스너 설정 메소드
+    fun setOnBackPressedListener(listener: MainActivity.OnBackPressedListener) {
+        mBackListener = listener
     }
 
-    //fun initFragment(){  }
+    // 뒤로가기 버튼을 눌렀을 때의 오버라이드 메소드
+    override fun onBackPressed() {
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            // super.onBackPressed()
+            // 다른 Fragment 에서 리스너를 설정했을 때 처리됩니다.
+            if (mBackListener != null) {
+                mBackListener!!.onBack()
+                Log.e("!!!", "Listener is not null")
+                // 리스너가 설정되지 않은 상태(예를들어 메인Fragment)라면
+                // 뒤로가기 버튼을 연속적으로 두번 눌렀을 때 앱이 종료됩니다.
+            } else {
+                Log.e("!!!", "Listener is null")
+                if (pressedTime == 0L) {
+                    Snackbar.make(
+                        toolbar,
+                        " 한 번 더 누르면 종료됩니다.", Snackbar.LENGTH_LONG
+                    ).show()
+                    pressedTime = System.currentTimeMillis()
+                } else {
+                    val seconds = (System.currentTimeMillis() - pressedTime).toInt()
+
+                    if (seconds > 2000) {
+                        Snackbar.make(
+                            toolbar,
+                            " 한 번 더 누르면 종료됩니다.", Snackbar.LENGTH_LONG
+                        ).show()
+                        pressedTime = 0
+                    } else {
+                        super.onBackPressed()
+                        Log.e("!!!", "onBackPressed : finish, killProcess")
+                        finish()
+                        android.os.Process.killProcess(android.os.Process.myPid())
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        // Get a support ActionBar corresponding to this toolbar
+        val ab = supportActionBar
+        ab!!.setDisplayHomeAsUpEnabled(true)
+        //
+        if (hasFocus) {
+            showSystemUI()
+        }
+    }
+
+    fun showSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        val decorView = window.decorView
+
+        // Hide both the navigation bar and the status bar.
+        // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+        // a general rule, you should design your app to hide the status bar whenever you
+        // hide the navigation bar.
+        decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+    }
 
     override fun onClick(v: View?) {
-        when (v?.id) {
 
-            //로그인 버튼
-            R.id.loginButton -> {
-
-                var mem_id = idInput.text.toString()
-                var mem_pw = passwordInput.text.toString()
-
-
-                if (mem_id != null && mem_pw != null) {
-                    var getLoginInfo = modAuthProcess().login()
-                    var LoginInfo = getLoginInfo.execute("$mem_id", "$mem_pw").get()
-
-                    // 시간을 받아서 String으로 변환
-                    val current = LocalDateTime.now()
-                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-                    val logindate = current.format(formatter)
-                    val lastdate = current.format(formatter)
-
-                    when (LoginInfo.status) {
-                        "succeed" -> {
-                            // 받아오는값: status, token (db에서 토큰이 만들어짐)
-                            // SQLite에서 이미 토큰이있는지 확인..
-                            // 없으면 만들고 로그인성공..
-
-                            val dbms = modDBMS(context!!)
-                            var modSysData: modSysData = null!!
-
-                            modSysData.mem_id = mem_id
-                            modSysData.token = LoginInfo.token
-                            modSysData.logindate = logindate
-                            modSysData.lastdate = lastdate
-
-                            dbms.addUser(modSysData)
-                            Toast.makeText(context, "로그인 성공", Toast.LENGTH_SHORT).show()
-
-                            MainActivity.modService!!.mem_id = mem_id
-                            MainActivity.modService!!.token = LoginInfo.token
-                            MainActivity.modService!!.logindate = logindate
-                            MainActivity.modService!!.lastdate = lastdate
-                        }
-
-                        "exist_session" -> {
-                            Toast.makeText(context, "다른 기기에서 이미 로그인이 되어있습니다.", Toast.LENGTH_SHORT).show()
-                            // 받아오는값: status ( db에 이미 토큰이 있음..) 비정상적인 접근..
-                        }
-
-                        "failed" -> {
-                            Toast.makeText(context, "아이디 또는 비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show()
-                        }
-                        else -> {
-                            Toast.makeText(context, "알 수 없는 오류가 발생 했습니다. FOPO팀에게 문의해주세요.", Toast.LENGTH_SHORT).show()
-                        }
-                    } //when 끝부분
-                }else{
-                    Toast.makeText(context, "ID와PASSWD를 공백없이 입력하세요!", Toast.LENGTH_SHORT).show()
-                }
-            } //R.id.loginButton 끝부분
-
-            //회원가입 버튼
-            R.id.registerButon -> {
-
-            }
-
-        } //when(v?.id) 끝부분
     } //onClick끝부분
+
+    fun setFragment(fragment: Fragment) {
+        //현재 보여지고 있는 프래그먼트를 가져옵니다.
+        val mgrFragment = supportFragmentManager
+        val getTopFragment = mgrFragment.findFragmentById(R.id.fraLogin)
+        mgrFragment.beginTransaction()
+            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
+            .replace(R.id.fraMain, fragment)
+            .commit()
+        println("현재 다음 프레그먼트가 선택 되어 있습니다 : "+mgrFragment.toString())
+    }
+
+    fun setSnackbar(title: String) {
+        //navView.setCheckedItem(R.id.nav_fopomap)
+        Snackbar.make(
+            toolbar,
+            "$title", Snackbar.LENGTH_LONG
+        ).show()
+    }
+
+    fun setScreen(num: Int) {
+        //navView.setCheckedItem(R.id.nav_fopomap)
+        when(num){
+            0 ->{ // 로그인 화면
+                setFragment(actLogin)
+            } 1 ->{ // 회원가입 화면
+                setFragment(actSignUp)
+        }
+        }
+
+    }
 
 }

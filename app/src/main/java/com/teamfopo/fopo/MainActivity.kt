@@ -18,8 +18,6 @@ import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
 import com.teamfopo.fopo.module.modService
 import kotlinx.android.synthetic.main.app_bar_main.*
-import android.view.WindowManager
-import android.os.Build
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
     companion object {
@@ -72,7 +70,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         modService = modService() // 서비스클래스 객체만들고..
 
-        Snackbar.make(toolbar,"[FOPO] 테스트 계정으로 로그인합니다.",Snackbar.LENGTH_SHORT).show()
+        // Snackbar.make(toolbar,"[FOPO] 로그인합니다.",Snackbar.LENGTH_SHORT).show()
     }
 
     private fun initLayoutAction(){

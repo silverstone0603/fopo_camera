@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.teamfopo.fopo.module.modMemProcess
-import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.android.synthetic.main.content_signup.*
 
 class SignUpActivity : Fragment(), View.OnClickListener {
     companion object {
@@ -29,7 +29,7 @@ class SignUpActivity : Fragment(), View.OnClickListener {
     ): View? {
         // Inflate the layout for this fragment
 
-        var viewRoot: View = inflater!!.inflate(R.layout.activity_register, container, false)
+        var viewRoot: View = inflater!!.inflate(R.layout.content_signup, container, false)
         var btnGo: Button = viewRoot.findViewById(R.id.signUpButton) as Button
         btnGo.setOnClickListener(this)
 
