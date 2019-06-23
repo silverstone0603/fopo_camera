@@ -77,7 +77,6 @@ class ViewActivity : AppCompatActivity() {
     }   //onCreate 끝부분
 
     private fun SetPicture(getBrd_no: Int) {
-
         var getBoardInfo = modBoardProcess().GetView()
         var brdInfo = getBoardInfo.execute(getBrd_no.toString()).get()
 

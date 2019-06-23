@@ -18,7 +18,8 @@ import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
 import com.teamfopo.fopo.module.modService
 import kotlinx.android.synthetic.main.app_bar_main.*
-
+import android.view.WindowManager
+import android.os.Build
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
     companion object {
@@ -293,6 +294,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //navView.setCheckedItem(R.id.nav_fopomap)
         setFragment(actFopomap)
     }
+
 
 
 }
