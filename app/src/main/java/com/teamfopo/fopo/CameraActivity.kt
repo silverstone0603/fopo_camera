@@ -1,5 +1,6 @@
 package com.teamfopo.fopo
 
+import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.graphics.Rect
@@ -183,51 +184,38 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         if (frame != null && frame.camera.trackingState == TrackingState.TRACKING) {
             for (hit in frame.hitTest(motionEvent)) {
                 Log.d("ARCore", "적중 거리 : ${hit.distance}")
-                // Toast.makeText(this.context,"적중 거리 : ${hit.distance}",Toast.LENGTH_SHORT).show()
-
                 Log.d("ARCore", "선택 개체 정보 : ${hit.hitPose.toString()}")
 
                 val trackable = hit.trackable
                 if (trackable is Plane) {
-                    // Anchor down
-                    val anchor = hit.createAnchor()
-                    val anchorNode = AnchorNode(anchor)
-                    anchorNode.setParent(arSceneView.scene)
+                        // Anchor down
+                        val anchor = hit.createAnchor()
+                        val anchorNode = AnchorNode(anchor)
+                        anchorNode.setParent(arSceneView.scene)
 
-                    /*
-                    markerRenderable.let{
-                        Node().apply{
-                            setParent(anchorNode)
-                            renderable = it
-                            localPosition = Vector3(-0.0f, 0.0f, 0.0f)
+                        // 노드 추가
+                        val node = Node()
+                        node.setParent(anchorNode)
+                        node.worldRotation = Quaternion()
+
+                        var blFopozone: Boolean = showDialogBox("포포존 생성","선택하신 위치에 포포존을 생성할까요?","네","아니오")
+                        if(blFopozone == true) {
+                            // 노드를 생성하고 앵커에 추가
+                            val andy = TransformableNode(arFragment!!.transformationSystem)
+                            andy.setParent(node)
+                            andy.renderable = markerRenderable
+                            andy.setOnTapListener { hitTestResult: HitTestResult, motionEvent: MotionEvent ->
+                                Log.d("ARCore", "앵커 ID : " + hit.createAnchor().cloudAnchorId)
+                                var blSelect: Boolean = showDialogBox("포포존 이동", "선택하신 포포존으로 이동할까요?", "네", "아니오")
+                                if (blSelect == true) goToFopozone()
+                            }
+                            andy.select()
+
+                            Toast.makeText(this.context, "개체 : 앵커가 생성되었습니다", Toast.LENGTH_LONG).show()
+
+                            Log.d("ARCore", "인스턴스 이름 : ${trackable.javaClass.name}")
+                            Toast.makeText(this.context, "인스턴스 이름 : ${trackable.javaClass.name}", Toast.LENGTH_SHORT).show()
                         }
-
-                        Toast.makeText(this.context,"개체 : 앵커가 생성되고 선택 되었습니다",Toast.LENGTH_LONG).show()
-                    }
-                    */
-
-                    val node = Node()
-                    node.setParent(anchorNode)
-                    node.worldRotation = Quaternion()
-                    /*
-                    node.setOnTapListener{hitTestResult: HitTestResult, motionEvent: MotionEvent ->
-                        Toast.makeText(this.context,"개체 : 개체를 선택했습니다.",Toast.LENGTH_LONG).show()
-                    }
-                    */
-
-                    // Create node and add to the anchor
-                    val andy = TransformableNode(arFragment!!.transformationSystem)
-                    andy.setParent(node)
-                    andy.renderable = markerRenderable
-
-                    andy.select()
-
-                    Toast.makeText(this.context,"개체 : 앵커가 생성되고 선택 되었습니다",Toast.LENGTH_LONG).show()
-
-                    Log.d("ARCore", "인스턴스 이름 : ${trackable.javaClass.name}")
-                    Toast.makeText(this.context,"인스턴스 이름 : ${trackable.javaClass.name}",Toast.LENGTH_SHORT).show()
-
-
                 }else if (trackable is Point){
                     // Toast.makeText(this.context,"개체 : 앵커가 선택 되었습니다",Toast.LENGTH_LONG).show()
                 }
@@ -245,23 +233,42 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                 Toast.makeText(context, "GPS On/Off 버튼입니다", Toast.LENGTH_LONG).show()
             }
             R.id.btnFopozone -> {
-                Toast.makeText(context, "해당 포토존으로 이동합니다", Toast.LENGTH_LONG).show()
-                // Set title bar
-                (activity as MainActivity).setActionBarTitle("포포맵")
-                (activity as MainActivity).setTestGOGO()
-                //val fragment1 = FopomapActivity()
-                val fragment2 = FopozoneActivity()
-                val bundle = Bundle()
-                bundle.putString("zone_no", "3")
-                fragment2.arguments = bundle
-                val fragmentManager = fragmentManager
-                val fragmentTransaction = fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(R.id.fraMain, fragment2)
-                fragmentTransaction.commit()
+                goToFopozone()
 
             }else -> {
         }
         }
+    }
+
+    fun goToFopozone(){
+        Toast.makeText(context, "해당 포토존으로 이동합니다", Toast.LENGTH_LONG).show()
+        // Set title bar
+        (activity as MainActivity).setActionBarTitle("포포맵")
+        (activity as MainActivity).setTestGOGO()
+        //val fragment1 = FopomapActivity()
+        val fragment2 = FopozoneActivity()
+        val bundle = Bundle()
+        bundle.putString("zone_no", "3")
+        fragment2.arguments = bundle
+        val fragmentManager = fragmentManager
+        val fragmentTransaction = fragmentManager!!.beginTransaction()
+        fragmentTransaction.replace(R.id.fraMain, fragment2)
+        fragmentTransaction.commit()
+    }
+
+    fun showDialogBox(title: String, contents: String, strYes: String, strNo: String): Boolean{
+        var blSelect:Boolean = false
+        var builder = AlertDialog.Builder(ContextThemeWrapper(this.context, R.style.Theme_AppCompat_Light_Dialog_Alert))
+                builder.setTitle(title)
+                builder.setMessage(contents)
+                builder.setPositiveButton(strYes){dialog, which ->
+                    blSelect = true
+                }
+                builder.setNegativeButton(strNo){dialog, which ->
+                    blSelect = false
+                }
+                builder.show();
+        return blSelect
     }
 
     private fun addModelToScene(anchor: Anchor, modelRenderable: ModelRenderable) {
