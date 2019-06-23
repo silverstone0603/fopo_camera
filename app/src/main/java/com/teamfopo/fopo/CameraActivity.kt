@@ -1,9 +1,10 @@
 package com.teamfopo.fopo
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.ImageFormat
+import android.graphics.Rect
+import android.graphics.YuvImage
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -15,12 +16,14 @@ import android.widget.ToggleButton
 import com.google.ar.core.*
 import com.google.ar.sceneform.*
 import com.google.ar.sceneform.math.Quaternion
-import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import com.gun0912.tedpermission.PermissionListener
 import com.teamfopo.fopo.nodes.PointCloudNode
+import java.io.BufferedOutputStream
+import java.io.ByteArrayOutputStream
+import java.io.FileOutputStream
 import java.lang.Math.*
 import java.nio.ByteBuffer
 
@@ -199,11 +202,17 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                     val node = Node()
                     node.setParent(anchorNode)
                     node.worldRotation = Quaternion()
+                    /*
+                    node.setOnTapListener{hitTestResult: HitTestResult, motionEvent: MotionEvent ->
+                        Toast.makeText(this.context,"개체 : 개체를 선택했습니다.",Toast.LENGTH_LONG).show()
+                    }
+                    */
 
                     // Create node and add to the anchor
                     val andy = TransformableNode(arFragment!!.transformationSystem)
                     andy.setParent(node)
                     andy.renderable = markerRenderable
+
                     andy.select()
 
                     Toast.makeText(this.context,"개체 : 앵커가 생성되고 선택 되었습니다",Toast.LENGTH_LONG).show()
@@ -213,7 +222,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
 
 
                 }else if (trackable is Point){
-                    Toast.makeText(this.context,"개체 : 앵커가 선택 되었습니다",Toast.LENGTH_LONG).show()
+                    // Toast.makeText(this.context,"개체 : 앵커가 선택 되었습니다",Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -223,7 +232,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btnCapture -> {
-                Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
+                takePhoto()
             }
             R.id.btnLocation -> {
                 Toast.makeText(context, "GPS On/Off 버튼입니다", Toast.LENGTH_LONG).show()
@@ -337,59 +346,72 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
 
     override fun onUpdate(frameTime: FrameTime) {
         /*
-        val frame = arFragment!!.getArSceneView().getArFrame()
-        if (frame != null) {
-            // Log.d("ARCore","onUpdate 메소드 실행중입니다.")
-            for (o in frame.getUpdatedTrackables(Plane::class.java)) {
-                val plane = o as Plane
-                if (plane.getTrackingState() === TrackingState.TRACKING) {
-                    arFragment!!.getPlaneDiscoveryController().hide()
-                    val iterableAnchor = frame.getUpdatedAnchors().iterator()
-                    if (!iterableAnchor.hasNext()) {
-                        // method(plane, frame)
-                        makeAr(plane, frame)
-                    }
-                }
+        try {
+            // var currentFrame: Frame = arFragment.arSceneView.scene.view.getArFrame()
+            var currentImage: Image = arFragment!!.arSceneView.arFrame!!.acquireCameraImage() as Image
+            var imageFormat = currentImage.format
+            if (imageFormat == ImageFormat.YUV_420_888) {
+                Log.d("ARCore", "이미지 변환이 정상적으로 처리 되었으며, 포맷은 YUV_420_888 입니다.")
             }
+        }catch (e: Exception){
+            Log.d("ARCore","오류가 발생했습니다 : "+e.toString())
         }
         */
-
     }
 
-    fun makeAr(plane: Plane, frame: Frame) {
-
-        for (k in 0..9) {
-            if (getDegre(35.8931,128.622,35.8963,128.6)>= 160 && getDegre(35.8931,128.622,35.8963,128.6) <= 170) {
-                Toast.makeText(this.context, "walk", Toast.LENGTH_SHORT).show()
-                val hitTest = frame.hitTest(screenCenter().x, screenCenter().y)
-
-                val hitTestIterator = hitTest.iterator()
-
-                while (hitTestIterator.hasNext()) {
-                    val hitResult = hitTestIterator.next() as HitResult
-
-                    // val modelAnchor = null
-                    val modelAnchor = plane.createAnchor(hitResult.hitPose)
-
-                    val anchorNode = AnchorNode(modelAnchor)
-                    anchorNode.setParent(arFragment!!.getArSceneView().getScene())
-
-                    val transformableNode = TransformableNode(arFragment!!.getTransformationSystem())
-                    transformableNode.setParent(anchorNode)
-                    transformableNode.renderable = this.markerRenderable
-
-                    val x = modelAnchor.getPose().tx()
-                    val y = modelAnchor.getPose().compose(Pose.makeTranslation(0f, 0f, 0f)).ty()
-
-                    transformableNode.worldPosition = Vector3(x, y, (-k).toFloat())
-                }
+    fun takePhoto(){
+        try {
+            // var currentFrame: Frame = arFragment.arSceneView.scene.view.getArFrame()
+            var currentImage: Image = arFragment!!.arSceneView.arFrame!!.acquireCameraImage() as Image
+            var imageFormat = currentImage.format
+            if (imageFormat == ImageFormat.YUV_420_888) {
+                Log.d("CameraCore", "이미지 변환이 정상적으로 처리 되었으며, 포맷은 YUV_420_888 입니다.")
+                WriteImageInformation(currentImage, "storage/sdcard0/DCIM/test.jpg")
+                Log.d("CameraCore", "사진이 저장 되었습니다.")
+                Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
             }
+        }catch (e: Exception){
+            Log.d("CameraCore","오류가 발생했습니다 : "+e.toString())
         }
     }
 
-    private fun screenCenter(): Vector3 {
-        val vw = activity!!.findViewById<View>(android.R.id.content)
-        return Vector3(vw.width / 2f, vw.height / 2f, 0f)
+    fun NV21toJPEG(nv21: ByteArray, width: Int, height: Int): ByteArray {
+        val out = ByteArrayOutputStream()
+        val yuv = YuvImage(nv21, ImageFormat.NV21, width, height, null)
+        yuv.compressToJpeg(Rect(0, 0, width, height), 100, out)
+        return out.toByteArray()
+    }
+
+    fun WriteImageInformation(image: Image, path: String) {
+        var data: ByteArray? = null
+        data = NV21toJPEG(
+            YUV_420_888toNV21(image),
+            image.width, image.height
+        )
+        val bos = BufferedOutputStream(FileOutputStream(path))
+        bos.write(data)
+        bos.flush()
+        bos.close()
+    }
+
+    fun YUV_420_888toNV21(image: Image): ByteArray {
+        val nv21: ByteArray
+        val yBuffer = image.planes[0].buffer
+        val uBuffer = image.planes[1].buffer
+        val vBuffer = image.planes[2].buffer
+
+        val ySize = yBuffer.remaining()
+        val uSize = uBuffer.remaining()
+        val vSize = vBuffer.remaining()
+
+        nv21 = ByteArray(ySize + uSize + vSize)
+
+        //U and V are swapped
+        yBuffer.get(nv21, 0, ySize)
+        vBuffer.get(nv21, ySize, vSize)
+        uBuffer.get(nv21, ySize + vSize, uSize)
+
+        return nv21
     }
 
 }
