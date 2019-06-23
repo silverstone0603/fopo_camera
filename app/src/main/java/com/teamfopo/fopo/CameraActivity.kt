@@ -4,11 +4,9 @@ import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.graphics.Rect
 import android.graphics.YuvImage
-import android.graphics.drawable.BitmapDrawable
 import android.media.Image
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
@@ -25,10 +23,14 @@ import com.gun0912.tedpermission.PermissionListener
 import com.teamfopo.fopo.nodes.PointCloudNode
 import java.io.BufferedOutputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.FileOutputStream
 import java.lang.Math.*
 import java.nio.ByteBuffer
-import java.time.LocalDateTime
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -369,13 +371,17 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
             var imageFormat = currentImage.format
             if (imageFormat == ImageFormat.YUV_420_888) {
                 Log.d("CameraCore", "이미지 변환이 정상적으로 처리 되었으며, 포맷은 YUV_420_888 입니다.")
-                var tmpPath = MediaStore.Images.Media.INTERNAL_CONTENT_URI.path+"/"+ LocalDateTime.now()
-                Log.d("CameraCore","저장 경로 : $tmpPath")
+                var tmpPath = getFileName()
+                if(!tmpPath.equals("")){
+                    Log.d("CameraCore","저장 경로 : $tmpPath")
 
-                tmpPath = "/sdcard/DCIM/new.jpg"
-                WriteImageInformation(currentImage, "$tmpPath")
-                Log.d("CameraCore", "사진이 저장 되었습니다.")
-                Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
+                    WriteImageInformation(currentImage, "$tmpPath")
+                    Log.d("CameraCore", "사진이 저장 되었습니다.")
+                    Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
+                }else{
+                    Toast.makeText(context, "사진 저장에 실패 했습니다.", Toast.LENGTH_LONG).show()
+                }
+
             }
         }catch (e: Exception){
             Log.d("CameraCore","오류가 발생했습니다 : "+e.toString())
@@ -410,6 +416,42 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         return out.toByteArray()
     }
 
+    fun getFileName(): String{
+
+        var path = "/sdcard/DCIM/" // this.activity!!.applicationContext.filesDir.path.toString()
+
+        var datetime = DateTimeFormatter
+                                    .ofPattern("yyyyMMddHHmmss")
+                                    .withZone(ZoneOffset.UTC)
+                                    .format(Instant.now())
+
+        path = path + "/FOPO_"+ datetime +".jpg"
+        var file = File(path)
+
+        Log.d("FileManager","파일 경로 : $path")
+
+        // create a new file
+        val isNewFileCreated :Boolean = file.createNewFile()
+
+        if(isNewFileCreated){
+            Log.d("FileManager","파일이 생성 되었습니다 : $path")
+            return path
+        } else{
+            Log.d("FileManager","파일이 이미 존재합니다 : $path")
+        }
+
+        // 이미 파일이 존재하더라도 한번 더 생성을 진행함
+        val isFileCreated :Boolean = file.createNewFile()
+
+        if(isFileCreated){
+            Log.d("FileManager","파일이 생성 되었습니다 : $path")
+            return path
+        } else{
+            Log.d("FileManager","파일이 이미 존재합니다 : $path")
+            return ""
+        }
+    }
+
     fun WriteImageInformation(image: Image, path: String) {
         var data: ByteArray? = null
         data = NV21toJPEG(
@@ -420,23 +462,6 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         bos.write(data)
         bos.flush()
         bos.close()
-    }
-
-    // Method to save an image to gallery and return uri
-    private fun saveImage(drawable: Image, path: String):Uri{
-        // Get the bitmap from drawable object
-        val bitmap = (drawable as BitmapDrawable).bitmap
-
-        // Save image to gallery
-        val savedImageURL = MediaStore.Images.Media.insertImage(
-            this.activity!!.contentResolver,
-            bitmap,
-            path,
-            "Image of $path"
-        )
-
-        // Parse the gallery image url to uri
-        return Uri.parse(savedImageURL)
     }
 
 }
