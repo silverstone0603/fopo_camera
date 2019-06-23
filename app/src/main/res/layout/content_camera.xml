@@ -77,7 +77,8 @@
                 android:id="@+id/btnFopozone"
                 android:text="포토존 이동"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:visibility="invisible"/>
 
     </LinearLayout>
 

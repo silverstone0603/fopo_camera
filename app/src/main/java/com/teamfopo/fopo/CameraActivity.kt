@@ -381,7 +381,9 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                 }else{
                     Toast.makeText(context, "사진 저장에 실패 했습니다.", Toast.LENGTH_LONG).show()
                 }
-
+            }else{
+                Log.d("CameraCore", "촬영 조건이 맞지 않습니다.")
+                Toast.makeText(context, "촬영 조건을 다시 맞춰주세요.", Toast.LENGTH_LONG).show()
             }
         }catch (e: Exception){
             Log.d("CameraCore","오류가 발생했습니다 : "+e.toString())
