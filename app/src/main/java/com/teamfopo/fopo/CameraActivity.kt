@@ -133,6 +133,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         var btnFopozone: Button = viewRoot.findViewById(R.id.btnFopozone) as Button
         btnFopozone.setOnClickListener(this)
 
+        (activity as MainActivity).showSystemUI()
+
         /*
         arFragment!!.setOnTapArPlaneListener { hitResult, plane, motionEvent ->
             val anchor = hitResult.createAnchor()
@@ -377,13 +379,16 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
 
                     WriteImageInformation(currentImage, "$tmpPath")
                     Log.d("CameraCore", "사진이 저장 되었습니다.")
-                    Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
+                    // Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
+                    (activity as MainActivity).setSnackbar("사진을 저장 했습니다.")
                 }else{
-                    Toast.makeText(context, "사진 저장에 실패 했습니다.", Toast.LENGTH_LONG).show()
+                    // Toast.makeText(context, "사진 저장에 실패 했습니다.", Toast.LENGTH_LONG).show()
+                    (activity as MainActivity).setSnackbar("사진 저장에 실패 했습니다.")
                 }
             }else{
                 Log.d("CameraCore", "촬영 조건이 맞지 않습니다.")
-                Toast.makeText(context, "촬영 조건을 다시 맞춰주세요.", Toast.LENGTH_LONG).show()
+                // Toast.makeText(context, "촬영 조건을 다시 맞춰주세요.", Toast.LENGTH_LONG).show()
+                (activity as MainActivity).setSnackbar("촬영 조건을 다시 맞춰주세요.")
             }
         }catch (e: Exception){
             Log.d("CameraCore","오류가 발생했습니다 : "+e.toString())

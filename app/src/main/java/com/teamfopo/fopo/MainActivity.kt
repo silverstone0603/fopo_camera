@@ -13,7 +13,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
@@ -21,7 +20,7 @@ import com.teamfopo.fopo.module.modService
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
     companion object {
         var modService: modService ?= null
     }
@@ -253,8 +252,41 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        // Get a support ActionBar corresponding to this toolbar
+        val ab = supportActionBar
+        ab!!.setDisplayHomeAsUpEnabled(true)
+        //
+        if (hasFocus) {
+            showSystemUI()
+        }
+    }
+
+    fun showSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        val decorView = window.decorView
+
+        // Hide both the navigation bar and the status bar.
+        // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+        // a general rule, you should design your app to hide the status bar whenever you
+        // hide the navigation bar.
+        decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+    }
+
     fun setActionBarTitle(title: String) {
         supportActionBar!!.title = title
+    }
+
+    fun setSnackbar(title: String) {
+        //navView.setCheckedItem(R.id.nav_fopomap)
+        Snackbar.make(
+            toolbar,
+            "$title", Snackbar.LENGTH_LONG
+        ).show()
     }
 
     fun setTestGOGO() {

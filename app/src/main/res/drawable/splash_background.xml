@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
             android:drawable="@android:color/white"/>
-    <item>
-        <ImageView
-                android:gravity="center"
-                android:src="@drawable/ic_fopo_logo"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-        />
-    </item>
+    <item
+            android:gravity="center"
+            android:width="125dp"
+            android:height="125dp"
+            android:drawable="@drawable/ic_fopo_logo"/>
 </layer-list>
