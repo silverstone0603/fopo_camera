@@ -4,9 +4,11 @@ import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.graphics.Rect
 import android.graphics.YuvImage
+import android.graphics.drawable.BitmapDrawable
 import android.media.Image
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
@@ -26,6 +28,7 @@ import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
 import java.lang.Math.*
 import java.nio.ByteBuffer
+import java.time.LocalDateTime
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -366,13 +369,38 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
             var imageFormat = currentImage.format
             if (imageFormat == ImageFormat.YUV_420_888) {
                 Log.d("CameraCore", "이미지 변환이 정상적으로 처리 되었으며, 포맷은 YUV_420_888 입니다.")
-                WriteImageInformation(currentImage, "storage/sdcard0/DCIM/test.jpg")
+                var tmpPath = MediaStore.Images.Media.INTERNAL_CONTENT_URI.path+"/"+ LocalDateTime.now()
+                Log.d("CameraCore","저장 경로 : $tmpPath")
+
+                tmpPath = "/sdcard/DCIM/new.jpg"
+                WriteImageInformation(currentImage, "$tmpPath")
                 Log.d("CameraCore", "사진이 저장 되었습니다.")
                 Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
             }
         }catch (e: Exception){
             Log.d("CameraCore","오류가 발생했습니다 : "+e.toString())
         }
+    }
+
+
+    fun YUV_420_888toNV21(image: Image): ByteArray {
+        val nv21: ByteArray
+        val yBuffer = image.planes[0].buffer
+        val uBuffer = image.planes[1].buffer
+        val vBuffer = image.planes[2].buffer
+
+        val ySize = yBuffer.remaining()
+        val uSize = uBuffer.remaining()
+        val vSize = vBuffer.remaining()
+
+        nv21 = ByteArray(ySize + uSize + vSize)
+
+        //U and V are swapped
+        yBuffer.get(nv21, 0, ySize)
+        vBuffer.get(nv21, ySize, vSize)
+        uBuffer.get(nv21, ySize + vSize, uSize)
+
+        return nv21
     }
 
     fun NV21toJPEG(nv21: ByteArray, width: Int, height: Int): ByteArray {
@@ -394,24 +422,21 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         bos.close()
     }
 
-    fun YUV_420_888toNV21(image: Image): ByteArray {
-        val nv21: ByteArray
-        val yBuffer = image.planes[0].buffer
-        val uBuffer = image.planes[1].buffer
-        val vBuffer = image.planes[2].buffer
+    // Method to save an image to gallery and return uri
+    private fun saveImage(drawable: Image, path: String):Uri{
+        // Get the bitmap from drawable object
+        val bitmap = (drawable as BitmapDrawable).bitmap
 
-        val ySize = yBuffer.remaining()
-        val uSize = uBuffer.remaining()
-        val vSize = vBuffer.remaining()
+        // Save image to gallery
+        val savedImageURL = MediaStore.Images.Media.insertImage(
+            this.activity!!.contentResolver,
+            bitmap,
+            path,
+            "Image of $path"
+        )
 
-        nv21 = ByteArray(ySize + uSize + vSize)
-
-        //U and V are swapped
-        yBuffer.get(nv21, 0, ySize)
-        vBuffer.get(nv21, ySize, vSize)
-        uBuffer.get(nv21, ySize + vSize, uSize)
-
-        return nv21
+        // Parse the gallery image url to uri
+        return Uri.parse(savedImageURL)
     }
 
 }
