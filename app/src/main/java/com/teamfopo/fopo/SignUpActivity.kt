@@ -59,6 +59,7 @@ class SignUpActivity : Fragment(), View.OnClickListener {
                     when (memInfo) {
                         "true" -> {
                             Toast.makeText(context, "환영합니다! 회원가입 성공~", Toast.LENGTH_SHORT).show()
+                            (activity as AuthActivity).setScreen(0)
                         }
                         "false" -> {
                             Toast.makeText(context, "회원가입 실패! FOPO TEAM에게 문의하세요", Toast.LENGTH_SHORT).show()

@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-         xmlns:android="http://schemas.android.com/apk/res/android"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:gravity="top|center">
+            <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_marginTop="25dp"
+                    app:srcCompat="@drawable/ic_fopo_logo"
+                    android:contentDescription="@string/nav_header_desc"
+                    android:id="@+id/imageView"/>
+    </RelativeLayout>
 
     <FrameLayout
             android:id="@+id/fraLogin"

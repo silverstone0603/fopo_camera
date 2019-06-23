@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.teamfopo.fopo.module.modAuthProcess
 import com.teamfopo.fopo.module.modDBMS
 import com.teamfopo.fopo.module.modSysData
-import kotlinx.android.synthetic.main.content_signup.*
+import kotlinx.android.synthetic.main.content_login.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -71,20 +71,17 @@ class LoginActivity : Fragment(), View.OnClickListener {
                             // 없으면 만들고 로그인성공..
 
                             val dbms = modDBMS(context!!)
-                            var modSysData: modSysData = null!!
+                            val sysdata = modSysData()
 
-                            modSysData.mem_id = mem_id
-                            modSysData.token = LoginInfo.token
-                            modSysData.logindate = logindate
-                            modSysData.lastdate = lastdate
+                            sysdata.mem_id = mem_id
+                            sysdata.token = LoginInfo.token
+                            sysdata.logindate = logindate
+                            sysdata.lastdate = lastdate
 
-                            dbms.addUser(modSysData)
+                            dbms.addUser(sysdata)
                             Toast.makeText(context, "로그인 성공", Toast.LENGTH_SHORT).show()
 
-                            MainActivity.modService!!.mem_id = mem_id
-                            MainActivity.modService!!.token = LoginInfo.token
-                            MainActivity.modService!!.logindate = logindate
-                            MainActivity.modService!!.lastdate = lastdate
+                            (activity as AuthActivity).setMain()
                         }
 
                         "exist_session" -> {
@@ -106,7 +103,7 @@ class LoginActivity : Fragment(), View.OnClickListener {
 
             //회원가입 버튼
             R.id.registerButon -> {
-
+                (activity as AuthActivity).setScreen(1)
             }
 
         } //when(v?.id) 끝부분

@@ -1,10 +1,9 @@
 package com.teamfopo.fopo
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -12,6 +11,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 class AuthActivity : AppCompatActivity(), View.OnClickListener{
 
+    var nowFragment: Int = 0
     val actLogin = LoginActivity()
     val actSignUp = SignUpActivity()
 
@@ -35,9 +35,8 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
 
     // 뒤로가기 버튼을 눌렀을 때의 오버라이드 메소드
     override fun onBackPressed() {
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
+        if (nowFragment != 0) {
+            setScreen(0)
         } else {
             // super.onBackPressed()
             // 다른 Fragment 에서 리스너를 설정했을 때 처리됩니다.
@@ -76,9 +75,6 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        // Get a support ActionBar corresponding to this toolbar
-        val ab = supportActionBar
-        ab!!.setDisplayHomeAsUpEnabled(true)
         //
         if (hasFocus) {
             showSystemUI()
@@ -109,29 +105,28 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
         val getTopFragment = mgrFragment.findFragmentById(R.id.fraLogin)
         mgrFragment.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
-            .replace(R.id.fraMain, fragment)
+            .replace(R.id.fraLogin, fragment)
             .commit()
         println("현재 다음 프레그먼트가 선택 되어 있습니다 : "+mgrFragment.toString())
-    }
-
-    fun setSnackbar(title: String) {
-        //navView.setCheckedItem(R.id.nav_fopomap)
-        Snackbar.make(
-            toolbar,
-            "$title", Snackbar.LENGTH_LONG
-        ).show()
     }
 
     fun setScreen(num: Int) {
         //navView.setCheckedItem(R.id.nav_fopomap)
         when(num){
             0 ->{ // 로그인 화면
+                nowFragment = 0
                 setFragment(actLogin)
             } 1 ->{ // 회원가입 화면
+                nowFragment = 1
                 setFragment(actSignUp)
+            }
         }
-        }
+    }
 
+    fun setMain(){
+        val nextIntent = Intent(this, MainActivity::class.java)
+        startActivity(nextIntent)
+        finish()
     }
 
 }

@@ -15,7 +15,7 @@ class SplashActivity : AppCompatActivity() {
         //dbms.addUser(abc)
         var abc = dbms.getMember()
 
-        if ( !abc.mem_id.equals("") ) {
+        if ( abc.mem_id.equals("") ) {
             var intent = Intent(this, AuthActivity::class.java)
             startActivity(intent)
         } else {
