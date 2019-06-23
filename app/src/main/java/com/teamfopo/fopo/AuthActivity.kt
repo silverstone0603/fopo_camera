@@ -72,7 +72,7 @@ class AuthActivity : Fragment(), View.OnClickListener {
                             // 없으면 만들고 로그인성공..
 
                             val dbms = modDBMS(context!!)
-                            val modSysData = modSysData()
+                            var modSysData: modSysData = null!!
 
                             modSysData.mem_id = mem_id
                             modSysData.token = LoginInfo.token
