@@ -15,8 +15,12 @@ import android.widget.Button
 import android.widget.Toast
 import android.widget.ToggleButton
 import com.google.ar.core.*
-import com.google.ar.sceneform.*
+import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.FrameTime
+import com.google.ar.sceneform.HitTestResult
+import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.math.Quaternion
+import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
@@ -194,28 +198,22 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                         anchorNode.setParent(arSceneView.scene)
 
                         // 노드 추가
-                        val node = Node()
+                        val node = TransformableNode(arFragment!!.getTransformationSystem())
                         node.setParent(anchorNode)
                         node.worldRotation = Quaternion()
-
-                        var blFopozone: Boolean = showDialogBox("포포존 생성","선택하신 위치에 포포존을 생성할까요?","네","아니오")
-                        if(blFopozone == true) {
-                            // 노드를 생성하고 앵커에 추가
-                            val andy = TransformableNode(arFragment!!.transformationSystem)
-                            andy.setParent(node)
-                            andy.renderable = markerRenderable
-                            andy.setOnTapListener { hitTestResult: HitTestResult, motionEvent: MotionEvent ->
-                                Log.d("ARCore", "앵커 ID : " + hit.createAnchor().cloudAnchorId)
-                                var blSelect: Boolean = showDialogBox("포포존 이동", "선택하신 포포존으로 이동할까요?", "네", "아니오")
-                                if (blSelect == true) goToFopozone()
-                            }
-                            andy.select()
-
-                            Toast.makeText(this.context, "개체 : 앵커가 생성되었습니다", Toast.LENGTH_LONG).show()
-
-                            Log.d("ARCore", "인스턴스 이름 : ${trackable.javaClass.name}")
-                            Toast.makeText(this.context, "인스턴스 이름 : ${trackable.javaClass.name}", Toast.LENGTH_SHORT).show()
+                        node.renderable = markerRenderable
+                        node.setLocalScale(Vector3(0.55f, 0.55f, 0.55f))
+                        node.rotationController.isEnabled = false
+                        node.scaleController.isEnabled = false
+                        node.setOnTapListener { hitTestResult: HitTestResult, motionEvent: MotionEvent ->
+                            Log.d("ARCore", "앵커 ID : " + hit.createAnchor().cloudAnchorId)
+                            var blSelect: Boolean = showDialogBox("포포존 이동", "선택하신 포포존으로 이동할까요?", "네", "아니오")
+                            if (blSelect == true) goToFopozone()
+                            else hitTestResult.node!!.removeChild(hitTestResult.node)
                         }
+
+                        Log.d("ARCore", "인스턴스 이름 : ${trackable.javaClass.name}")
+                        Toast.makeText(this.context, "인스턴스 이름 : ${trackable.javaClass.name}", Toast.LENGTH_SHORT).show()
                 }else if (trackable is Point){
                     // Toast.makeText(this.context,"개체 : 앵커가 선택 되었습니다",Toast.LENGTH_LONG).show()
                 }
