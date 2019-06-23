@@ -202,14 +202,17 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                     val node = Node()
                     node.setParent(anchorNode)
                     node.worldRotation = Quaternion()
+                    /*
+                    node.setOnTapListener{hitTestResult: HitTestResult, motionEvent: MotionEvent ->
+                        Toast.makeText(this.context,"개체 : 개체를 선택했습니다.",Toast.LENGTH_LONG).show()
+                    }
+                    */
 
                     // Create node and add to the anchor
                     val andy = TransformableNode(arFragment!!.transformationSystem)
                     andy.setParent(node)
                     andy.renderable = markerRenderable
-                    andy.setOnTapListener{hitTestResult: HitTestResult, motionEvent: MotionEvent ->
-                        Toast.makeText(this.context,"선택했느냐 드디어",Toast.LENGTH_LONG).show()
-                    }
+
                     andy.select()
 
                     Toast.makeText(this.context,"개체 : 앵커가 생성되고 선택 되었습니다",Toast.LENGTH_LONG).show()
@@ -219,7 +222,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
 
 
                 }else if (trackable is Point){
-                    Toast.makeText(this.context,"개체 : 앵커가 선택 되었습니다",Toast.LENGTH_LONG).show()
+                    // Toast.makeText(this.context,"개체 : 앵커가 선택 되었습니다",Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -229,7 +232,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btnCapture -> {
-                Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
+                takePhoto()
             }
             R.id.btnLocation -> {
                 Toast.makeText(context, "GPS On/Off 버튼입니다", Toast.LENGTH_LONG).show()
@@ -342,19 +345,37 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     }
 
     override fun onUpdate(frameTime: FrameTime) {
+        /*
         try {
             // var currentFrame: Frame = arFragment.arSceneView.scene.view.getArFrame()
             var currentImage: Image = arFragment!!.arSceneView.arFrame!!.acquireCameraImage() as Image
             var imageFormat = currentImage.format
             if (imageFormat == ImageFormat.YUV_420_888) {
-                Log.d("ImageFormat", "Image format is YUV_420_888")
+                Log.d("ARCore", "이미지 변환이 정상적으로 처리 되었으며, 포맷은 YUV_420_888 입니다.")
             }
         }catch (e: Exception){
+            Log.d("ARCore","오류가 발생했습니다 : "+e.toString())
+        }
+        */
+    }
 
+    fun takePhoto(){
+        try {
+            // var currentFrame: Frame = arFragment.arSceneView.scene.view.getArFrame()
+            var currentImage: Image = arFragment!!.arSceneView.arFrame!!.acquireCameraImage() as Image
+            var imageFormat = currentImage.format
+            if (imageFormat == ImageFormat.YUV_420_888) {
+                Log.d("CameraCore", "이미지 변환이 정상적으로 처리 되었으며, 포맷은 YUV_420_888 입니다.")
+                WriteImageInformation(currentImage, "storage/sdcard0/DCIM/test.jpg")
+                Log.d("CameraCore", "사진이 저장 되었습니다.")
+                Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
+            }
+        }catch (e: Exception){
+            Log.d("CameraCore","오류가 발생했습니다 : "+e.toString())
         }
     }
 
-    private fun NV21toJPEG(nv21: ByteArray, width: Int, height: Int): ByteArray {
+    fun NV21toJPEG(nv21: ByteArray, width: Int, height: Int): ByteArray {
         val out = ByteArrayOutputStream()
         val yuv = YuvImage(nv21, ImageFormat.NV21, width, height, null)
         yuv.compressToJpeg(Rect(0, 0, width, height), 100, out)
@@ -373,7 +394,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         bos.close()
     }
 
-    private fun YUV_420_888toNV21(image: Image): ByteArray {
+    fun YUV_420_888toNV21(image: Image): ByteArray {
         val nv21: ByteArray
         val yBuffer = image.planes[0].buffer
         val uBuffer = image.planes[1].buffer

@@ -7,22 +7,23 @@ import android.graphics.YuvImage
 import android.media.Image
 import com.google.ar.sceneform.ux.ArFragment
 import java.io.BufferedOutputStream
-
 import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
 
 class modCameraCore(val activity: Activity, val arFragment: ArFragment) {
-
+    /*
     private var activity: Activity ?= null
     private var arFragment: ArFragment ?= null
-
+*/
     private val mWidth: Int = 0
     private val mHeight: Int = 0
     private val capturePicture = false
 
     init {
+        /*
         this.activity = activity
         this.arFragment = arFragment
+        */
     }
 
 
