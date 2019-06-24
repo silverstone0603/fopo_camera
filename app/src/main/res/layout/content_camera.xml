@@ -53,7 +53,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textOff="위치 정보 Off"
-                android:textOn="위치 정보 On"/>
+                android:textOn="위치 정보 On"
+                android:visibility="invisible"/>
 
     </LinearLayout>
 
@@ -67,11 +68,15 @@
             android:gravity="bottom" android:id="@+id/camera_bottom_layout" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
-        <Button
+
+        <ImageButton
                 android:id="@+id/btnCapture"
-                android:text="Capture"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/img_camera_shooting"
+                android:layout_gravity="center"/>
 
         <Button
                 android:id="@+id/btnFopozone"
