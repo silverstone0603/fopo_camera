@@ -40,7 +40,9 @@
                 android:textAllCaps="false"
                 android:layout_marginTop="20dp"
                 android:layout_below="@+id/passwordInput"
-                android:layout_toLeftOf="@+id/registerButon"/>
+                android:layout_toLeftOf="@+id/registerButon"
+                android:background="@drawable/style_fopo_roundbtn"
+                android:textColor="@android:color/white"/>
 
         <Button
                 android:layout_width="150dp"
@@ -49,7 +51,9 @@
                 android:id="@+id/registerButon"
                 android:textAllCaps="false"
                 android:layout_alignTop="@+id/loginButton"
-                android:layout_alignRight="@+id/passwordInput"/>
+                android:layout_alignRight="@+id/passwordInput"
+                android:background="@drawable/style_fopo_roundbtn"
+                android:textColor="@android:color/white"/>
 
         <CheckBox
                 android:layout_width="wrap_content"

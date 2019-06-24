@@ -22,8 +22,10 @@
             //최 상단
             <ImageButton
                     android:id="@+id/imageButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="0dp"
                     android:background="@drawable/img_left_icon"
                     android:layout_gravity="start"/>
 
@@ -32,18 +34,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="글쓰기"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold"
                     android:layout_gravity="center"/>
 
             <Button
                     android:id="@+id/Btn_share"
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:text="공유"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="18sp"
                     android:background="#00ff0000"
                     android:layout_gravity="end"/>
 

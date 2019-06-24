@@ -2,12 +2,11 @@ package com.teamfopo.fopo
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import kotlinx.android.synthetic.main.app_bar_main.*
+import android.widget.Toast
 
 class AuthActivity : AppCompatActivity(), View.OnClickListener{
 
@@ -48,18 +47,18 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
             } else {
                 Log.e("!!!", "Listener is null")
                 if (pressedTime == 0L) {
-                    Snackbar.make(
-                        toolbar,
-                        " 한 번 더 누르면 종료됩니다.", Snackbar.LENGTH_LONG
+                    Toast.makeText(
+                        this,
+                        "한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG
                     ).show()
                     pressedTime = System.currentTimeMillis()
                 } else {
                     val seconds = (System.currentTimeMillis() - pressedTime).toInt()
 
                     if (seconds > 2000) {
-                        Snackbar.make(
-                            toolbar,
-                            " 한 번 더 누르면 종료됩니다.", Snackbar.LENGTH_LONG
+                        Toast.makeText(
+                            this,
+                            "한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG
                         ).show()
                         pressedTime = 0
                     } else {

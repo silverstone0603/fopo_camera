@@ -95,7 +95,9 @@
                 android:textAllCaps="false"
                 android:layout_marginTop="20dp"
                 android:layout_below="@+id/radioGroup"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/style_fopo_roundbtn"
+                android:textColor="@android:color/white"/>
 
     </RelativeLayout>
 
