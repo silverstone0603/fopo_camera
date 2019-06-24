@@ -27,17 +27,26 @@
                 android:id="@+id/btnMap"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:text="포포맵"/>
+                android:text="포포맵"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                android:background="#FFFFFF"/>
         <Button
                 android:id="@+id/btnWrite"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:text="글쓰기"/>
+                android:text="글쓰기"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                android:background="#FFFFFF"/>
         <Button
                 android:id="@+id/btnFriend"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:text="친구 목록"/>
+                android:text="친구 목록"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                android:background="#FFFFFF"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
