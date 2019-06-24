@@ -46,7 +46,7 @@ class WriteActivity : AppCompatActivity() {
         val backClick = findViewById(R.id.imageButton) as ImageButton
 
         backClick.setOnClickListener {
-            startActivity(Intent(this,FopozoneActivity::class.java))
+            //startActivity(Intent(this,FopozoneActivity::class.java))
             finish()
         }
 
