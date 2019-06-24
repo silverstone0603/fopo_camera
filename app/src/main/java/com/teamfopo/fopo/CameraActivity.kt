@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import android.widget.ToggleButton
 import com.google.ar.core.*
@@ -132,7 +133,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         var btnLocation: ToggleButton = viewRoot.findViewById(R.id.btnLocation) as ToggleButton
         btnLocation.setOnClickListener(this)
 
-        var btnCapture: Button = viewRoot.findViewById(R.id.btnCapture) as Button
+        var btnCapture: ImageButton = viewRoot.findViewById(R.id.btnCapture) as ImageButton
         btnCapture.setOnClickListener(this)
 
         var btnFopozone: Button = viewRoot.findViewById(R.id.btnFopozone) as Button
