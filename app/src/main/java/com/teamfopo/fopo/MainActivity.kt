@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         navView.setNavigationItemSelectedListener(this)
 
+        supportActionBar?.title = "카메라"
         navView.setCheckedItem(R.id.nav_camera)
         setFragment(actCamera)
 
@@ -255,7 +256,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onWindowFocusChanged(hasFocus)
         // Get a support ActionBar corresponding to this toolbar
         val ab = supportActionBar
-        ab!!.setDisplayHomeAsUpEnabled(true)
+        ab!!.setDisplayHomeAsUpEnabled(false)
         //
         if (hasFocus) {
             showSystemUI()

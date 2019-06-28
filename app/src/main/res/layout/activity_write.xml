@@ -12,43 +12,50 @@
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:orientation="vertical">
-
         <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp">
+                android:layout_height="45dp"
+                android:layout_marginLeft="5dp"
+                android:background="@android:color/white">
 
             //최 상단
             <ImageButton
                     android:id="@+id/imageButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="0dp"
-                    android:background="@drawable/img_left_icon"
-                    android:layout_gravity="start"/>
+                    android:background="@drawable/ic_arrow_left"
+                    android:layout_gravity="left|center"/>
 
             <TextView
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="글쓰기"
+                    android:text="게시글 작성"
                     android:textSize="18sp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold"
                     android:layout_gravity="center"/>
 
+            <ImageButton
+                    android:id="@+id/Btn_Share"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/ic_btn_write"
+                    android:layout_gravity="right|center"/>
+
+            <!--
             <Button
                     android:id="@+id/Btn_share"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:text="공유"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="18sp"
-                    android:background="#00ff0000"
-                    android:layout_gravity="end"/>
-
+                    android:background="@drawable/ic_btn_write"
+                    android:layout_gravity="right"/>
+-->
         </FrameLayout>
 
         <FrameLayout
@@ -63,6 +70,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
+                        android:paddingTop="2dp"
                         android:id="@+id/img_show"/>
 
                 <ImageButton
@@ -83,10 +91,10 @@
                 android:layout_marginLeft="5dp">
 
             <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="한줄평 작성"
-                    android:textColor="@color/colorAccent"
+                    android:text="한줄평"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="22sp"
                     android:layout_marginTop="10dp"/>
 

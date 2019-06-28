@@ -51,7 +51,7 @@ class WriteActivity : AppCompatActivity() {
         }
 
         // 공유 버튼
-        val shareClick  = findViewById(R.id.Btn_share) as Button
+        val shareClick  = findViewById(R.id.Btn_Share) as ImageButton
 
         shareClick.setOnClickListener {
             goToImageUpload()

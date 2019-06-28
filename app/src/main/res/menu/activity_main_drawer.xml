@@ -6,7 +6,7 @@
     <group android:checkableBehavior="single">
         <item
                 android:id="@+id/nav_home"
-                android:icon="@drawable/ic_menu_camera"
+                android:icon="@drawable/ic_menu_public"
                 android:iconTint="@color/colorTextNormal"
                 android:title="@string/menu_home">
         </item>
@@ -16,7 +16,7 @@
                 android:title="@string/menu_camera" />
         <item
                 android:id="@+id/nav_fopomap"
-                android:icon="@drawable/ic_menu_fopomap"
+                android:icon="@drawable/ic_menu_place"
                 android:title="@string/menu_fopomap" />
         <item
                 android:id="@+id/nav_setting"
@@ -24,7 +24,7 @@
                 android:title="@string/menu_setting" />
         <item
                 android:id="@+id/nav_help"
-                android:icon="@drawable/ic_menu_help"
+                android:icon="@android:drawable/ic_menu_help"
                 android:title="@string/menu_help" />
     </group>
     <!--
