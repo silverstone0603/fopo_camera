@@ -25,7 +25,8 @@ class SplashActivity : AppCompatActivity() {
             System.out.println("TESTTEST: " + calcDaysBetweenNowAndLastDate(dataMemberVO.lastlogin))
         }
 
-        if ( dataMemberVO.token.equals("") || ((!dataMemberVO.lastlogin.equals("")) && calcDaysBetweenNowAndLastDate(dataMemberVO.lastlogin) > 5 )) {
+        if ( dataMemberVO.token.equals("") || calcDaysBetweenNowAndLastDate(dataMemberVO.lastlogin) > 5 ) {
+            // 기존의 sqlite에 컬럼이있을시 삭제 필요.
             var intent = Intent(this, AuthActivity::class.java)
             startActivity(intent)
         } else {
