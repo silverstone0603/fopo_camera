@@ -47,37 +47,49 @@ class SignUpActivity : Fragment(), View.OnClickListener {
                 var mem_pw = passwordInput.text.toString()
                 var mem_checkpw = passwordCheeckInput.text.toString()
                 var mem_nick = nickName.text.toString()
-                var mem_gender = "1"
+                var mem_gender = "2"
 
                 //성별 체크 남자=1 여자=2
                 if (radio_men.isChecked) mem_gender = "1"
                 else mem_gender = "2"
 
-                if(mem_pw == mem_checkpw) {
-                    var getMemInfo = modMemProcess().signUp()
-                    var memInfo = getMemInfo.execute("$mem_id", "$mem_pw", "$mem_nick", "$mem_gender").get()
-                    when (memInfo) {
-                        "true" -> {
-                            Toast.makeText(context, "환영합니다! 회원가입 성공~", Toast.LENGTH_SHORT).show()
-                            (activity as AuthActivity).setScreen(0)
-                        }
-                        "false" -> {
-                            Toast.makeText(context, "회원가입 실패! FOPO TEAM에게 문의하세요", Toast.LENGTH_SHORT).show()
-                        }
-                        "exist_id" -> {
-                            Toast.makeText(context, "중복된 ID 입니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        "exist_nick" -> {
-                            Toast.makeText(context, "중복된 닉네임 입니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        else -> {
-                            Toast.makeText(context, "알수없는 오류! FOPO TEAM에게 문의하세요", Toast.LENGTH_SHORT).show()
-                        }
-                    } //when 끝부분
-                } //비밀번호-비밀번호 확인 if문 끝부분
+                if ( mem_id.equals("")) {
+                    Toast.makeText(context, "아이디를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                    return
+                } else if ( mem_pw.equals("") ) {
+                    Toast.makeText(context, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                    return
+                } else if ( !mem_pw.equals(mem_checkpw) ) {
+                    Toast.makeText(context, "비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
+                    return
+                } else if ( mem_nick.equals("") ) {
+                    Toast.makeText(context, "닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                    return
+                }
+
+                var getMemInfo = modMemProcess().signUp()
+                var memInfo = getMemInfo.execute("$mem_id", "$mem_pw", "$mem_nick", "$mem_gender").get()
+
+                when (memInfo) {
+                    "true" -> {
+                        Toast.makeText(context, "환영합니다! 회원가입 성공~", Toast.LENGTH_SHORT).show()
+                        (activity as AuthActivity).setScreen(0)
+                    }
+                    "false" -> {
+                        Toast.makeText(context, "회원가입 실패! FOPO TEAM에게 문의하세요", Toast.LENGTH_SHORT).show()
+                    }
+                    "exist_id" -> {
+                        Toast.makeText(context, "중복된 ID 입니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    "exist_nick" -> {
+                        Toast.makeText(context, "중복된 닉네임 입니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        Toast.makeText(context, "알수없는 오류! FOPO TEAM에게 문의하세요", Toast.LENGTH_SHORT).show()
+                    }
+                } //when 끝부분
 
             }else -> {   } //회원가입 버튼 if문 끝
         } //when(v?.id) 끝부분
     } //onClick끝부분
-
 }

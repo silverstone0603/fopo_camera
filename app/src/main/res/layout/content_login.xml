@@ -7,78 +7,59 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:gravity="center"
         tools:context=".AuthActivity">
     <!-- tools:showIn="@layout/app_bar_main" -->
 
-    <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent">
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:id="@+id/editUserID"
+            android:layout_centerHorizontal="true"
+            android:hint="아이디"
+            android:inputType="text"
+            android:background="@drawable/custome_edit_text"
+            android:drawableStart="@drawable/ic_username"/>
 
-        <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:contentDescription="@string/nav_header_desc"
-                android:gravity="center">
-            <ImageView
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:layout_marginTop="50dp"
-                    app:srcCompat="@drawable/ic_fopo_logo"
-                    android:gravity="bottom|center"
-                    android:id="@+id/imageView"/>
-        </RelativeLayout>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:id="@+id/editPassword"
+            android:layout_centerHorizontal="true"
+            android:hint="비밀번호"
+            android:layout_below="@+id/editUserID"
+            android:drawableStart="@drawable/ic_password"
+            android:drawableLeft="@drawable/ic_password"
+            android:background="@drawable/custome_edit_text"
+            android:layout_marginTop="8dp"
+            android:inputType="textPassword"/>
 
-        <EditText
-                android:layout_width="300dp"
-                android:layout_height="50dp"
-                android:id="@+id/idInput"
-                android:layout_centerHorizontal="true"
-                android:hint="ID"
-                android:inputType="text"
-                android:layout_marginTop="151dp" />
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:text="로그인"
+            android:id="@+id/btnLogin"
+            android:textAllCaps="false"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/passwordInput"
+            android:layout_toLeftOf="@+id/registerButon"
+            android:background="@drawable/style_auth_button"
+            android:textColor="@android:color/white"/>
 
-        <EditText
-                android:layout_width="300dp"
-                android:layout_height="50dp"
-                android:id="@+id/passwordInput"
-                android:layout_centerHorizontal="true"
-                android:hint="Password"
-                android:layout_below="@+id/idInput"
-                android:inputType="textPassword"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textSize="16sp"
+            android:text="혹시, 비밀번호를 잊어버리셨나요?"/>
 
-        <Button
-                android:layout_width="150dp"
-                android:layout_height="55dp"
-                android:text="로그인"
-                android:id="@+id/loginButton"
-                android:textAllCaps="false"
-                android:layout_marginTop="20dp"
-                android:layout_below="@+id/passwordInput"
-                android:layout_toLeftOf="@+id/registerButon"
-                android:background="@drawable/style_fopo_roundbtn"
-                android:textColor="@android:color/white"/>
-
-        <Button
-                android:layout_width="150dp"
-                android:layout_height="55dp"
-                android:text="회원가입"
-                android:id="@+id/registerButon"
-                android:textAllCaps="false"
-                android:layout_alignTop="@+id/loginButton"
-                android:layout_alignRight="@+id/passwordInput"
-                android:background="@drawable/style_fopo_roundbtn"
-                android:textColor="@android:color/white"/>
-
-        <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="자동 로그인"
-                android:id="@+id/checkBox"
-                android:layout_marginTop="20dp"
-                android:layout_below="@+id/loginButton"
-                android:layout_centerHorizontal="true" />
-    </RelativeLayout>
-
+    <TextView
+            android:id="@+id/txtRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_marginTop="15dp"
+            android:textSize="16sp"
+            android:text="회원가입 하실래요?"/>
 </LinearLayout>

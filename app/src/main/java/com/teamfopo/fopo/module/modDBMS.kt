@@ -23,20 +23,22 @@ class modDBMS(context: Context)
 
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {}
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        db?.execSQL("DROP TABLE member")
+        onCreate(db)
+    }
 
-    fun addUser(user: modSysData) : Boolean {
+    fun addMember(user: modSysData) : Boolean {
         val db = this.writableDatabase
         val values = ContentValues()
         values.put("id", user.mem_id)
         values.put("token", user.token)
-        values.put("logindate", user.logindate)
-        values.put("lastdate", user.lastdate)
+        values.put("lastlogin", user.lastlogin)
 
-        val _success = db.insert("member", null, values)
+        val success = db.insert("member", null, values)
         db.close()
 
-    return (Integer.parseInt("$_success") != -1)
+    return (Integer.parseInt("$success") != -1)
 }
 
     fun getMember() : modSysData {
@@ -51,12 +53,7 @@ class modDBMS(context: Context)
                 while (cursor.moveToNext()) {
                     temp.mem_id = cursor.getString(0)
                     temp.token = cursor.getString(1)
-                    temp.logindate = cursor.getString(2)
-                    temp.lastdate = cursor.getString(3)
-                    //temp.mem_id = cursor.getString(cursor.getColumnIndex("id"))
-                    //temp.token = cursor.getString(cursor.getColumnIndex("token"))
-                    //temp.logindate = cursor.getString(cursor.getColumnIndex("logindate"))
-                    //temp.lastdate = cursor.getString(cursor.getColumnIndex("lastlogin"))
+                    temp.lastlogin = cursor.getString(2)
                 }
           //  }
         //}
@@ -70,6 +67,5 @@ class modDBMS(context: Context)
 class modSysData {
     var mem_id : String = ""
     var token : String = ""
-    var logindate : String = ""
-    var lastdate : String = ""
+    var lastlogin : String = ""
 }
