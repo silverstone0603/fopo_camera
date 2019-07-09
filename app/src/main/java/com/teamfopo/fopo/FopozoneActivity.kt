@@ -1,10 +1,12 @@
 package com.teamfopo.fopo
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.service.media.MediaBrowserService
+import android.support.annotation.MainThread
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v4.app.Fragment
 import android.view.GestureDetector
@@ -25,6 +27,8 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
     private var trackableGestureDetector: GestureDetector? = null
     private var actLayoutInflater: LayoutInflater? = null
 
+    lateinit var viewRoot: View
+
     var zone_no = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +46,7 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
             zone_no = arguments!!.getString("zone_no")
         }
         // Inflate the layout for this fragment
-        var viewRoot: View = inflater.inflate(R.layout.content_fopozone, container, false)
+        viewRoot = inflater.inflate(R.layout.content_fopozone, container, false)
 
         //this.actInflater =
         this.actLayoutInflater = inflater
@@ -57,8 +61,8 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
 
     fun initFragment(viewRoot: View){
 
-        // var thread = ThreadClass()
-        // thread.start()
+         var thread = ThreadClass()
+         thread.start()
 
         /*
             Bundle 설정시
@@ -67,29 +71,26 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
             println(userId)
         */
 
-        var getBoardList = modBoardProcess().GetList()
-        var brdList = getBoardList.execute(zone_no).get()
-        getListView(viewRoot, brdList)
+        //var getBoardList = modBoardProcess().GetList()
+        //var brdList = getBoardList.execute(zone_no).get()
+        //getListView(viewRoot, brdList)
 
     }
 
-    inner class ThreadClass : Thread() {
+    inner class ThreadClass: Thread() {
         override fun run() {
-            //var getBoardList = modBoardProcess().GetList()
-            //var brdList = getBoardList.execute("1").get()
+            var getBoardList = modBoardProcess().GetList()
+            var brdList = getBoardList.execute(zone_no).get()
 
-            /*
-            runOnUiThread {
+            activity!!.runOnUiThread{
                 // Main Thread가 처리
-                getListView(brdList)
+                getListView(viewRoot, brdList)
             }
-            */
-        }
 
+        }
     }
 
     fun getListView(viewRoot: View, brdList: Array<modListProcess>) {
-
         val inflater = actLayoutInflater!!.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         var glItem = viewRoot!!.findViewById(R.id.glBoardList) as GridLayout
 
@@ -119,6 +120,7 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
                 }
 
             }
+
         }
     }
 

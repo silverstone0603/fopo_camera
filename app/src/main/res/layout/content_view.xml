@@ -78,6 +78,8 @@
                                 android:gravity="center"
                                 android:layout_width="match_parent"
                                 android:layout_height="350dp"
+                                android:minHeight="350dp"
+                                android:maxHeight="500dp"
                                 android:padding="15dp"
                                 android:visibility="invisible"
                                 android:background="#B3000000"

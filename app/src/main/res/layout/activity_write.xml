@@ -44,18 +44,6 @@
                     android:layout_marginRight="15dp"
                     android:background="@drawable/ic_btn_write"
                     android:layout_gravity="right|center"/>
-
-            <!--
-            <Button
-                    android:id="@+id/Btn_share"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:text="공유"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    android:background="@drawable/ic_btn_write"
-                    android:layout_gravity="right"/>
--->
         </FrameLayout>
 
         <FrameLayout
@@ -79,7 +67,6 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:background="@drawable/img_pic_add"/>
-
             </RelativeLayout>
 
         </FrameLayout>
@@ -88,22 +75,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_marginLeft="5dp">
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="한줄평"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="22sp"
-                    android:layout_marginTop="10dp"/>
+                android:layout_margin="8dp">
 
             <EditText
                     android:id="@+id/edit_oneLine"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/custome_edit_text"
                     android:textSize="14sp"
+                    android:gravity="start"
+                    android:padding="10dp"
                     android:hint="한줄평을 작성해주세요."/>
 
         </LinearLayout>
