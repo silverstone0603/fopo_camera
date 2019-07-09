@@ -28,9 +28,10 @@ class SettingActivity : Fragment(), View.OnClickListener {
         //viewCamera = inflater.inflate(R.layout.content_setting, container, false)
         var viewRoot: View = inflater.inflate(R.layout.content_setting, container, false)
 
+        /** 갑자기 와있노 이거 ㅅㅂ -기원 7.10
         var btnFopozones: Button = viewRoot.findViewById(R.id.btnFopozones) as Button
         btnFopozones.setOnClickListener(this)
-
+        */
         initFragment()
 
         return viewRoot
@@ -46,9 +47,11 @@ class SettingActivity : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            /** 7.10 오류나서 주석 - 기원
             R.id.btnFopozones -> {
 
             }
+            */
         }
     }
 }

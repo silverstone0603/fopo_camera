@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_voice">
+        <item>포포왔숑</item>
+        <item>포포</item>
+        <item>띠링</item>
+        <item>따르릉</item>
+    </string-array>
+</resources>
