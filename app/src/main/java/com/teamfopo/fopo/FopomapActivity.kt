@@ -2,6 +2,8 @@ package com.teamfopo.fopo
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
@@ -34,12 +36,15 @@ class FopomapActivity : Fragment(), View.OnClickListener {
 
         var viewRoot: View = inflater!!.inflate(R.layout.content_fopomap, container, false)
 
+        var navBottomView: BottomNavigationView = viewRoot.findViewById(R.id.bottom_navigation)
+        navBottomView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        /*
         var btnMap: Button = viewRoot.findViewById(R.id.btnMap) as Button
         btnMap.setOnClickListener(this)
         var btnWrite: Button = viewRoot.findViewById(R.id.btnWrite) as Button
         btnWrite.setOnClickListener(this)
         var btnFriend: Button = viewRoot.findViewById(R.id.btnFriend) as Button
-        btnFriend.setOnClickListener(this)
+        btnFriend.setOnClickListener(this)*/
 
 
     initFragment()
@@ -57,6 +62,7 @@ class FopomapActivity : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        /*
         when (v?.id) {
             R.id.btnMap -> {
                 Toast.makeText(context, "포포맵", Toast.LENGTH_LONG).show()
@@ -70,8 +76,28 @@ class FopomapActivity : Fragment(), View.OnClickListener {
             }else -> {
                 Toast.makeText(context,"Test", Toast.LENGTH_LONG).show()
             }
-        }
+        }*/
     }
+
+    private val mOnNavigationItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.action_one -> {
+                    setChildFragment(MapActivity())
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.action_two -> {
+                    Toast.makeText(context, "친구목록 페이지 준비중입니다 :)", Toast.LENGTH_SHORT).show()
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.action_three -> {
+                    val writeIntent = Intent(activity, WriteActivity::class.java)
+                    startActivity(writeIntent)
+                }
+            }
+            false
+        }
+
 
     private fun setChildFragment(child: Fragment) {
         val childFt = childFragmentManager.beginTransaction()

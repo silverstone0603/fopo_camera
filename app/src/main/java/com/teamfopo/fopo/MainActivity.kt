@@ -1,6 +1,7 @@
 package com.teamfopo.fopo
 
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -19,9 +20,9 @@ import android.widget.Toast.makeText
 import com.teamfopo.fopo.module.modService
 import kotlinx.android.synthetic.main.app_bar_main.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     companion object {
-        var modService: modService ?= null
+        var modService: modService? = null
     }
 
     val actHome = HomeActivity()
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         var navView: NavigationView = findViewById(R.id.nav_view)
+
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
@@ -93,16 +95,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         */
 
     }
-
     override fun onClick(v: View?) {
         Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
+        /*
         when (v?.id) {
             R.id.btnMap -> {
                 println("Test Message")
             }else -> {
                 println("Test Message")
             }
-        }
+        }*/
     }
 
     /*
@@ -127,9 +129,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_friend_add -> true
             else -> super.onOptionsItemSelected(item)
         }
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
