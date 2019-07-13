@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val actFopomap = FopomapActivity()
     val actSetting = SettingActivity()
     val actHelp = HelpActivity()
+    val actFriend = FriendActivity()
 
     val actFopozone = FopozoneActivity()
     // val actView = ViewActivity()
@@ -128,11 +129,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_friend_add -> true
+        when (item.itemId) {
+            R.id.action_friend_add -> {
+                supportActionBar?.title = "친구"
+                makeText(this@MainActivity, "친구추가를 선택했습니다.", LENGTH_SHORT).show()
+
+                setFragment(actFriend)
+            }
             else -> super.onOptionsItemSelected(item)
         }
 
+        return true
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -193,6 +200,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mgrFragment.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
             .replace(R.id.fraMain, fragment)
+            .addToBackStack(null)
             .commit()
         println("현재 다음 프레그먼트가 선택 되어 있습니다 : "+mgrFragment.toString())
     }

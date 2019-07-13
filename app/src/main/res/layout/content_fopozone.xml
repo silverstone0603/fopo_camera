@@ -16,7 +16,8 @@
                 android:orientation="vertical"
 
                 android:padding="10dp"
-                android:background="#F2F2F2">
+                android:gravity="center|left"
+                android:background="@drawable/style_border_underline">
 
             <LinearLayout
                     android:layout_width="wrap_content"
@@ -31,7 +32,7 @@
                         android:text="수성못"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:textColor="@android:color/black"
                         android:textSize="18sp"/>
             </LinearLayout>
 

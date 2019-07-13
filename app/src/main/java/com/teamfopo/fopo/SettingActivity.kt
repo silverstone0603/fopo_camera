@@ -26,7 +26,7 @@ class SettingActivity : Fragment(), View.OnClickListener {
         // Inflate the layout for this fragment
         //var viewCamera: View
         //viewCamera = inflater.inflate(R.layout.content_setting, container, false)
-        var viewRoot: View = inflater.inflate(R.layout.content_setting, container, false)
+        var viewRoot: View = inflater!!.inflate(R.layout.content_setting, container, false)
 
         /** 갑자기 와있노 이거 ㅅㅂ -기원 7.10
         var btnFopozones: Button = viewRoot.findViewById(R.id.btnFopozones) as Button
