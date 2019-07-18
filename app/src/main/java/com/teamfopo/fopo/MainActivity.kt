@@ -1,5 +1,6 @@
 package com.teamfopo.fopo
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     companion object {
         var modService: modService? = null
+        lateinit var mMenu: Menu // For ActionBar MenuIcon Control
     }
 
     val actHome = HomeActivity()
@@ -30,8 +32,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val actFopomap = FopomapActivity()
     val actSetting = SettingActivity()
     val actHelp = HelpActivity()
-    val actFriend = FriendActivity()
-
+    val actFriendList = FriendListActivity()
+    val actFriendAdd = FriendAddActivity()
     val actFopozone = FopozoneActivity()
     // val actView = ViewActivity()
 
@@ -41,6 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val actRegister = SignUpActivity()
     //로그인 엑티비티
     val actAuth = AuthActivity()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,7 +124,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
+        //var actionBar = supportActionBar
+
+        //actionBar!!.setDisplayShowHomeEnabled(false)
+        //getMenuInflater().inflate(R.menu.main, menu)
         menuInflater.inflate(R.menu.main, menu)
+        mMenu = menu
+
         return true
     }
 
@@ -131,10 +140,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
             R.id.action_friend_add -> {
-                supportActionBar?.title = "친구"
+                var mFriendAdd = mMenu.findItem(R.id.action_friend_add)
+                //var mFriendSearch = mMenu.findItem(R.id.action_friend_search)
+                mFriendAdd.setVisible(false)
+                //mFriendSearch.setVisible(true)
+
+                supportActionBar?.title = "친구 추가"
                 makeText(this@MainActivity, "친구추가를 선택했습니다.", LENGTH_SHORT).show()
 
-                setFragment(actFriend)
+                actFopomap.setChildFragment(actFriendAdd)
             }
             else -> super.onOptionsItemSelected(item)
         }

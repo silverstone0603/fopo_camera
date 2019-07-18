@@ -9,5 +9,11 @@
     <item android:id="@+id/action_friend_add"
           android:title="친구 관리"
           android:icon="@drawable/ic_group_add_white_30dp"
+          android:visible="false"
           app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_friend_search"
+          android:title="찾기"
+          android:visible="false"
+          app:showAsAction="ifRoom|withText"/>
 </menu>

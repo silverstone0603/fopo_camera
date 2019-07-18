@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-
+import com.teamfopo.fopo.MainActivity.Companion.mMenu
 
 
 class FopomapActivity : Fragment(), View.OnClickListener {
@@ -83,11 +83,16 @@ class FopomapActivity : Fragment(), View.OnClickListener {
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.action_one -> {
+                    (activity as MainActivity).supportActionBar?.title = "포포맵"
                     setChildFragment(MapActivity())
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.action_two -> {
-                    Toast.makeText(context, "친구목록 페이지 준비중입니다 :)", Toast.LENGTH_SHORT).show()
+                    setChildFragment(FriendListActivity())
+
+                    (activity as MainActivity).supportActionBar?.title = "친구 목록"
+                    var mFriendAdd = mMenu.findItem(R.id.action_friend_add)
+                    mFriendAdd.setVisible(true)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.action_three -> {
@@ -99,7 +104,7 @@ class FopomapActivity : Fragment(), View.OnClickListener {
         }
 
 
-    private fun setChildFragment(child: Fragment) {
+    fun setChildFragment(child: Fragment) {
         val childFt = childFragmentManager.beginTransaction()
 
         if (!child.isAdded) {

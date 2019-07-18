@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.service.media.MediaBrowserService
 import android.support.annotation.MainThread
+import android.support.design.widget.NavigationView
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v4.app.Fragment
 import android.view.GestureDetector
