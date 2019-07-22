@@ -10,53 +10,98 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="친구 포포 ID"/>
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatEditText
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="친구 포포 ID"/>
+
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginRight="10dp"
-                    app:backgroundTint="@color/colorPrimary"/>
+                    android:orientation="horizontal">
 
-            <Button
-                    android:layout_width="60dp"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="1dp"
-                    android:textColor="@android:color/black"
-                    android:background="@drawable/style_round_btn"
-                    android:text="찾기"/>
+                <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/editUserID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginRight="10dp"
+                        app:backgroundTint="@color/colorPrimary"/>
+
+                <Button
+                        android:id="@+id/btnFriendSearch"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="1dp"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/style_auth_button"
+                        android:text="찾기"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:background="#F0F0F0"
+                        android:text="내 아이디"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="idididid"/>
+            </LinearLayout>
         </LinearLayout>
 
 
         <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal">
+                android:id="@+id/llFoundFriend"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="invisible">
+
+            <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/ic_fopo_logo"/>
 
             <TextView
+                    android:id="@+id/txtFoundNick"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:background="#F0F0F0"
-                    android:text="내 아이디"/>
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"
+                    android:text="상워니워니"/>
 
             <TextView
+                    android:id="@+id/txtFoundArticleCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="idididid"/>
+                    android:layout_marginBottom="30dp"
+                    android:text="7개의 게시글"/>
+
+            <Button
+                    android:id="@+id/btnFriendAdd"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/style_auth_button"
+                    android:text="친구 추가"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>
