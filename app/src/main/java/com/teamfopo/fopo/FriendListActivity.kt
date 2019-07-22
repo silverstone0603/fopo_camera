@@ -111,7 +111,7 @@ class MemberAdapter(val items: List<FriendsVO>,
             var result = removeFriend.execute("$fri_id").get()
 
             if (result.equals("success")) {
-
+//
             }
             */
         //}
