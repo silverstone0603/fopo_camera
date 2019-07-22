@@ -56,6 +56,7 @@ class SplashActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsR
     private fun setAppsPermission(){
         var arrPer: Array<String> = arrayOf(
             android.Manifest.permission.INTERNET,
+            android.Manifest.permission.ACCESS_NETWORK_STATE,
             android.Manifest.permission.CAMERA,
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -67,8 +68,9 @@ class SplashActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsR
     private fun getAppsPermission(): Boolean{
         var isGrantPermission: Int = 0
 
-        val arrPer: Array<Int> = arrayOf(0, 0, 0, 0, 0, 0)
+        val arrPer: Array<Int> = arrayOf(0, 0, 0, 0, 0, 0, 0)
         var tmpPerInternet = android.Manifest.permission.INTERNET
+        var tmpPerNetworkStatus = android.Manifest.permission.ACCESS_NETWORK_STATE
         var tmpPerCamera = android.Manifest.permission.CAMERA
         var tmpPerReadIO = android.Manifest.permission.READ_EXTERNAL_STORAGE
         var tmpPerWriteIO = android.Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -82,26 +84,29 @@ class SplashActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsR
             if (checkSelfPermission(tmpPerInternet) == PackageManager.PERMISSION_GRANTED) arrPer[0]=1
             else Log.d("권한 체크", "인터넷 권한 비활성화")
 
-            if (checkSelfPermission(tmpPerCamera) == PackageManager.PERMISSION_GRANTED) arrPer[1]=1
+            if (checkSelfPermission(tmpPerNetworkStatus) == PackageManager.PERMISSION_GRANTED) arrPer[1]=1
+            else Log.d("권한 체크", "네트워크 상태 권한 비활성화")
+
+            if (checkSelfPermission(tmpPerCamera) == PackageManager.PERMISSION_GRANTED) arrPer[2]=1
             else Log.d("권한 체크", "카메라 권한 비활성화")
 
-            if (checkSelfPermission(tmpPerReadIO) == PackageManager.PERMISSION_GRANTED) arrPer[2]=1
+            if (checkSelfPermission(tmpPerReadIO) == PackageManager.PERMISSION_GRANTED) arrPer[3]=1
             else Log.d("권한 체크", "파일 읽기 권한 비활성화")
 
-            if (checkSelfPermission(tmpPerWriteIO) == PackageManager.PERMISSION_GRANTED) arrPer[3]=1
+            if (checkSelfPermission(tmpPerWriteIO) == PackageManager.PERMISSION_GRANTED) arrPer[4]=1
             else Log.d("권한 체크", "파일 쓰기 권한 비활성화")
 
-            if (checkSelfPermission(tmpPerLocation1) == PackageManager.PERMISSION_GRANTED) arrPer[4]=1
+            if (checkSelfPermission(tmpPerLocation1) == PackageManager.PERMISSION_GRANTED) arrPer[5]=1
             else Log.d("권한 체크", "위치 찾기 권한 비활성화")
 
-            if (checkSelfPermission(tmpPerLocation2) == PackageManager.PERMISSION_GRANTED) arrPer[5]=1
+            if (checkSelfPermission(tmpPerLocation2) == PackageManager.PERMISSION_GRANTED) arrPer[6]=1
             else Log.d("권한 체크", "세부 위치 찾기 권한 비활성화")
 
             for(i in arrPer){
                 if(i>=1) isGrantPermission++
             }
 
-            if(isGrantPermission >= 6) return true
+            if(isGrantPermission >= 7) return true
             else return false
         }else{
             Log.d("권한 체크", "모든 권한에 대해서 허용 되었습니다.")
@@ -127,6 +132,7 @@ class SplashActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsR
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         var arrPer: Array<String> = arrayOf(
             android.Manifest.permission.INTERNET,
+            android.Manifest.permission.ACCESS_NETWORK_STATE,
             android.Manifest.permission.CAMERA,
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -156,8 +162,9 @@ class SplashActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsR
                     ActivityCompat.shouldShowRequestPermissionRationale(this, arrPer[2]) ||
                     ActivityCompat.shouldShowRequestPermissionRationale(this, arrPer[3]) ||
                     ActivityCompat.shouldShowRequestPermissionRationale(this, arrPer[4]) ||
-                    ActivityCompat.shouldShowRequestPermissionRationale(this, arrPer[5])
-                        ) {
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, arrPer[5]) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, arrPer[6])
+                ) {
 
                     // 사용자가 거부만 선택한 경우에는 앱을 다시 실행하여 허용을 선택하면 앱을 사용할 수 있습니다.
                     val dialogClickListener = DialogInterface.OnClickListener{_,which ->

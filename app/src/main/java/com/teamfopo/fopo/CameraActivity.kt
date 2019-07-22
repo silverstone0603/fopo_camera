@@ -326,7 +326,6 @@ if (frame != null && frame.camera.trackingState == TrackingState.TRACKING) {
     }
 
     private fun tedPermission(viewRoot: View) {
-
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
                 // 권한 요청 성공
@@ -338,7 +337,6 @@ if (frame != null && frame.camera.trackingState == TrackingState.TRACKING) {
                 isPermission = false
             }
         }
-
     }
 
     fun getDegre(latSource: Double, lngSource: Double, latDestination: Double, lngDestination: Double): Double {
