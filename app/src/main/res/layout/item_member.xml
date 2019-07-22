@@ -63,8 +63,9 @@
         android:layout_gravity="center"
         android:layout_marginRight="10dp"
         android:text="언팔로우"
-        android:textColor="@android:color/white"
+        android:textColor="@drawable/style_textcolor_red"
         android:background="@drawable/style_round_redbtn"
+        style="?android:attr/borderlessButtonStyle"
     />
 </LinearLayout>
 
