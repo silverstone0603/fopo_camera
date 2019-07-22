@@ -165,7 +165,7 @@ class SplashActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsR
                             DialogInterface.BUTTON_POSITIVE -> finish()
                         }
                     }
-                    showAlertDialog("권한 요청 실패","FOPO 실행에 필요한 권한 요청이 거부되었습니다. FOPO를 다시 실행하여 권한을 허용해주세요.","확인","",dialogClickListener)
+                    showAlertDialog("권한 요청 실패","FOPO 실행에 필요한 권한 요청이 거부되었습니다. 다시 실행하여 권한을 허용해주세요.","확인","",dialogClickListener)
                     return
                 } else {
                     // “다시 묻지 않음”을 사용자가 체크하고 거부를 선택한 경우에는 설정(앱 정보)에서 퍼미션을 허용해야 앱을 사용할 수 있습니다.
@@ -174,7 +174,7 @@ class SplashActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsR
                             DialogInterface.BUTTON_POSITIVE -> finish()
                         }
                     }
-                    showAlertDialog("권한 요청 실패","FOPO 실행에 필요한 권한 요청이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다.","확인","",dialogClickListener)
+                    showAlertDialog("권한 요청 실패","FOPO 실행에 필요한 권한 요청이 거부되었습니다. 설정(앱 정보)에서 권한을 허용한 후 다시 실행해주세요.","확인","",dialogClickListener)
                     return
                 }
             }
