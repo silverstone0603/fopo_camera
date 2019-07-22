@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
  */
 
 public class SettingPreferenceFragment extends PreferenceFragment {
-
     SharedPreferences prefs;
     ListPreference soundPreference;
 

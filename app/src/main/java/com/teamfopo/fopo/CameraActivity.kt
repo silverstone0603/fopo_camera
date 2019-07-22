@@ -15,12 +15,14 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import android.widget.ToggleButton
-import com.google.ar.core.*
+import com.google.ar.core.Anchor
+import com.google.ar.core.HitResult
+import com.google.ar.core.Plane
+import com.google.ar.core.TrackingState
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.HitTestResult
 import com.google.ar.sceneform.Scene
-import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
@@ -49,7 +51,8 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, Scene.OnPeekTouchListener, Scene.OnUpdateListener {
+class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, Scene.OnPeekTouchListener,
+    Scene.OnUpdateListener {
 
     private var isCamera: Boolean? = true
     private var isPermission: Boolean? = true
@@ -82,7 +85,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         return viewCamera
     }
 
-    fun initArFragment(viewRoot: View){
+    fun initArFragment(viewRoot: View) {
         /*
             AR Fragment 생성 부분
         */
@@ -109,13 +112,14 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
             }
 
         // set on tap listener
-        arFragment!!.arSceneView.scene.addOnPeekTouchListener(this)
+        // arFragment!!.arSceneView.scene.addOnPeekTouchListener(this)
         arFragment!!.arSceneView.scene.setOnTouchListener(this)
         arFragment!!.arSceneView.scene.addOnUpdateListener(this)
         arFragment!!.setOnTapArPlaneListener { hitResult: HitResult, plane: Plane, motionEvent: MotionEvent ->
-                Toast.makeText(this.context,"해당 위치에 새로운 node가 생성 되었습니다",Toast.LENGTH_LONG).show()
+            Toast.makeText(this.context, "setOnTapArPlaneListener가 실행 되었습니다.", Toast.LENGTH_LONG).show()
         }
 
+        /*
         trackableGestureDetector = GestureDetector(this.activity,
             object : GestureDetector.SimpleOnGestureListener() {
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
@@ -128,6 +132,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                 }
             }
         )
+        */
 
         // Capture the Image
         var btnLocation: ToggleButton = viewRoot.findViewById(R.id.btnLocation) as ToggleButton
@@ -158,16 +163,15 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         }
         */
 
-
-
-        // 제발 되게 해주세요
-
     }
 
     fun onFrame(frameTime: FrameTime) {
         arFragment!!.onUpdate(frameTime)
         val frame = arFragment!!.arSceneView.arFrame
         val camera = frame!!.camera
+
+        var dim: IntArray = camera.getImageIntrinsics().getImageDimensions()
+        Log.d("ARCore","Camera Dimensions: "+dim[0]+" x "+dim[1]);
 
         // If not tracking, don't draw 3d objects.
         if (camera.trackingState == TrackingState.PAUSED) {
@@ -184,43 +188,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     }
 
     fun onSingleTap(motionEvent: MotionEvent) {
-        val arSceneView = arFragment!!.arSceneView
-        val frame = arSceneView.arFrame
-        if (frame != null && frame.camera.trackingState == TrackingState.TRACKING) {
-            for (hit in frame.hitTest(motionEvent)) {
-                Log.d("ARCore", "적중 거리 : ${hit.distance}")
-                Log.d("ARCore", "선택 개체 정보 : ${hit.hitPose.toString()}")
 
-                val trackable = hit.trackable
-                if (trackable is Plane) {
-                        // Anchor down
-                        val anchor = hit.createAnchor()
-                        val anchorNode = AnchorNode(anchor)
-                        anchorNode.setParent(arSceneView.scene)
-
-                        // 노드 추가
-                        val node = TransformableNode(arFragment!!.getTransformationSystem())
-                        node.setParent(anchorNode)
-                        node.worldRotation = Quaternion()
-                        node.renderable = markerRenderable
-                        node.setLocalScale(Vector3(0.55f, 0.55f, 0.55f))
-                        node.rotationController.isEnabled = false
-                        node.scaleController.isEnabled = false
-                        node.setOnTapListener { hitTestResult: HitTestResult, motionEvent: MotionEvent ->
-                            Log.d("ARCore", "앵커 ID : " + hit.createAnchor().cloudAnchorId)
-                            var blSelect: Boolean = showDialogBox("포포존 이동", "선택하신 포포존으로 이동할까요?", "네", "아니오")
-                            if (blSelect == true) goToFopozone()
-                            else hitTestResult.node!!.removeChild(hitTestResult.node)
-                        }
-
-                        Log.d("ARCore", "인스턴스 이름 : ${trackable.javaClass.name}")
-                        Toast.makeText(this.context, "인스턴스 이름 : ${trackable.javaClass.name}", Toast.LENGTH_SHORT).show()
-                }else if (trackable is Point){
-                    // Toast.makeText(this.context,"개체 : 앵커가 선택 되었습니다",Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-        Log.i(this.TAG, "Tracking state: ${frame!!.camera.trackingState}")
     }
 
     override fun onClick(v: View?) {
@@ -234,12 +202,13 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
             R.id.btnFopozone -> {
                 goToFopozone()
 
-            }else -> {
-        }
+            }
+            else -> {
+            }
         }
     }
 
-    fun goToFopozone(){
+    fun goToFopozone() {
         Toast.makeText(context, "해당 포토존으로 이동합니다", Toast.LENGTH_LONG).show()
         // Set title bar
         (activity as MainActivity).setActionBarTitle("포포맵")
@@ -255,31 +224,41 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         fragmentTransaction.commit()
     }
 
-    fun showDialogBox(title: String, contents: String, strYes: String, strNo: String): Boolean{
-        var blSelect:Boolean = false
+    fun showDialogBox(title: String, contents: String, strYes: String, strNo: String): Boolean {
+        var blSelect: Boolean = false
         var builder = AlertDialog.Builder(ContextThemeWrapper(this.context, R.style.Theme_AppCompat_Light_Dialog_Alert))
-                builder.setTitle(title)
-                builder.setMessage(contents)
-                builder.setPositiveButton(strYes){dialog, which ->
-                    blSelect = true
-                }
-                builder.setNegativeButton(strNo){dialog, which ->
-                    blSelect = false
-                }
-                builder.show();
+        builder.setTitle(title)
+        builder.setMessage(contents)
+        builder.setPositiveButton(strYes) { dialog, which ->
+            blSelect = true
+        }
+        builder.setNegativeButton(strNo) { dialog, which ->
+            blSelect = false
+        }
+        builder.show();
         return blSelect
     }
 
     private fun addModelToScene(anchor: Anchor, modelRenderable: ModelRenderable) {
         val anchorNode = AnchorNode(anchor)
         val transformableNode = TransformableNode(arFragment!!.getTransformationSystem())
+
+        Log.d("ARCore", "추가 : 이까지 오긴 합니다")
         transformableNode.setParent(anchorNode)
         transformableNode.renderable = modelRenderable
+        transformableNode.setLocalScale(Vector3(0.55f, 0.55f, 0.55f))
+        transformableNode.rotationController.isEnabled = false
+        transformableNode.scaleController.isEnabled = false
+        transformableNode.setOnTapListener { hitTestResult: HitTestResult, motionEvent: MotionEvent ->
+            var blSelect: Boolean = showDialogBox("포포존 이동", "선택하신 포포존으로 이동할까요?", "네", "아니오")
+            if (blSelect == true) goToFopozone()
+            else hitTestResult.node!!.removeChild(hitTestResult.node)
+        }
         arFragment!!.getArSceneView().scene.addChild(anchorNode)
         transformableNode.select()
     }
 
-    fun onCameraClick(buffer: ByteBuffer, width : Int, height: Int): Bitmap {
+    fun onCameraClick(buffer: ByteBuffer, width: Int, height: Int): Bitmap {
 
         buffer.rewind()
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -296,24 +275,54 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     }
 
     override fun onSceneTouch(hitTestResult: HitTestResult?, motionEvent: MotionEvent?): Boolean {
-        if(hitTestResult!!.node !== null){
-            // Toast.makeText(this.context,"터치 : "+hitTestResult!!.node.toString(),Toast.LENGTH_SHORT).show()
-            Log.d("ARCore", "터치 : "+motionEvent?.getY().toString() + ","+motionEvent?.getY().toString())
-        }else{
-            Log.d("ARCore", "터치 : 개체가 없습니다")
+        val arSceneView = arFragment!!.arSceneView
+        val frame = arSceneView.arFrame
+
+        when (motionEvent?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                Log.d("ARCore", "터치 : " + motionEvent?.getY().toString() + "," + motionEvent?.getY().toString())
+                for (hit in frame!!.hitTest(motionEvent)) {
+                    val trackable = hit.trackable
+                    val anchor = hit!!.createAnchor()
+                    if (trackable is Plane) {
+                        // addModelToScene(anchor, markerRenderable)
+                        Log.d(
+                            "ARCore",
+                            "터치 후 움직임 : " + motionEvent?.getY().toString() + "," + motionEvent?.getY().toString()
+                        )
+                    }
+                }
+            }
         }
+
         return true
     }
 
     override fun onPeekTouch(hitTestResult: HitTestResult?, motionEvent: MotionEvent?) {
         arFragment!!.onPeekTouch(hitTestResult, motionEvent)
+        val arSceneView = arFragment!!.arSceneView
+        val frame = arSceneView.arFrame
+/*
+if (frame != null && frame.camera.trackingState == TrackingState.TRACKING) {
+    if (hitTestResult!!.node != null) {
+        for (hit in frame.hitTest(motionEvent)) {
+            val trackable = hit.trackable
 
-        if (hitTestResult!!.node != null) {
-            // Toast.makeText(this.context, "노드를 터치 했습니다.", Toast.LENGTH_LONG).show()
-            // Log.d("ARCore", "Sceneform 노드를 터치하고 있습니다.")
+            if (trackable is Plane) {
+                /*
+                val anchor = hit!!.createAnchor()
+                addModelToScene(anchor, markerRenderable)
+                break
+                */
+            }
+
         }
+    }
+}
+*/
+        Log.d("ARCore", "OnPeekTouch 상태 : ${frame!!.camera.trackingState}")
 
-        trackableGestureDetector!!.onTouchEvent(motionEvent)
+// trackableGestureDetector!!.onTouchEvent(motionEvent)
     }
 
     private fun tedPermission(viewRoot: View) {
@@ -323,81 +332,75 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                 // 권한 요청 성공
                 isPermission = true
             }
+
             override fun onPermissionDenied(deniedPermissions: ArrayList<String>) {
                 // 권한 요청 실패
                 isPermission = false
             }
         }
-        /*
-        TedPermission.with(view!!.context)
-            .setPermissionListener(permissionListener)
-            .setRationaleMessage(resources.getString(R.string.permission_2))
-            .setDeniedMessage(resources.getString(R.string.permission_1))
-            .setPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA)
-            .check()
-            */
 
     }
 
-    fun getDegre(latSource: Double, lngSource: Double, latDestination: Double, lngDestination: Double):Double{
-        val lat1:Double = latSource/180 * Math.PI
-        val lng1:Double = lngSource/180 * Math.PI
-        val lat2:Double = latDestination/180 * Math.PI
-        val lng2:Double = lngDestination/180 * Math.PI
+    fun getDegre(latSource: Double, lngSource: Double, latDestination: Double, lngDestination: Double): Double {
+        val lat1: Double = latSource / 180 * Math.PI
+        val lng1: Double = lngSource / 180 * Math.PI
+        val lat2: Double = latDestination / 180 * Math.PI
+        val lng2: Double = lngDestination / 180 * Math.PI
 
-        val y = sin(lng2 - lng1)*cos(lat2)
+        val y = sin(lng2 - lng1) * cos(lat2)
         val x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lng2 - lng1)
 
         val tan2 = atan2(y, x)
         val degre = tan2 * 180 / Math.PI
         if (degre < 0) {
-            return degre+360
-        }else {
+            return degre + 360
+        } else {
             return degre
         }
     }
 
     override fun onUpdate(frameTime: FrameTime) {
-        /*
-        try {
-            // var currentFrame: Frame = arFragment.arSceneView.scene.view.getArFrame()
-            var currentImage: Image = arFragment!!.arSceneView.arFrame!!.acquireCameraImage() as Image
-            var imageFormat = currentImage.format
-            if (imageFormat == ImageFormat.YUV_420_888) {
-                Log.d("ARCore", "이미지 변환이 정상적으로 처리 되었으며, 포맷은 YUV_420_888 입니다.")
-            }
-        }catch (e: Exception){
-            Log.d("ARCore","오류가 발생했습니다 : "+e.toString())
-        }
-        */
+/*
+try {
+    // var currentFrame: Frame = arFragment.arSceneView.scene.view.getArFrame()
+    var currentImage: Image = arFragment!!.arSceneView.arFrame!!.acquireCameraImage() as Image
+    var imageFormat = currentImage.format
+    if (imageFormat == ImageFormat.YUV_420_888) {
+        Log.d("ARCore", "이미지 변환이 정상적으로 처리 되었으며, 포맷은 YUV_420_888 입니다.")
+    }
+}catch (e: Exception){
+    Log.d("ARCore","오류가 발생했습니다 : "+e.toString())
+}
+*/
     }
 
-    fun takePhoto(){
+    fun takePhoto() {
         try {
             // var currentFrame: Frame = arFragment.arSceneView.scene.view.getArFrame()
             var currentImage: Image = arFragment!!.arSceneView.arFrame!!.acquireCameraImage() as Image
             var imageFormat = currentImage.format
+
             if (imageFormat == ImageFormat.YUV_420_888) {
                 Log.d("CameraCore", "이미지 변환이 정상적으로 처리 되었으며, 포맷은 YUV_420_888 입니다.")
                 var tmpPath = getFileName()
-                if(!tmpPath.equals("")){
-                    Log.d("CameraCore","저장 경로 : $tmpPath")
+                if (!tmpPath.equals("")) {
+                    Log.d("CameraCore", "저장 경로 : $tmpPath")
 
                     WriteImageInformation(currentImage, "$tmpPath")
                     Log.d("CameraCore", "사진이 저장 되었습니다.")
                     // Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
                     (activity as MainActivity).setSnackbar("사진을 저장 했습니다.")
-                }else{
+                } else {
                     // Toast.makeText(context, "사진 저장에 실패 했습니다.", Toast.LENGTH_LONG).show()
                     (activity as MainActivity).setSnackbar("사진 저장에 실패 했습니다.")
                 }
-            }else{
+            } else {
                 Log.d("CameraCore", "촬영 조건이 맞지 않습니다.")
                 // Toast.makeText(context, "촬영 조건을 다시 맞춰주세요.", Toast.LENGTH_LONG).show()
                 (activity as MainActivity).setSnackbar("촬영 조건을 다시 맞춰주세요.")
             }
-        }catch (e: Exception){
-            Log.d("CameraCore","오류가 발생했습니다 : "+e.toString())
+        } catch (e: Exception) {
+            Log.d("CameraCore", "오류가 발생했습니다 : " + e.toString())
         }
     }
 
@@ -414,7 +417,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
 
         nv21 = ByteArray(ySize + uSize + vSize)
 
-        //U and V are swapped
+//U and V are swapped
         yBuffer.get(nv21, 0, ySize)
         vBuffer.get(nv21, ySize, vSize)
         uBuffer.get(nv21, ySize + vSize, uSize)
@@ -429,38 +432,38 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         return out.toByteArray()
     }
 
-    fun getFileName(): String{
+    fun getFileName(): String {
 
         var path = "/sdcard/DCIM/" // this.activity!!.applicationContext.filesDir.path.toString()
 
         var datetime = DateTimeFormatter
-                                    .ofPattern("yyyyMMddHHmmss")
-                                    .withZone(ZoneOffset.UTC)
-                                    .format(Instant.now())
+            .ofPattern("yyyyMMddHHmmss")
+            .withZone(ZoneOffset.UTC)
+            .format(Instant.now())
 
-        path = path + "/FOPO_"+ datetime +".jpg"
+        path = path + "/FOPO_" + datetime + ".jpg"
         var file = File(path)
 
-        Log.d("FileManager","파일 경로 : $path")
+        Log.d("FileManager", "파일 경로 : $path")
 
-        // create a new file
-        val isNewFileCreated :Boolean = file.createNewFile()
+// create a new file
+        val isNewFileCreated: Boolean = file.createNewFile()
 
-        if(isNewFileCreated){
-            Log.d("FileManager","파일이 생성 되었습니다 : $path")
+        if (isNewFileCreated) {
+            Log.d("FileManager", "파일이 생성 되었습니다 : $path")
             return path
-        } else{
-            Log.d("FileManager","파일이 이미 존재합니다 : $path")
+        } else {
+            Log.d("FileManager", "파일이 이미 존재합니다 : $path")
         }
 
-        // 이미 파일이 존재하더라도 한번 더 생성을 진행함
-        val isFileCreated :Boolean = file.createNewFile()
+// 이미 파일이 존재하더라도 한번 더 생성을 진행함
+        val isFileCreated: Boolean = file.createNewFile()
 
-        if(isFileCreated){
-            Log.d("FileManager","파일이 생성 되었습니다 : $path")
+        if (isFileCreated) {
+            Log.d("FileManager", "파일이 생성 되었습니다 : $path")
             return path
-        } else{
-            Log.d("FileManager","파일이 이미 존재합니다 : $path")
+        } else {
+            Log.d("FileManager", "파일이 이미 존재합니다 : $path")
             return ""
         }
     }
