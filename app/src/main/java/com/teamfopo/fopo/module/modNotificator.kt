@@ -6,16 +6,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.media.RingtoneManager
-import android.support.v4.app.Fragment
 import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat.getSystemService
-import android.widget.Toast
 import com.teamfopo.fopo.MainActivity
-import com.teamfopo.fopo.fragments.FopomapActivity
-import android.support.v4.content.ContextCompat.getSystemService
-import android.R
 
 // 현재 기본 기능에서 추후 필요한 기능 있을시 마다 Update 예정..
 //  - > 푸시알림시 소리 안나옴, 푸시 클릭했을시 인텐트값 넘어갈때 어떻게 할것인지..
