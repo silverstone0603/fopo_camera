@@ -16,19 +16,23 @@ import com.teamfopo.fopo.MainActivity
 import com.teamfopo.fopo.fragments.FopomapActivity
 import android.support.v4.content.ContextCompat.getSystemService
 import android.R
+import android.graphics.Color
 
 // 현재 기본 기능에서 추후 필요한 기능 있을시 마다 Update 예정..
 //  - > 푸시알림시 소리 안나옴, 푸시 클릭했을시 인텐트값 넘어갈때 어떻게 할것인지..
 // ********************************************** 사용법 ************************************************
 // modNotificator.
-//     showNotification(드래그 시 삭제가능여부, 제목, 내용, [ 알림ID값(Default = 0) ], [ 스몰아이콘값(Default = R.drawable.ic_fopo_logo) ]) // 푸시알림
+//     showNotification(드래그 시 삭제가능여부, 제목, 내용, [ 알림ID값(Default = 0) ], [ 스몰아이콘값(Default = R.drawable.ic_fopo_logo) ],
+//                                       [ 라지아이콘값(Default = R.drawable.img_logo) ]) // 푸시알림
 //     CancelNotification(알림ID값) -> 특정 알림ID 푸시알림 삭제
-//     CancelNotification() -> 모든 푸시알림 삭제
+//     CancelNotificationAll() -> 모든 푸시알림 삭제
 // *****************************************************************************************************
 
 class modNotificator {
     companion object {
-        fun showNotification(Ongoing: Boolean, ContentTitle: String, ContentText: String, id: Int = 0, SmallIcon: Int = com.teamfopo.fopo.R.drawable.ic_fopo_logo) {
+        fun showNotification(Ongoing: Boolean, ContentTitle: String, ContentText: String, id: Int = 0,
+                             SmallIcon: Int = com.teamfopo.fopo.R.drawable.ic_fopo_logo,
+                              LargeIcon: Int = com.teamfopo.fopo.R.drawable.img_logo) {
             val channelId = "channel"
             val channelName = "Channel Name"
 
@@ -63,6 +67,9 @@ class modNotificator {
 
             builder.setContentTitle(ContentTitle) // required
                 .setSmallIcon(SmallIcon)
+                    //getResources().getColor(R.color.my_notif_color);
+                    //#F444FF
+                .setColor(MainActivity.mContext.getColor(com.teamfopo.fopo.R.color.colorPrimary))
                 .setStyle(NotificationCompat.BigTextStyle().bigText(ContentText))
                 .setContentText(ContentText)  // required
                 .setDefaults(Notification.DEFAULT_ALL)
@@ -73,16 +80,14 @@ class modNotificator {
                         .getDefaultUri(RingtoneManager.TYPE_ALARM)
                 )
 
-                //.setSmallIcon(R.drawable.ic_fopo_logo)
-                //.setLargeIcon(BitmapFactory.decodeResource(MainActivity.mContext.getResources(), R.drawable.ic_fopo_logo))
-                //.setBadgeIconType(R.drawable.ic_fopo_logo)
+                .setLargeIcon(BitmapFactory.decodeResource(MainActivity.mContext.getResources(),  LargeIcon))
 
                 .setContentIntent(pendingIntent)
 
             notifManager.notify(id, builder.build())
         }
 
-        fun CancelNotification() {
+        fun CancelNotificationAll() {
             val notifiyMgr = MainActivity.mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
             notifiyMgr!!.cancelAll()
         }
