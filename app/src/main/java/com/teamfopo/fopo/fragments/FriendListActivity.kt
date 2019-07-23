@@ -1,4 +1,4 @@
-package com.teamfopo.fopo
+package com.teamfopo.fopo.fragments
 
 
 import android.content.Context
@@ -15,6 +15,8 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import com.teamfopo.fopo.MainActivity
+import com.teamfopo.fopo.R
 import com.teamfopo.fopo.databinding.ItemMemberBinding
 import com.teamfopo.fopo.module.FriendsVO
 import com.teamfopo.fopo.module.modBoardProcess
@@ -41,8 +43,9 @@ class FriendListActivity : Fragment() {
     }
 
     private fun initFragment(){
-        var mFriendAdd = MainActivity.mMenu.findItem(R.id.action_friend_add)
-        mFriendAdd.setVisible(true)
+        var mFriendAdd = MainActivity.mMenu.findItem(R.id.action_friend_add).also {
+            it.setVisible(true)
+        }
 
         var getFriendList = modFriendProcess().getFriends()
         var memberlist = getFriendList.execute().get()

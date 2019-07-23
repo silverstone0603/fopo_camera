@@ -1,4 +1,4 @@
-package com.teamfopo.fopo
+package com.teamfopo.fopo.fragments
 
 import android.app.Activity
 import android.content.Context
@@ -18,6 +18,7 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.Toast
+import com.teamfopo.fopo.R
 import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modListProcess
 import kotlinx.android.synthetic.main.content_fopozone.*

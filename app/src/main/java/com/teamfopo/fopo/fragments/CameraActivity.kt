@@ -1,4 +1,4 @@
-package com.teamfopo.fopo
+package com.teamfopo.fopo.fragments
 
 import android.app.AlertDialog
 import android.graphics.Bitmap
@@ -28,6 +28,8 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import com.gun0912.tedpermission.PermissionListener
+import com.teamfopo.fopo.MainActivity
+import com.teamfopo.fopo.R
 import com.teamfopo.fopo.nodes.PointCloudNode
 import java.io.BufferedOutputStream
 import java.io.ByteArrayOutputStream

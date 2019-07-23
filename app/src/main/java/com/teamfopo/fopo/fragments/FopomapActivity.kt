@@ -1,16 +1,14 @@
-package com.teamfopo.fopo
+package com.teamfopo.fopo.fragments
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.design.widget.NavigationView
+import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
+import com.teamfopo.fopo.*
 import com.teamfopo.fopo.MainActivity.Companion.mMenu
 
 
@@ -80,7 +78,7 @@ class FopomapActivity : Fragment(), View.OnClickListener {
     }
 
     private val mOnNavigationItemSelectedListener =
-        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.action_one -> {
                     (activity as MainActivity).supportActionBar?.title = "포포맵"

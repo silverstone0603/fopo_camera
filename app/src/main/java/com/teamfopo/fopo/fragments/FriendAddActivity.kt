@@ -1,4 +1,4 @@
-package com.teamfopo.fopo
+package com.teamfopo.fopo.fragments
 
 
 import android.content.Context
@@ -15,6 +15,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.teamfopo.fopo.MainActivity
+import com.teamfopo.fopo.R
 import com.teamfopo.fopo.module.FriendsVO
 import com.teamfopo.fopo.module.UserVO
 import com.teamfopo.fopo.module.modFriendProcess

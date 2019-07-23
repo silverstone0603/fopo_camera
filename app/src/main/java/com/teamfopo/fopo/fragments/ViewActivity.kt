@@ -1,4 +1,4 @@
-package com.teamfopo.fopo
+package com.teamfopo.fopo.fragments
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import com.teamfopo.fopo.R
 import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modReplyProcess
 import com.teamfopo.fopo.module.modViewProcess

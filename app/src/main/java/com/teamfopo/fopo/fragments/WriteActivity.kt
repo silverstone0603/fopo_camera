@@ -1,4 +1,4 @@
-package com.teamfopo.fopo
+package com.teamfopo.fopo.fragments
 
 import android.Manifest
 import android.app.Activity
@@ -20,6 +20,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
+import com.teamfopo.fopo.R
 import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modImageResizeUtils
 import kotlinx.android.synthetic.main.activity_write.*

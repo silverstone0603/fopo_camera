@@ -2,7 +2,6 @@ package com.teamfopo.fopo
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -19,6 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
+import com.teamfopo.fopo.fragments.*
 import com.teamfopo.fopo.module.modService
 import kotlinx.android.synthetic.main.app_bar_main.*
 

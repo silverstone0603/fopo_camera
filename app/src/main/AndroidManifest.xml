@@ -65,12 +65,12 @@
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-                android:name=".ViewActivity"
+                android:name=".fragments.ViewActivity"
                 android:theme="@style/AppTheme.NoActionBar"
                 android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
-                android:name=".WriteActivity"
+                android:name=".fragments.WriteActivity"
                 android:theme="@style/AppTheme.NoActionBar"
                 android:windowSoftInputMode="stateAlwaysHidden">
         </activity>

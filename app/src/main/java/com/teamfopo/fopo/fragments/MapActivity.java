@@ -1,4 +1,4 @@
-package com.teamfopo.fopo;
+package com.teamfopo.fopo.fragments;
 
 import android.Manifest;
 import android.content.Intent;
@@ -32,6 +32,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.skt.Tmap.TMapTapi;
+import com.teamfopo.fopo.R;
+import com.teamfopo.fopo.fragments.FopozoneActivity;
 import com.teamfopo.fopo.module.PhotozoneDTO;
 import com.teamfopo.fopo.module.modPhotoProcess;
 import com.teamfopo.fopo.nodes.MarkerClusterRenderer;

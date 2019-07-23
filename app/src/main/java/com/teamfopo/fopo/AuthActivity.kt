@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.teamfopo.fopo.fragments.*
 
 class AuthActivity : AppCompatActivity(), View.OnClickListener{
 
@@ -105,6 +106,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
         mgrFragment.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
             .replace(R.id.fraLogin, fragment)
+            .show(fragment)
             .commit()
         println("현재 다음 프레그먼트가 선택 되어 있습니다 : "+mgrFragment.toString())
     }

@@ -1,4 +1,4 @@
-package com.teamfopo.fopo
+package com.teamfopo.fopo.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import com.teamfopo.fopo.AuthActivity
+import com.teamfopo.fopo.R
 import com.teamfopo.fopo.module.modMemProcess
 import kotlinx.android.synthetic.main.content_signup.*
 
