@@ -36,7 +36,7 @@
 
     <Button
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:text="로그인"
             android:id="@+id/btnLogin"
             android:textAllCaps="false"
@@ -45,21 +45,36 @@
             android:layout_below="@+id/passwordInput"
             android:layout_toLeftOf="@+id/registerButon"
             android:background="@drawable/style_auth_button"
-            android:textColor="@android:color/white"/>
+            android:textColor="@drawable/style_textcolor_darkpink"
+            style="?android:attr/borderlessButtonStyle"/>
 
-    <TextView
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:textSize="16sp"
-            android:text="혹시, 비밀번호를 잊어버리셨나요?"/>
-
-    <TextView
-            android:id="@+id/txtRegister"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:layout_marginTop="15dp"
-            android:textSize="16sp"
-            android:text="회원가입 하실래요?"/>
+            android:padding="0dp"
+            android:layout_gravity="top"
+            android:gravity="center">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:text="비밀번호 찾기"/>
+        <View
+                android:layout_width="2dp"
+                android:layout_height="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                style="@style/Divider"/>
+        <TextView
+                android:id="@+id/txtRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:gravity="bottom"
+                android:textSize="16sp"
+                android:text="회원가입"/>
+    </LinearLayout>
 </LinearLayout>

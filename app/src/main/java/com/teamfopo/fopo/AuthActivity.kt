@@ -7,19 +7,35 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.teamfopo.fopo.fragments.*
+import com.teamfopo.fopo.fragments.LoginActivity
+import com.teamfopo.fopo.fragments.SignUpActivity
+import com.teamfopo.fopo.module.modKeyboardUtils
+import kotlinx.android.synthetic.main.activity_auth.*
 
 class AuthActivity : AppCompatActivity(), View.OnClickListener{
 
-    var nowFragment: Int = 0
-    val actLogin = LoginActivity()
-    val actSignUp = SignUpActivity()
+    private lateinit var modKeyboardUtils: modKeyboardUtils
+
+    private var nowFragment: Int = 0
+    private val actLogin = LoginActivity()
+    private val actSignUp = SignUpActivity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
+        setScreen(0)
 
-        setFragment(actLogin)
+        modKeyboardUtils = modKeyboardUtils(window,
+            onShowKeyboard = { keyboardHeight ->
+                sv_root.run {
+                    smoothScrollTo(scrollX, scrollY + keyboardHeight)
+                }
+            })
+    }
+
+    override fun onDestroy() {
+        modKeyboardUtils.detachKeyboardListeners()
+        super.onDestroy()
     }
 
     // 뒤로가기 버튼 입력시간이 담길 long 객체
@@ -37,6 +53,10 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
     override fun onBackPressed() {
         if (nowFragment != 0) {
             setScreen(0)
+            Toast.makeText(
+                this,
+                "로그인 화면으로 되돌아갑니다.", Toast.LENGTH_LONG
+            ).show()
         } else {
             // super.onBackPressed()
             // 다른 Fragment 에서 리스너를 설정했을 때 처리됩니다.
@@ -104,11 +124,12 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
         val mgrFragment = supportFragmentManager
         val getTopFragment = mgrFragment.findFragmentById(R.id.fraLogin)
         mgrFragment.beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
+            .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
             .replace(R.id.fraLogin, fragment)
-            .show(fragment)
+            .addToBackStack(null)
+            // .disallowAddToBackStack()
             .commit()
-        println("현재 다음 프레그먼트가 선택 되어 있습니다 : "+mgrFragment.toString())
+        println("현재 다음 프레그먼트가 선택 되어 있습니다 : $nowFragment")
     }
 
     fun setScreen(num: Int) {
