@@ -82,8 +82,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         mContext = this.applicationContext
 
-        modNotificator.showNotification(false, "FOPO 푸시알림 테스트",
-            "FOPO 푸시알림 테스트입니다.")
+        modNotificator.showNotification(false, "사진 동기화 완료",
+            "FOPO 앨범의 사진을 자동으로 동기화 하였습니다.")
         //modNotificator.CancelNotification()
 
         // Snackbar.make(toolbar,"[FOPO] 로그인합니다.",Snackbar.LENGTH_SHORT).show()

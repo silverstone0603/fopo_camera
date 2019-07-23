@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:id="@+id/sv_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:scrollbarFadeDuration="0"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarThumbVertical="@color/colorPrimaryDark"
+        android:scrollbarTrackVertical="@android:color/white"
+        android:scrollbarSize="2dp">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:gravity="center"
+            android:layout_margin="40dp">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:src="@drawable/ic_fopo_logo"
+                android:layout_gravity="center" android:contentDescription="@string/app_name"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="로그인 인증 요청"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16dp"
+                android:textStyle="normal"
+                android:id="@+id/title"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="사용자의 계정으로 다른 기기에서 로그인을 요청하였습니다.\n아래의 인증코드를 요청한 기기에서 입력하여 인증하세요."
+                android:textAlignment="center"
+                android:textColor="@color/colorTextNormal"
+                android:textSize="13dp"
+                android:textStyle="normal"
+                android:id="@+id/desc"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="인증코드"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:id="@+id/numAuth"/>
+        <Button
+                android:text="인증 취소"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button"
+                android:background="@drawable/style_auth_button"
+                android:textColor="@drawable/style_textcolor_darkpink"
+                style="?android:attr/borderlessButtonStyle"
+        />
+    </LinearLayout>
+</ScrollView>
+
