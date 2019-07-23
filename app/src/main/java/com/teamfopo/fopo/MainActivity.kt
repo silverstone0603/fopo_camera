@@ -19,6 +19,7 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
 import com.teamfopo.fopo.fragments.*
+import com.teamfopo.fopo.module.modNotificator
 import com.teamfopo.fopo.module.modService
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -26,6 +27,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     companion object {
         var modService: modService? = null
         lateinit var mMenu: Menu // For ActionBar MenuIcon Control
+
+        lateinit var mContext: Context
     }
 
     val actHome = HomeActivity()
@@ -44,8 +47,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val actRegister = SignUpActivity()
     //로그인 엑티비티
     val actAuth = AuthActivity()
-
-    val mContext: Context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +79,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         initLayoutAction()
 
         modService = modService() // 서비스클래스 객체만들고..
+
+        mContext = this.applicationContext
+
+        modNotificator.showNotification(false, "FOPO 푸시알림 테스트",
+            "FOPO 푸시알림 테스트입니다.")
+        //modNotificator.CancelNotification()
 
         // Snackbar.make(toolbar,"[FOPO] 로그인합니다.",Snackbar.LENGTH_SHORT).show()
     }
