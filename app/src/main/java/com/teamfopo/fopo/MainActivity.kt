@@ -1,6 +1,7 @@
 package com.teamfopo.fopo
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -19,6 +20,7 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
 import com.teamfopo.fopo.fragments.*
+import com.teamfopo.fopo.module.FOPOService
 import com.teamfopo.fopo.module.modNotificator
 import com.teamfopo.fopo.module.modService
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         lateinit var mContext: Context
     }
+    var serviceIntent: Intent? = null
 
     val actHome = HomeActivity()
     val actCamera = CameraActivity()
@@ -87,6 +90,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //modNotificator.CancelNotification()
 
         // Snackbar.make(toolbar,"[FOPO] 로그인합니다.",Snackbar.LENGTH_SHORT).show()
+
+        if (FOPOService.serviceIntent == null) {
+            serviceIntent = Intent(this, FOPOService::class.java)
+            startService(serviceIntent)
+            Toast.makeText(applicationContext, "ddd", Toast.LENGTH_LONG).show()
+
+        } else {
+            serviceIntent = FOPOService.serviceIntent //getInstance().getApplication();
+            Toast.makeText(applicationContext, "already", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun initLayoutAction(){
@@ -334,5 +347,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        if (serviceIntent != null) {
+            stopService(serviceIntent)
+            serviceIntent = null
+        }
+    }
 }

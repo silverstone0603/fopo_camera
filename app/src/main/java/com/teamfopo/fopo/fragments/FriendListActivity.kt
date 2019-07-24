@@ -1,32 +1,24 @@
 package com.teamfopo.fopo.fragments
 
 
-import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import com.teamfopo.fopo.MainActivity
 import com.teamfopo.fopo.R
 import com.teamfopo.fopo.databinding.ItemMemberBinding
 import com.teamfopo.fopo.module.FriendsVO
-import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modFriendProcess
-import com.teamfopo.fopo.nodes.Member
-import kotlinx.android.synthetic.main.content_friend_list.*
-import kotlinx.android.synthetic.main.item_member.*
-import java.util.*
 
 class FriendListActivity : Fragment() {
+    lateinit var memberlist: List<FriendsVO>
 
     lateinit var viewRoot: View
 
@@ -48,9 +40,8 @@ class FriendListActivity : Fragment() {
         }
 
         var getFriendList = modFriendProcess().getFriends()
-        var memberlist = getFriendList.execute().get()
+        memberlist = getFriendList.execute().get()
 
-        //"친구 " + memberlist.size + "명"
         var txtFriendCount: TextView = viewRoot.findViewById(R.id.txtFriendCount)
         txtFriendCount.setText("친구 " + memberlist.size + "명")
 
@@ -58,23 +49,9 @@ class FriendListActivity : Fragment() {
         mRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = MemberAdapter(memberlist) { member ->
-
-                //btnRemoveFriend.setOnClickListener {
-                //    Toast.makeText(context,"${member.mem_no}", Toast.LENGTH_SHORT).show()
-                //}
-
                 Toast.makeText(context,"$member", Toast.LENGTH_SHORT).show()
-
             }
-
-
-
-            //members.add(Member(1,"ddddd",5))
-            //mRecyclerView.adapter!!.notifyDataSetChanged()
-
-
         }
-
     }
 
     override fun onStop() {
@@ -84,7 +61,7 @@ class FriendListActivity : Fragment() {
     }
 }
 
-class MemberAdapter(val items: List<FriendsVO>,
+class MemberAdapter(var items: List<FriendsVO>,
                     private val clickListener: (member: FriendsVO) -> Unit) :
     RecyclerView.Adapter<MemberAdapter.MemberViewHolder>() {
 
@@ -100,24 +77,20 @@ class MemberAdapter(val items: List<FriendsVO>,
             clickListener.invoke(items[viewHolder.adapterPosition])
         }
 
-        //btnRemoveFriend.setOnClickListener{
-        //    clickListener.invoke(items[viewHolder.adapterPosition])
-        //}
-
-
-        //btnRemoveFriend.setOnClickListener {
-           // clickListener.invoke(items[viewHolder.adapterPosition])
-
-            /*var fri_id: String = "${items[viewHolder.adapterPosition].mem_no}"
-
+        btnRemoveFriend.setOnClickListener {
+            var fri_id: String = "${items[viewHolder.adapterPosition].mem_no}"
             var removeFriend = modFriendProcess().removeFriend()
             var result = removeFriend.execute("$fri_id").get()
 
             if (result.equals("success")) {
-//
+                Toast.makeText(MainActivity.mContext,"${items[viewHolder.adapterPosition].mem_nick} 언팔로우", Toast.LENGTH_SHORT).show()
+
+                var getFriendList = modFriendProcess().getFriends()
+                items = getFriendList.execute().get()
+
+                this.notifyDataSetChanged()
             }
-            */
-        //}
+        }
 
         return viewHolder
     }
