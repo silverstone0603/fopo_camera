@@ -79,9 +79,9 @@ class ThreadTest: Thread() {
         while (run) {
             try {
                 SystemClock.sleep(5000)
-                //handler.sendEmptyMessage(Toast_Notice) // 메인스레드에서의 작업 필요시 핸들러 호출.. (UI갱신, 토스트 등)
+                // handler.sendEmptyMessage(Toast_Notice) // 메인스레드에서의 작업 필요시 핸들러 호출.. (UI갱신, 토스트 등)
                             // 참조 -> sendMessage메소드를 사용하면 정수가아닌 msg정보를 핸들러도 전송가능
-                //modNotificator.showNotification(false, "쓰레드테스트", "5초마다 울립니다 ㅋㅋ",0, Context_FOPOService!!.applicationContext)
+                modNotificator.showNotification(false, "쓰레드테스트", "5초마다 울립니다 ㅋㅋ",0, Context_FOPOService!!.applicationContext)
             } catch (e: InterruptedException) {
                 run = false
                 e.printStackTrace()

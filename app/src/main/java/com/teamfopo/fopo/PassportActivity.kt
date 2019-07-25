@@ -10,7 +10,7 @@ class PassportActivity:AppCompatActivity() {
         val dbms = modDBMS(this)
         var dataMemberVO = dbms.getMember()
 
-
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_passport)
     }
 }
