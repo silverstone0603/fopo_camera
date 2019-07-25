@@ -12,9 +12,10 @@ import com.teamfopo.fopo.MainActivity
 //  - > 푸시 클릭했을시 인텐트값 넘어갈때 어떻게 할것인지..
 // ********************************************** 사용법 ************************************************
 // modNotificator.
-//     showNotification(드래그 시 삭제가능여부, 제목, 내용,
+//     showNotification(드래그 시 삭제가능여부, 푸시알림 클릭시 사라짐 여부, 제목, 내용,
 //                       [ 알림ID값(Default = 0) ],
 //                       [ 콘텍스트(Default = MainActivity.mContext) ],
+//                       [ 인텐트(Default = Intent(MainActivity.mContext, MainActivity::class.java) ],
 //                       [ 스몰아이콘값(Default = R.drawable.ic_fopo_logo) ],
 //                       [ 라지아이콘값(Default = R.drawable.img_logo) ]) // 푸시알림
 //
@@ -24,8 +25,9 @@ import com.teamfopo.fopo.MainActivity
 
 class modNotificator {
     companion object {
-        fun showNotification(Ongoing: Boolean, ContentTitle: String, ContentText: String, id: Int = 0,
+        fun showNotification(Ongoing: Boolean, AutoCancel: Boolean, ContentTitle: String, ContentText: String, id: Int = 0,
                              mContext: Context = MainActivity.mContext,
+                             notificationIntent: Intent? = Intent(MainActivity.mContext, MainActivity::class.java),
                              SmallIcon: Int = com.teamfopo.fopo.R.drawable.ic_fopo_logo,
                              LargeIcon: Int = com.teamfopo.fopo.R.drawable.img_logo) {
             val channelId = "channel"
@@ -47,9 +49,9 @@ class modNotificator {
 
             val builder = NotificationCompat.Builder(mContext, channelId)
 
-            val notificationIntent = Intent(mContext, MainActivity::class.java)
+            //notificationIntent = Intent(mContext, MainActivity::class.java)
 
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            notificationIntent?.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
             val requestID = System.currentTimeMillis().toInt()
 
@@ -66,17 +68,15 @@ class modNotificator {
                 .setStyle(NotificationCompat.BigTextStyle().bigText(ContentText))
                 .setContentText(ContentText)  // required
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setAutoCancel(false) // 알림 터치시 반응 후 삭제
+                .setAutoCancel(AutoCancel) // 알림 터치시 반응 후 삭제
                 .setOngoing(Ongoing)
                 .setSound(
                     RingtoneManager
                         .getDefaultUri(RingtoneManager.TYPE_ALARM)
                 )
-
                 //.setSmallIcon(R.drawable.ic_fopo_logo)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), LargeIcon))
                 //.setBadgeIconType(R.drawable.ic_fopo_logo)
-
                 .setContentIntent(pendingIntent)
 
             notifManager.notify(id, builder.build())

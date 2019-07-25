@@ -9,7 +9,8 @@
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbarThumbVertical="@color/colorPrimaryDark"
         android:scrollbarTrackVertical="@android:color/white"
-        android:scrollbarSize="2dp">
+        android:scrollbarSize="2dp"
+        tools:context=".PassportActivity">
 
     <LinearLayout
             android:orientation="vertical"

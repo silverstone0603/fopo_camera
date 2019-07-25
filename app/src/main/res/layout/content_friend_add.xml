@@ -31,7 +31,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginRight="10dp"
-                        app:backgroundTint="@color/colorPrimary"/>6
+                        app:backgroundTint="@color/colorPrimary"/>
 
                 <Button
                         android:id="@+id/btnFriendSearch"

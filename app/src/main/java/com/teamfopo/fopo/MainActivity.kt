@@ -1,6 +1,8 @@
 package com.teamfopo.fopo
 
+import android.app.Application
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -56,6 +58,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
         /*
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
@@ -84,8 +87,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         modService = modService() // 서비스클래스 객체만들고..
 
         mContext = this.applicationContext
+        //PassportActivity.pContext = PassportActivity.pContext
 
-        modNotificator.showNotification(false, "사진 동기화 완료",
+        modNotificator.showNotification(false,true, "사진 동기화 완료",
             "FOPO 앨범의 사진을 자동으로 동기화 하였습니다.")
         //modNotificator.CancelNotification()
 
@@ -289,10 +293,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         ).show()
                         pressedTime = 0
                     } else {
-                        super.onBackPressed()
+                        //super.onBackPressed()
+                        //onDestroy()
                         Log.e("!!!", "onBackPressed : finish, killProcess")
                         finish()
-                        android.os.Process.killProcess(android.os.Process.myPid())
+                        //android.os.Process.killProcess(android.os.Process.myPid())
                     }
                 }
             }
