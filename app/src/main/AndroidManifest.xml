@@ -74,9 +74,9 @@
                 android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
-            android:name=".WriteActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden">
+                android:name=".WriteActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
                 android:name=".PassportActivity"

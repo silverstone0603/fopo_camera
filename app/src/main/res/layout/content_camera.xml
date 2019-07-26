@@ -40,8 +40,6 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_marginBottom="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -53,7 +51,7 @@
                 android:id="@+id/btnOverlap"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:background="@drawable/img_camera_shooting"
+                android:background="@drawable/img_overlap"
                 android:layout_gravity="center"/>
         <ImageButton
                 android:id="@+id/btnFilter"
@@ -61,7 +59,7 @@
                 android:layout_height="65dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="0dp"
-                android:background="@drawable/img_camera_shooting"
+                android:background="@drawable/img_filter"
                 android:layout_gravity="center"/>
         <ImageButton
                 android:id="@+id/btnCapture"
@@ -77,7 +75,7 @@
                 android:layout_height="65dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="0dp"
-                android:background="@drawable/img_camera_shooting"
+                android:background="@drawable/img_pose"
                 android:layout_gravity="center"/>
         <ImageButton
                 android:id="@+id/btnGallery"
@@ -85,7 +83,7 @@
                 android:layout_height="65dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="0dp"
-                android:background="@drawable/img_camera_shooting"
+                android:background="@drawable/img_gallery"
                 android:layout_gravity="center"/>
 
 
