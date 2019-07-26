@@ -49,18 +49,19 @@ class modNotificator {
 
             val builder = NotificationCompat.Builder(mContext, channelId)
 
-            //notificationIntent = Intent(mContext, MainActivity::class.java)
+            var pendingIntent:PendingIntent? = null
+            if ( notificationIntent != null) {
+                notificationIntent?.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
-            notificationIntent?.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                val requestID = System.currentTimeMillis().toInt()
 
-            val requestID = System.currentTimeMillis().toInt()
-
-            val pendingIntent = PendingIntent.getActivity(
-                mContext,
-                requestID,
-                notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
+                pendingIntent = PendingIntent.getActivity(
+                    mContext,
+                    requestID,
+                    notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            }
 
             builder.setContentTitle(ContentTitle) // required
                 .setSmallIcon(SmallIcon)

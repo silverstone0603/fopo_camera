@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteOpenHelper
 import android.os.*
 import android.util.Log
 import android.widget.Toast
@@ -24,6 +25,7 @@ class FOPOService : Service() {
         var Context_FOPOService: Application? = null
 
         var dataMemberVO: modSysData? = null
+
     }
 
     var AuthThread: Thread? = AuthThread()
@@ -32,7 +34,7 @@ class FOPOService : Service() {
         serviceIntent = intent
         Context_FOPOService = application
 
-        val dbms = modDBMS(Context_FOPOService!!.applicationContext)
+        var dbms = modDBMS(Context_FOPOService!!.applicationContext)
         dataMemberVO = dbms.getMember()
 
         AuthThread?.start()
@@ -83,32 +85,30 @@ class AuthThread: Thread() {
                 SystemClock.sleep(5000)
 
                 var isToken = modAuthProcess().web_auth()
-                var abc = isToken.execute("$sess_token", "0").get()
+                var tempVO = isToken.execute("$sess_token", "0").get()
 
-                Log.d("TESTTEST", "${abc.status}")
-                if ( abc.status.equals("not_exist_session")) {
-                    //modDBMS.C
+                if ( tempVO.status.equals("not_exist_session")) {
+                    var dbms = modDBMS(Context_FOPOService!!.applicationContext)
+                    dbms.clearMember()
+
+                    modNotificator.showNotification(false, true, "FOPO 알림", "자동 로그아웃 되었습니다.",0, Context_FOPOService!!.applicationContext, null)
                     android.os.Process.killProcess(android.os.Process.myPid())
                 } else {
+                    var webLoginAuth = modAuthProcess().web_auth()
+                    var tempInfo = webLoginAuth.execute("$sess_token", "1").get()
 
-                }
+                    if ( tempInfo.status.equals("exist_auth")) {
+                        var sess_no = tempInfo.sess_no
 
-                var webLoginAuth = modAuthProcess().web_auth()
-                var tempInfo = webLoginAuth.execute("$sess_token", "1").get()
+                        var testim = modAuthProcess().testim()
+                        testim.execute("$sess_no") // 추후 예외처리 필요
 
-                if ( tempInfo.status.equals("exist_auth")) {
-                    var sess_no = tempInfo.sess_no
+                        val notificationIntent = Intent(Context_FOPOService!!.applicationContext, PassportActivity::class.java)
+                        notificationIntent.putExtra("sess_no", tempInfo.sess_no)
+                        notificationIntent.putExtra("sess_verify", tempInfo.sess_verify)
 
-                    var testim = modAuthProcess().testim()
-                    testim.execute("$sess_no") // 추후 예외처리 필요
-
-                    val notificationIntent = Intent(Context_FOPOService!!.applicationContext, PassportActivity::class.java)
-                    notificationIntent.putExtra("sess_no", tempInfo.sess_no)
-                    notificationIntent.putExtra("sess_verify", tempInfo.sess_verify)
-
-                    modNotificator.showNotification(false, true, "FOPO 로그인 인증", "다른 기기에서 로그인을 요청하였습니다.",0, Context_FOPOService!!.applicationContext, notificationIntent)
-                } else {
-
+                        modNotificator.showNotification(false, true, "FOPO 로그인 인증", "다른 기기에서 로그인을 요청하였습니다.",0, Context_FOPOService!!.applicationContext, notificationIntent)
+                    }
                 }
             } catch (e: InterruptedException) {
                 run = false

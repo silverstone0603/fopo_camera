@@ -52,7 +52,7 @@ class modAuthProcess {
 
     inner class web_auth : AsyncTask<String, Long, webLoginVO>() {
         override fun doInBackground(vararg params: String?): webLoginVO {
-            var url = "http://106.10.51.32/ajax_process/temp_process"
+            var url = "http://106.10.51.32/ajax_process/web_process"
             var type = "web_auth"
             var sess_token = params[0]
             var sess_devicetype = params[1]
@@ -88,7 +88,7 @@ class modAuthProcess {
 
     inner class testim : AsyncTask<String, Long, String>() {
         override fun doInBackground(vararg params: String?): String {
-            var url = "http://106.10.51.32/ajax_process/temp_process"
+            var url = "http://106.10.51.32/ajax_process/web_process"
             var type = "testim"
             var sess_no = params[0]
 

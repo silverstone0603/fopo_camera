@@ -63,8 +63,11 @@ class modDBMS(context: Context)
         return temp
     }
 
-    fun clearMember(db: SQLiteDatabase?) {
+    fun clearMember() {
+        var db = readableDatabase
         db!!.execSQL("delete from member")
+
+        db.close()
     }
 }
 
