@@ -11,10 +11,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
-import android.widget.ToggleButton
 import com.google.ar.core.Anchor
 import com.google.ar.core.HitResult
 import com.google.ar.core.Plane
@@ -137,14 +135,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         */
 
         // Capture the Image
-        var btnLocation: ToggleButton = viewRoot.findViewById(R.id.btnLocation) as ToggleButton
-        btnLocation.setOnClickListener(this)
-
         var btnCapture: ImageButton = viewRoot.findViewById(R.id.btnCapture) as ImageButton
         btnCapture.setOnClickListener(this)
-
-        var btnFopozone: Button = viewRoot.findViewById(R.id.btnFopozone) as Button
-        btnFopozone.setOnClickListener(this)
 
         (activity as MainActivity).showSystemUI()
 
@@ -197,13 +189,6 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         when (v?.id) {
             R.id.btnCapture -> {
                 takePhoto()
-            }
-            R.id.btnLocation -> {
-                Toast.makeText(context, "GPS On/Off 버튼입니다", Toast.LENGTH_LONG).show()
-            }
-            R.id.btnFopozone -> {
-                goToFopozone()
-
             }
             else -> {
             }

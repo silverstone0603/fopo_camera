@@ -69,16 +69,20 @@
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-                android:name=".fragments.ViewActivity"
+                android:name=".ViewActivity"
                 android:theme="@style/AppTheme.NoActionBar"
                 android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
-                android:name=".fragments.WriteActivity"
+            android:name=".WriteActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+        <activity
+                android:name=".PassportActivity"
                 android:theme="@style/AppTheme.NoActionBar"
                 android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
-
         <provider
                 android:name="android.support.v4.content.FileProvider"
                 android:authorities="com.teamfopo.fopo.provider"

@@ -1,4 +1,4 @@
-package com.teamfopo.fopo.fragments
+package com.teamfopo.fopo
 
 import android.content.Context
 import android.graphics.Bitmap
