@@ -1,27 +1,21 @@
 package com.teamfopo.fopo.fragments
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.service.media.MediaBrowserService
-import android.support.annotation.MainThread
-import android.support.design.widget.NavigationView
-import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v4.app.Fragment
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.Toast
 import com.teamfopo.fopo.R
+import com.teamfopo.fopo.ViewActivity
 import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modListProcess
-import kotlinx.android.synthetic.main.content_fopozone.*
 
 class FopozoneActivity : Fragment(), View.OnClickListener {
 
