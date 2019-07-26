@@ -55,10 +55,12 @@ class modAuthProcess {
             var url = "http://106.10.51.32/ajax_process/temp_process"
             var type = "web_auth"
             var sess_token = params[0]
+            var sess_devicetype = params[1]
 
             val requestBody: RequestBody = FormBody.Builder()
                 .add("type", "$type")
                 .add("sess_token", "$sess_token")
+                .add("sess_devicetype", "$sess_devicetype")
                 .build()
             val client = OkHttpClient()
             val request = Request.Builder()

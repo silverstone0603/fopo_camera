@@ -62,6 +62,10 @@ class modDBMS(context: Context)
 
         return temp
     }
+
+    fun clearMember(db: SQLiteDatabase?) {
+        db!!.execSQL("delete from member")
+    }
 }
 
 class modSysData {

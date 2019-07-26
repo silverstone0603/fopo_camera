@@ -7,6 +7,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.*
+import android.util.Log
 import android.widget.Toast
 import com.teamfopo.fopo.MainActivity
 import com.teamfopo.fopo.PassportActivity
@@ -76,21 +77,31 @@ class AuthThread: Thread() {
     override fun run() {
         var run = true
 
+        var sess_token = dataMemberVO!!.token
         while (run) {
             try {
                 SystemClock.sleep(5000)
 
-                var sess_token = dataMemberVO!!.token
+                var isToken = modAuthProcess().web_auth()
+                var abc = isToken.execute("$sess_token", "0").get()
+
+                Log.d("TESTTEST", "${abc.status}")
+                if ( abc.status.equals("not_exist_session")) {
+                    //modDBMS.C
+                    android.os.Process.killProcess(android.os.Process.myPid())
+                } else {
+
+                }
 
                 var webLoginAuth = modAuthProcess().web_auth()
-                var tempInfo = webLoginAuth.execute("$sess_token").get()
+                var tempInfo = webLoginAuth.execute("$sess_token", "1").get()
 
                 if ( tempInfo.status.equals("exist_auth")) {
                     var sess_no = tempInfo.sess_no
-                    
+
                     var testim = modAuthProcess().testim()
                     testim.execute("$sess_no") // 추후 예외처리 필요
-                    
+
                     val notificationIntent = Intent(Context_FOPOService!!.applicationContext, PassportActivity::class.java)
                     notificationIntent.putExtra("sess_no", tempInfo.sess_no)
                     notificationIntent.putExtra("sess_verify", tempInfo.sess_verify)
