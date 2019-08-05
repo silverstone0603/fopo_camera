@@ -1,8 +1,6 @@
 package com.teamfopo.fopo
 
-import android.app.Application
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -23,7 +21,6 @@ import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
 import com.teamfopo.fopo.fragments.*
 import com.teamfopo.fopo.module.FOPOService
-import com.teamfopo.fopo.module.modNotificator
 import com.teamfopo.fopo.module.modService
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -89,20 +86,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mContext = this.applicationContext
         //PassportActivity.pContext = PassportActivity.pContext
 
-        modNotificator.showNotification(false,true, "사진 동기화 완료",
-            "FOPO 앨범의 사진을 자동으로 동기화 하였습니다.")
-        //modNotificator.CancelNotification()
+        // modNotificator.showNotification(false,true, "사진 동기화 완료", "FOPO 앨범의 사진을 자동으로 동기화 하였습니다.")
+        // modNotificator.CancelNotification()
 
         // Snackbar.make(toolbar,"[FOPO] 로그인합니다.",Snackbar.LENGTH_SHORT).show()
 
         if (FOPOService.serviceIntent == null) {
             serviceIntent = Intent(this, FOPOService::class.java)
             startService(serviceIntent)
-            Toast.makeText(applicationContext, "ddd", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "FOPO 동기화 서비스가 시작됩니다.", Toast.LENGTH_LONG).show()
 
         } else {
             serviceIntent = FOPOService.serviceIntent //getInstance().getApplication();
-            Toast.makeText(applicationContext, "already", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "FOPO 동기화 서비스가 이미 동작하고 있습니다.", Toast.LENGTH_LONG).show()
         }
     }
 

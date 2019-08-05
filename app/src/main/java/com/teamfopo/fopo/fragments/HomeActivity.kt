@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import com.teamfopo.fopo.R
 
 
@@ -24,8 +25,20 @@ class HomeActivity : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.content_home, container, false)
+        var viewHome: View
+        viewHome = inflater.inflate(R.layout.content_home, container, false)
+
+        // 프레그먼트 초기화
+        initFragment(viewHome)
+
+        return viewHome
+    }
+
+    fun initFragment(view: View){
+        var webHome = view.findViewById<WebView>(R.id.webHome)
+        webHome.loadUrl("http://106.10.51.32/app/home")
     }
 
 

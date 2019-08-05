@@ -6,6 +6,7 @@ import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import com.teamfopo.fopo.R
 
 class HelpActivity : Fragment() {
@@ -23,18 +24,16 @@ class HelpActivity : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        var viewCamera: View
-        viewCamera = inflater.inflate(R.layout.content_help, container, false)
+        var viewHelp: View
+        viewHelp = inflater.inflate(R.layout.content_help, container, false)
 
-        initFragment()
+        initFragment(viewHelp)
 
-        return viewCamera
+        return viewHelp
     }
 
-    fun initFragment(){
-        /*
-            AR Fragment 생성 부분
-        */
-
+    fun initFragment(view: View){
+        var webHelp = view.findViewById<WebView>(R.id.webHelp)
+        webHelp.loadUrl("http://106.10.51.32/app/help")
     }
 }
