@@ -49,15 +49,15 @@
 
         <ImageButton
                 android:id="@+id/btnOverlap"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:background="@drawable/img_overlap"
                 android:layout_gravity="center"/>
         <ImageButton
                 android:id="@+id/btnFilter"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_marginLeft="5dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="0dp"
                 android:background="@drawable/img_filter"
                 android:layout_gravity="center"/>
@@ -65,23 +65,23 @@
                 android:id="@+id/btnCapture"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="0dp"
                 android:background="@drawable/img_camera_shooting"
                 android:layout_gravity="center"/>
         <ImageButton
                 android:id="@+id/btnPose"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_marginLeft="5dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="0dp"
                 android:background="@drawable/img_pose"
                 android:layout_gravity="center"/>
         <ImageButton
                 android:id="@+id/btnGallery"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_marginLeft="5dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="0dp"
                 android:background="@drawable/img_gallery"
                 android:layout_gravity="center"/>
