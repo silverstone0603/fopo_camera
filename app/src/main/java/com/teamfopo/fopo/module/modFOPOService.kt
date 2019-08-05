@@ -26,6 +26,7 @@ class FOPOService : Service() {
 
         var dataMemberVO: modSysData? = null
 
+
     }
 
     var AuthThread: Thread? = AuthThread()
@@ -38,6 +39,8 @@ class FOPOService : Service() {
         dataMemberVO = dbms.getMember()
 
         AuthThread?.start()
+
+        //Toast.makeText(applicationContext, "${FOPOService.dataMemberVO!!.mem_no}", Toast.LENGTH_LONG).show()
 
         return START_NOT_STICKY
     }

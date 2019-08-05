@@ -11,13 +11,13 @@ class modDBMS(context: Context)
 
     companion object {
         private val DB_NAME = "fopo_client"
-        private val DB_VERSION = 1
+        private val DB_VERSION = 2
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
 
         //멤버 테이블 생성
-        db?.execSQL("CREATE TABLE member (id TEXT PRIMARY KEY, token TEXT, lastlogin TEXT);")
+        db?.execSQL("CREATE TABLE member (id TEXT PRIMARY KEY, token TEXT, mem_no TEXT, lastlogin TEXT);")
         //파일목록 테이블 생성
         //db?.execSQL("CREATE TABLE files (id TEXT PRIMARY KEY, token TEXT, regdate TEXT, lastlogin TEXT);")
 
@@ -33,6 +33,7 @@ class modDBMS(context: Context)
         val values = ContentValues()
         values.put("id", user.mem_id)
         values.put("token", user.token)
+        values.put("mem_no", user.mem_no)
         values.put("lastlogin", user.lastlogin)
 
         val success = db.insert("member", null, values)
@@ -53,7 +54,8 @@ class modDBMS(context: Context)
                 while (cursor.moveToNext()) {
                     temp.mem_id = cursor.getString(0)
                     temp.token = cursor.getString(1)
-                    temp.lastlogin = cursor.getString(2)
+                    temp.mem_no = cursor.getString(2)
+                    temp.lastlogin = cursor.getString(3)
                 }
           //  }
         //}
@@ -74,5 +76,6 @@ class modDBMS(context: Context)
 class modSysData {
     var mem_id : String = ""
     var token : String = ""
+    var mem_no: String = ""
     var lastlogin : String = ""
 }

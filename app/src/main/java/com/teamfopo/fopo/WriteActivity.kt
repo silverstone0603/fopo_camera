@@ -19,6 +19,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
+import com.teamfopo.fopo.module.FOPOService
 import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modImageResizeUtils
 import kotlinx.android.synthetic.main.activity_write.*
@@ -72,11 +73,7 @@ class WriteActivity : AppCompatActivity() {
         var str_content = edit_oneLine.text.toString()
 
         var getImageUpload = modBoardProcess().Write()
-        var uploadResult = getImageUpload.execute("3","3","$str_content", "$getBitmapImageToString").get()
-
-        Log.d("QAZQAZ","$uploadResult")
-        Toast.makeText(this, "$uploadResult", Toast.LENGTH_SHORT).show()
-
+        var uploadResult = getImageUpload.execute(FOPOService.dataMemberVO!!.mem_no,"3","$str_content", "$getBitmapImageToString").get()
 
         var brd_no = Integer.parseInt(uploadResult.trim())
 

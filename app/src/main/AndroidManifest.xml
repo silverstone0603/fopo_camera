@@ -70,6 +70,7 @@
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
+                android:windowSoftInputMode="stateAlwaysHidden"
                 android:name=".ViewActivity"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>

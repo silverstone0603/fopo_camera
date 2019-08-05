@@ -132,6 +132,7 @@ class modBoardProcess {
             var mem_no = params[2]
             var rre_no = params[3]
             var re_comment = params[4]
+            var token = FOPOService.dataMemberVO!!.token
 
             var url = "http://106.10.51.32/ajax_process/reply_process"
             val requestBody : RequestBody = FormBody.Builder()
@@ -141,6 +142,7 @@ class modBoardProcess {
                 .add("mem_no", "$mem_no")
                 .add("rre_no", "$rre_no")
                 .add("re_comment", "$re_comment")
+                .add("token", "$token")
                 .build()
 
             val client = OkHttpClient()
@@ -241,7 +243,7 @@ class modBoardProcess {
             var zone_no = params[1]
             var brd_content = params[2]
             var filedata = params[3]
-            var token = "5d4847b5e8475"
+            var token = FOPOService.dataMemberVO!!.token
 
             var url = "http://106.10.51.32/ajax_process/board_process"
             val requestBody : RequestBody = FormBody.Builder()
