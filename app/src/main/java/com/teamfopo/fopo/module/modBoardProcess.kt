@@ -241,6 +241,7 @@ class modBoardProcess {
             var zone_no = params[1]
             var brd_content = params[2]
             var filedata = params[3]
+            var token = "5d4847b5e8475"
 
             var url = "http://106.10.51.32/ajax_process/board_process"
             val requestBody : RequestBody = FormBody.Builder()
@@ -249,6 +250,7 @@ class modBoardProcess {
                 .add("zone_no", "$zone_no")
                 .add("brd_content", "$brd_content")
                 .add("filedata", "$filedata")
+                .add("token", "$token")
                 .build()
 
             val client = OkHttpClient()

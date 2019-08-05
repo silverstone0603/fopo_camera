@@ -21,6 +21,7 @@ import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
 import com.teamfopo.fopo.fragments.*
 import com.teamfopo.fopo.module.FOPOService
+import com.teamfopo.fopo.module.modNotificator
 import com.teamfopo.fopo.module.modService
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -86,7 +87,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mContext = this.applicationContext
         //PassportActivity.pContext = PassportActivity.pContext
 
-        // modNotificator.showNotification(false,true, "사진 동기화 완료", "FOPO 앨범의 사진을 자동으로 동기화 하였습니다.")
+         modNotificator.showNotification(false,true, "사진 동기화 완료", "FOPO 앨범의 사진을 자동으로 동기화 하였습니다.")
         // modNotificator.CancelNotification()
 
         // Snackbar.make(toolbar,"[FOPO] 로그인합니다.",Snackbar.LENGTH_SHORT).show()

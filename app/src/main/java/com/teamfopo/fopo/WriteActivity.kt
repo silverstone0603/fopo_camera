@@ -72,15 +72,19 @@ class WriteActivity : AppCompatActivity() {
         var str_content = edit_oneLine.text.toString()
 
         var getImageUpload = modBoardProcess().Write()
-        var uploadResult = getImageUpload.execute("1","3","$str_content", "$getBitmapImageToString").get()
+        var uploadResult = getImageUpload.execute("3","3","$str_content", "$getBitmapImageToString").get()
 
+        Log.d("QAZQAZ","$uploadResult")
         Toast.makeText(this, "$uploadResult", Toast.LENGTH_SHORT).show()
+
+
         var brd_no = Integer.parseInt(uploadResult.trim())
 
         val i = Intent(this@WriteActivity, ViewActivity::class.java)
         i.putExtra("m_select", brd_no)
         startActivityForResult(i, 1)
         finish()
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
