@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import com.teamfopo.fopo.module.FOPOService
 import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modReplyProcess
 import com.teamfopo.fopo.module.modViewProcess
@@ -49,7 +51,7 @@ class ViewActivity : AppCompatActivity() {
                 var re_content: String = edit_reply.text.toString()
 
                 var ReplyWrite = modBoardProcess().ReplyWrite()
-                ReplyWrite.execute("3", "$getInt", "1", "$re_orgin", "$re_content")
+                ReplyWrite.execute("3", "$getInt", FOPOService.dataMemberVO!!.mem_no, "$re_orgin", "$re_content")
 
                 ViewReplyLists("$getInt", true)
             }
@@ -183,11 +185,17 @@ class ViewActivity : AppCompatActivity() {
 
         btnReplyOption.setOnClickListener(View.OnClickListener { v ->
             val popup = PopupMenu(applicationContext, v)//v는 클릭된 뷰를 의미
+            var popupMenu = popup.menu
 
             menuInflater.inflate(R.menu.reply_menu, popup.menu)
 
-            popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+            if ( FOPOService.dataMemberVO!!.mem_no.equals("${replyInfo.mem_no.toString()}") ) {
+                popupMenu.findItem(R.id.item_replyReport).setVisible(false)
+            } else {
+                popupMenu.findItem(R.id.item_replyDelete).setVisible(false)
+            }
 
+            popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
                 override fun onMenuItemClick(item: MenuItem): Boolean {
                     when (item.itemId) {
                         R.id.item_replyDelete -> {

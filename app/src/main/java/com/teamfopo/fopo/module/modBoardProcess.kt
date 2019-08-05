@@ -9,7 +9,7 @@ import okhttp3.*
 
 data class modListProcess(var brd_no: Int, var file_no: Int)
 data class modViewProcess(var mem_nick: String, var file_no: Int, var brd_content: String, var brd_like: Int)
-data class modReplyProcess(var re_no: Int, var mem_nick: String, var rre_no: Int, var re_comment: String, var re_date: String)
+data class modReplyProcess(var re_no: Int, var mem_no: Int, var mem_nick: String, var rre_no: Int, var re_comment: String, var re_date: String)
 
 class modBoardProcess {
     inner class GetList : AsyncTask<String, Long, Array<modListProcess>>() {
@@ -209,11 +209,13 @@ class modBoardProcess {
 
         override fun doInBackground(vararg params: String?): String {
             var re_no = params[0]
+            var token = FOPOService.dataMemberVO!!.token
 
             var url = "http://106.10.51.32/ajax_process/reply_process"
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","deleted")
                 .add("re_no", "$re_no")
+                .add("token", "$token")
                 .build()
 
             val client = OkHttpClient()
