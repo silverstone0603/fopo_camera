@@ -1,10 +1,12 @@
 package com.teamfopo.fopo.fragments
 
 import android.app.AlertDialog
+import android.content.Context.LOCATION_SERVICE
 import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.graphics.Rect
 import android.graphics.YuvImage
+import android.location.LocationManager
 import android.media.Image
 import android.net.Uri
 import android.os.Bundle
@@ -25,7 +27,6 @@ import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
-import com.gun0912.tedpermission.PermissionListener
 import com.teamfopo.fopo.MainActivity
 import com.teamfopo.fopo.R
 import com.teamfopo.fopo.nodes.PointCloudNode
@@ -38,7 +39,6 @@ import java.nio.ByteBuffer
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -54,9 +54,6 @@ private const val ARG_PARAM2 = "param2"
 class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, Scene.OnPeekTouchListener,
     Scene.OnUpdateListener {
 
-    private var isCamera: Boolean? = true
-    private var isPermission: Boolean? = true
-
     private val TAG = "CameraActivity"
     private var trackableGestureDetector: GestureDetector? = null
 
@@ -65,6 +62,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     private lateinit var pointCloudNode: PointCloudNode
 
     private var strTitle = ""
+
+    private var lmMain : LocationManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +78,9 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         var viewCamera: View
         viewCamera = inflater.inflate(R.layout.content_camera, container, false)
 
-        tedPermission(viewCamera)
+        // Create persistent LocationManager reference
+        lmMain = super.getActivity()!!.getSystemService(LOCATION_SERVICE) as LocationManager?
+
         initArFragment(viewCamera)
 
         return viewCamera
@@ -272,11 +273,12 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                     val trackable = hit.trackable
                     val anchor = hit!!.createAnchor()
                     if (trackable is Plane) {
-                        // addModelToScene(anchor, markerRenderable)
+                        addModelToScene(anchor, markerRenderable)
                         Log.d(
                             "ARCore",
                             "터치 후 움직임 : " + motionEvent?.getY().toString() + "," + motionEvent?.getY().toString()
                         )
+                        return true
                     }
                 }
             }
@@ -289,41 +291,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         arFragment!!.onPeekTouch(hitTestResult, motionEvent)
         val arSceneView = arFragment!!.arSceneView
         val frame = arSceneView.arFrame
-/*
-if (frame != null && frame.camera.trackingState == TrackingState.TRACKING) {
-    if (hitTestResult!!.node != null) {
-        for (hit in frame.hitTest(motionEvent)) {
-            val trackable = hit.trackable
 
-            if (trackable is Plane) {
-                /*
-                val anchor = hit!!.createAnchor()
-                addModelToScene(anchor, markerRenderable)
-                break
-                */
-            }
-
-        }
-    }
-}
-*/
         Log.d("ARCore", "OnPeekTouch 상태 : ${frame!!.camera.trackingState}")
-
-// trackableGestureDetector!!.onTouchEvent(motionEvent)
-    }
-
-    private fun tedPermission(viewRoot: View) {
-        val permissionListener = object : PermissionListener {
-            override fun onPermissionGranted() {
-                // 권한 요청 성공
-                isPermission = true
-            }
-
-            override fun onPermissionDenied(deniedPermissions: ArrayList<String>) {
-                // 권한 요청 실패
-                isPermission = false
-            }
-        }
     }
 
     fun getDegre(latSource: Double, lngSource: Double, latDestination: Double, lngDestination: Double): Double {
