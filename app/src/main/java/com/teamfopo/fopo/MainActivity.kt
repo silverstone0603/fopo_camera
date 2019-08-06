@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             // Toast.makeText(applicationContext, "FOPO 동기화 서비스가 이미 동작하고 있습니다.", Toast.LENGTH_LONG).show()
         }
     }
-    
+
     override fun onClick(v: View?) {
         Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
         /*
