@@ -14,11 +14,11 @@
         android:gravity="bottom">
 
     <ImageView
+            android:id="@+id/imgLogo"
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:srcCompat="@drawable/ic_fopo_logo"
-            android:contentDescription="@string/nav_header_desc"
-            android:id="@+id/imgLogo"/>
+            android:contentDescription="@string/nav_header_desc"/>
     <TextView
             android:id="@+id/txtNavNick"
             android:layout_width="180dp"
