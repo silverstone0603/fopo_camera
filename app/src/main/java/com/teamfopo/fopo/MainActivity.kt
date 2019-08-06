@@ -23,6 +23,7 @@ import com.teamfopo.fopo.fragments.*
 import com.teamfopo.fopo.module.FOPOService
 import com.teamfopo.fopo.module.modNotificator
 import com.teamfopo.fopo.module.modService
+import com.teamfopo.fopo.module.modSysData
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -32,7 +33,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         lateinit var mContext: Context
     }
+
     var serviceIntent: Intent? = null
+    var dataMemberVO: modSysData? = null
 
     val actHome = HomeActivity()
     val actCamera = CameraActivity()
@@ -42,28 +45,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val actFriendList = FriendListActivity()
     val actFriendAdd = FriendAddActivity()
     val actFopozone = FopozoneActivity()
-    // val actView = ViewActivity()
 
     var bundleMain: Bundle? = null
-
-    //회원가입 엑티비티
-    val actRegister = SignUpActivity()
-    //로그인 엑티비티
-    val actAuth = AuthActivity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-        /*
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            make(view, "FOPO Test :(", LENGTH_LONG)
-            .setAction("Action", null).show()
-        }
-        */
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         var navView: NavigationView = findViewById(R.id.nav_view)
@@ -80,9 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navView.setCheckedItem(R.id.nav_camera)
         setFragment(actCamera)
 
-        initLayoutAction()
-
-        modService = modService() // 서비스클래스 객체만들고..
+        modService = modService() // 서비스클래스 객체 만듦
 
         mContext = this.applicationContext
         //PassportActivity.pContext = PassportActivity.pContext
@@ -99,29 +86,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         } else {
             serviceIntent = FOPOService.serviceIntent //getInstance().getApplication();
-            Toast.makeText(applicationContext, "FOPO 동기화 서비스가 이미 동작하고 있습니다.", Toast.LENGTH_LONG).show()
+            // Toast.makeText(applicationContext, "FOPO 동기화 서비스가 이미 동작하고 있습니다.", Toast.LENGTH_LONG).show()
         }
     }
-
-    private fun initLayoutAction(){
-        /*
-        bundleMain!!.putString("userId","userIdValue")
-        actHome.arguments = bundleMain
-        */
-
-        // 글쓰기 버튼
-        /*
-        imageButtonWrite.setOnClickListener {
-            setFragment(actHome)
-        }
-        */
-
-        /*
-        val btnGo: Button = findViewById(R.id.btnGoGo)
-        btnGo.setOnClickListener(this)
-        */
-
-    }
+    
     override fun onClick(v: View?) {
         Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
         /*

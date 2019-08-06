@@ -6,14 +6,10 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.database.sqlite.SQLiteOpenHelper
-import android.os.*
-import android.util.Log
-import android.widget.Toast
-import com.teamfopo.fopo.MainActivity
+import android.os.IBinder
+import android.os.SystemClock
 import com.teamfopo.fopo.PassportActivity
 import com.teamfopo.fopo.module.FOPOService.Companion.Context_FOPOService
-import com.teamfopo.fopo.module.FOPOService.Companion.Toast_Notice
 import com.teamfopo.fopo.module.FOPOService.Companion.dataMemberVO
 import java.util.*
 
@@ -25,8 +21,6 @@ class FOPOService : Service() {
         var Context_FOPOService: Application? = null
 
         var dataMemberVO: modSysData? = null
-
-
     }
 
     var AuthThread: Thread? = AuthThread()

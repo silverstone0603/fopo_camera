@@ -6,6 +6,7 @@ import android.os.IBinder
 
 class modService: Service() {
     var mem_id=""
+    var mem_nick=""
     var token=""
     var logindate=""
     var lastdate=""

@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
 
 class modDBMS(context: Context)
     : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
@@ -17,7 +16,7 @@ class modDBMS(context: Context)
     override fun onCreate(db: SQLiteDatabase?) {
 
         //멤버 테이블 생성
-        db?.execSQL("CREATE TABLE member (id TEXT PRIMARY KEY, token TEXT, mem_no TEXT, lastlogin TEXT);")
+        db?.execSQL("CREATE TABLE member (id TEXT PRIMARY KEY, nick TEXT, token TEXT, mem_no TEXT, lastlogin TEXT);")
         //파일목록 테이블 생성
         //db?.execSQL("CREATE TABLE files (id TEXT PRIMARY KEY, token TEXT, regdate TEXT, lastlogin TEXT);")
 
@@ -32,6 +31,7 @@ class modDBMS(context: Context)
         val db = this.writableDatabase
         val values = ContentValues()
         values.put("id", user.mem_id)
+        values.put("nick", user.mem_nick)
         values.put("token", user.token)
         values.put("mem_no", user.mem_no)
         values.put("lastlogin", user.lastlogin)
@@ -53,9 +53,10 @@ class modDBMS(context: Context)
          //   if (cursor.moveToFirst()) {
                 while (cursor.moveToNext()) {
                     temp.mem_id = cursor.getString(0)
-                    temp.token = cursor.getString(1)
-                    temp.mem_no = cursor.getString(2)
-                    temp.lastlogin = cursor.getString(3)
+                    temp.mem_nick = cursor.getString(1)
+                    temp.token = cursor.getString(2)
+                    temp.mem_no = cursor.getString(3)
+                    temp.lastlogin = cursor.getString(4)
                 }
           //  }
         //}
@@ -75,6 +76,7 @@ class modDBMS(context: Context)
 
 class modSysData {
     var mem_id : String = ""
+    var mem_nick : String = ""
     var token : String = ""
     var mem_no: String = ""
     var lastlogin : String = ""

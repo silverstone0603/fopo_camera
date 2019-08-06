@@ -28,7 +28,7 @@
             android:textColor="@color/colorPrimary"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textStyle="bold"
-            android:id="@+id/textView"
+            android:id="@+id/txtNavNick"
             android:layout_toRightOf="@+id/imageView"/>
     <TextView
             android:layout_width="wrap_content"
