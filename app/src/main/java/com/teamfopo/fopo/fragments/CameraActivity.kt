@@ -120,7 +120,6 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
             Toast.makeText(this.context, "setOnTapArPlaneListener가 실행 되었습니다.", Toast.LENGTH_LONG).show()
         }
 
-        /*
         trackableGestureDetector = GestureDetector(this.activity,
             object : GestureDetector.SimpleOnGestureListener() {
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
@@ -133,7 +132,6 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                 }
             }
         )
-        */
 
         // Capture the Image
         var btnCapture: ImageButton = viewRoot.findViewById(R.id.btnCapture) as ImageButton
@@ -183,7 +181,26 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     }
 
     fun onSingleTap(motionEvent: MotionEvent) {
+        val arSceneView = arFragment!!.arSceneView
+        val frame = arSceneView.arFrame
 
+        when (motionEvent?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                Log.d("ARCore", "터치 : " + motionEvent?.getY().toString() + "," + motionEvent?.getY().toString())
+                for (hit in frame!!.hitTest(motionEvent)) {
+                    val trackable = hit.trackable
+                    val anchor = hit!!.createAnchor()
+                    if (trackable is Plane) {
+                        addModelToScene(anchor, markerRenderable)
+                        Log.d(
+                            "ARCore",
+                            "터치 후 움직임 : " + motionEvent?.getY().toString() + "," + motionEvent?.getY().toString()
+                        )
+                        break
+                    }
+                }
+            }
+        }
     }
 
     override fun onClick(v: View?) {
@@ -263,6 +280,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     }
 
     override fun onSceneTouch(hitTestResult: HitTestResult?, motionEvent: MotionEvent?): Boolean {
+        /*
         val arSceneView = arFragment!!.arSceneView
         val frame = arSceneView.arFrame
 
@@ -283,7 +301,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
                 }
             }
         }
-
+        return true
+        */
         return true
     }
 
@@ -314,18 +333,6 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     }
 
     override fun onUpdate(frameTime: FrameTime) {
-/*
-try {
-    // var currentFrame: Frame = arFragment.arSceneView.scene.view.getArFrame()
-    var currentImage: Image = arFragment!!.arSceneView.arFrame!!.acquireCameraImage() as Image
-    var imageFormat = currentImage.format
-    if (imageFormat == ImageFormat.YUV_420_888) {
-        Log.d("ARCore", "이미지 변환이 정상적으로 처리 되었으며, 포맷은 YUV_420_888 입니다.")
-    }
-}catch (e: Exception){
-    Log.d("ARCore","오류가 발생했습니다 : "+e.toString())
-}
-*/
     }
 
     fun takePhoto() {
