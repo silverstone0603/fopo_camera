@@ -16,15 +16,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
 import com.teamfopo.fopo.fragments.*
-import com.teamfopo.fopo.module.FOPOService
-import com.teamfopo.fopo.module.modNotificator
-import com.teamfopo.fopo.module.modService
-import com.teamfopo.fopo.module.modSysData
+import com.teamfopo.fopo.module.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_view.*
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     companion object {
@@ -88,6 +88,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             serviceIntent = FOPOService.serviceIntent //getInstance().getApplication();
             // Toast.makeText(applicationContext, "FOPO 동기화 서비스가 이미 동작하고 있습니다.", Toast.LENGTH_LONG).show()
         }
+
+        //var dbms = modDBMS(this)
+        //var dataMemberVO = dbms.getMember()
+        //Toast.makeText(applicationContext, "${dataMemberVO!!.mem_nick}님 안녕하세요!", Toast.LENGTH_LONG).show()
+
+        //txtNavNick.setText("${dataMemberVO!!.mem_nick}님 안녕하세요!")
+        //var txtNavNick: TextView = findViewById(R.id.txtNavNick) as TextView
+        //txtNavNick.setText("sdfsdf님 안녕하세요!")
     }
 
     override fun onClick(v: View?) {

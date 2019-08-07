@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonParser
 import okhttp3.*
 
-data class modSessionToken(var status: String, var token: String, var mem_no: String)
+data class modSessionToken(var status: String, var token: String, var mem_no: String, var mem_nick: String)
 data class webLoginVO(var status: String, var sess_no: Int, var sess_verify: Int)
 
 class modAuthProcess {

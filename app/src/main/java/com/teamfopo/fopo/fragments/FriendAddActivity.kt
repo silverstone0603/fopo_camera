@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.teamfopo.fopo.MainActivity
 import com.teamfopo.fopo.R
+import com.teamfopo.fopo.module.FOPOService
 import com.teamfopo.fopo.module.FriendsVO
 import com.teamfopo.fopo.module.UserVO
 import com.teamfopo.fopo.module.modFriendProcess
@@ -47,6 +48,10 @@ class FriendAddActivity : Fragment(), View.OnClickListener {
         var btnFriendSearch: Button = viewRoot.findViewById(R.id.btnFriendSearch) as Button
         var btnFriendAdd: Button = viewRoot.findViewById(R.id.btnFriendAdd) as Button
 
+        var txtMyID: TextView = viewRoot.findViewById(R.id.txtMyID) as TextView
+
+        txtMyID.text = FOPOService.dataMemberVO!!.mem_id
+
         btnFriendSearch.setOnClickListener(this)
         btnFriendAdd.setOnClickListener(this)
 
@@ -71,6 +76,12 @@ class FriendAddActivity : Fragment(), View.OnClickListener {
                 if ( findUser_result.mem_no <= 0 ) {
                     llFoundFriend.visibility = View.INVISIBLE
                     Toast.makeText(context, "사용자를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    return
+                }
+
+                if ( findUser_result.status  == 2) {
+                    llFoundFriend.visibility = View.INVISIBLE
+                    Toast.makeText(context, "자기자신은 팔로우 할수 없습니다.", Toast.LENGTH_SHORT).show()
                     return
                 }
 

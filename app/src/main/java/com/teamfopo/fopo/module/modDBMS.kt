@@ -10,7 +10,7 @@ class modDBMS(context: Context)
 
     companion object {
         private val DB_NAME = "fopo_client"
-        private val DB_VERSION = 3
+        private val DB_VERSION = 4
     }
 
     override fun onCreate(db: SQLiteDatabase?) {

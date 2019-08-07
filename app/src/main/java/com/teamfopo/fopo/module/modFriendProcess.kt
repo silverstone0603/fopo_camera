@@ -16,7 +16,7 @@ class modFriendProcess {
         override fun doInBackground(vararg params: String?): List<FriendsVO> {
             val url = "http://106.10.51.32/ajax_process/friend_process"
             //var mem_no = params[0]
-            var mem_no = "9"
+            var mem_no = FOPOService.dataMemberVO!!.mem_no
 
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","F_list")
@@ -48,7 +48,7 @@ class modFriendProcess {
     inner class findUser : AsyncTask<String, Long, UserVO>() {
         override fun doInBackground(vararg params: String?): UserVO {
             val url = "http://106.10.51.32/ajax_process/friend_process"
-            var mem_no = "9"
+            var mem_no = FOPOService.dataMemberVO!!.mem_no
             var mem_id = params[0]
 
             val requestBody : RequestBody = FormBody.Builder()
@@ -84,7 +84,7 @@ class modFriendProcess {
     inner class addFriend : AsyncTask<String, Long, String>() {
         override fun doInBackground(vararg params: String?): String {
             val url = "http://106.10.51.32/ajax_process/friend_process"
-            val mem_no = "9"
+            val mem_no = FOPOService.dataMemberVO!!.mem_no
             val fri_no = params[0]
 
             val requestBody : RequestBody = FormBody.Builder()
@@ -117,7 +117,7 @@ class modFriendProcess {
     inner class removeFriend : AsyncTask<String, Long, String>() {
         override fun doInBackground(vararg params: String?): String {
             val url = "http://106.10.51.32/ajax_process/friend_process"
-            val mem_no = "9"
+            val mem_no = FOPOService.dataMemberVO!!.mem_no
             val fri_no = params[0]
 
             val requestBody : RequestBody = FormBody.Builder()
@@ -134,9 +134,6 @@ class modFriendProcess {
 
             val response : Response = client.newCall(request).execute()
             var str = response.body()?.string()!!
-
-            Log.d("QAZWSX" ,"$str")
-
 
             var gson = Gson() //오브젝트 생성
 

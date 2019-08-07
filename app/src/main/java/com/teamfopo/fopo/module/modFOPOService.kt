@@ -8,9 +8,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.SystemClock
+import android.widget.Toast
 import com.teamfopo.fopo.PassportActivity
 import com.teamfopo.fopo.module.FOPOService.Companion.Context_FOPOService
 import com.teamfopo.fopo.module.FOPOService.Companion.dataMemberVO
+import kotlinx.android.synthetic.main.nav_header_main.*
 import java.util.*
 
 class FOPOService : Service() {
@@ -33,8 +35,6 @@ class FOPOService : Service() {
         dataMemberVO = dbms.getMember()
 
         AuthThread?.start()
-
-        //Toast.makeText(applicationContext, "${FOPOService.dataMemberVO!!.mem_no}", Toast.LENGTH_LONG).show()
 
         return START_NOT_STICKY
     }

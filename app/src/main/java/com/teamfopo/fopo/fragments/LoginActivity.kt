@@ -82,6 +82,7 @@ class LoginActivity : Fragment(), View.OnClickListener {
                         sysdata.mem_id = mem_id
                         sysdata.token = LoginInfo.token
                         sysdata.mem_no = LoginInfo.mem_no
+                        sysdata.mem_nick = LoginInfo.mem_nick
                         sysdata.lastlogin = lastlogin
 
                         dbms.addMember(sysdata)
