@@ -77,12 +77,13 @@ class AuthThread: Thread() {
         var run = true
 
         var sess_token = dataMemberVO!!.token
+        var mem_no = dataMemberVO!!.mem_no
         while (run) {
             try {
                 SystemClock.sleep(5000)
 
                 var isToken = modAuthProcess().web_auth()
-                var tempVO = isToken.execute("$sess_token", "0").get()
+                var tempVO = isToken.execute("$mem_no", "0").get()
 
                 if ( tempVO.status.equals("not_exist_session")) {
                     var dbms = modDBMS(Context_FOPOService!!.applicationContext)
@@ -92,7 +93,7 @@ class AuthThread: Thread() {
                     android.os.Process.killProcess(android.os.Process.myPid())
                 } else {
                     var webLoginAuth = modAuthProcess().web_auth()
-                    var tempInfo = webLoginAuth.execute("$sess_token", "1").get()
+                    var tempInfo = webLoginAuth.execute("$mem_no", "1").get()
 
                     if ( tempInfo.status.equals("exist_auth")) {
                         var sess_no = tempInfo.sess_no

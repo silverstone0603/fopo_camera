@@ -8,6 +8,7 @@ import okhttp3.*
 
 data class modSessionToken(var status: String, var token: String, var mem_no: String, var mem_nick: String)
 data class webLoginVO(var status: String, var sess_no: Int, var sess_verify: Int)
+data class AuthCheckVO(var status: String)
 
 class modAuthProcess {
 
@@ -54,12 +55,12 @@ class modAuthProcess {
         override fun doInBackground(vararg params: String?): webLoginVO {
             var url = "http://106.10.51.32/ajax_process/web_process"
             var type = "web_auth"
-            var sess_token = params[0]
+            var mem_no = params[0]
             var sess_devicetype = params[1]
 
             val requestBody: RequestBody = FormBody.Builder()
                 .add("type", "$type")
-                .add("sess_token", "$sess_token")
+                .add("mem_no", "$mem_no")
                 .add("sess_devicetype", "$sess_devicetype")
                 .build()
             val client = OkHttpClient()
@@ -82,6 +83,40 @@ class modAuthProcess {
         }
 
         override fun onPostExecute(result: webLoginVO?) {
+            super.onPostExecute(result)
+        }
+    }
+
+    inner class auth_check : AsyncTask<String, Long, AuthCheckVO>() {
+        override fun doInBackground(vararg params: String?): AuthCheckVO {
+            var url = "http://106.10.51.32/ajax_process/web_process"
+            var type = "auth_check"
+            var sess_no = params[0]
+
+            val requestBody: RequestBody = FormBody.Builder()
+                .add("type", "$type")
+                .add("sess_no", "$sess_no")
+                .build()
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
+
+            val response: Response = client.newCall(request).execute()
+            var str = response.body()?.string()!!
+
+            var gson = Gson() //오브젝트 생성
+
+            val parser = JsonParser()
+            val rootObj = parser.parse(str)
+
+            var post = gson.fromJson(rootObj, AuthCheckVO::class.java)//뭐가 들어가야 하지?
+
+            return post
+        }
+
+        override fun onPostExecute(result: AuthCheckVO?) {
             super.onPostExecute(result)
         }
     }
