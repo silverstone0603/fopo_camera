@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
 import com.google.a.b.a.a.a.e
+import com.teamfopo.fopo.module.AuthThread
 import com.teamfopo.fopo.module.FOPOService
 import com.teamfopo.fopo.module.FOPOService.Companion.serviceIntent
 import com.teamfopo.fopo.module.modAuthProcess
@@ -21,6 +22,8 @@ class PassportActivity:AppCompatActivity(), View.OnClickListener {
 
         lateinit var PassportActivity: Activity
     }
+
+    var AuthCheckThread: Thread? = AuthCheckThread()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //val dbms = modDBMS(this)
@@ -43,7 +46,7 @@ class PassportActivity:AppCompatActivity(), View.OnClickListener {
 
         PassportActivity = this
 
-        AuthCheckThread().start()
+        AuthCheckThread?.start()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -66,6 +69,13 @@ class PassportActivity:AppCompatActivity(), View.OnClickListener {
         if (serviceIntent != null) {
             stopService(serviceIntent)
             serviceIntent = null
+        }
+
+        Thread.currentThread().interrupt()
+
+        if (AuthCheckThread != null) {
+            AuthCheckThread?.interrupt()
+            AuthCheckThread = null
         }
     }
 }
