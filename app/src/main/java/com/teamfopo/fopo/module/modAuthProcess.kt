@@ -77,6 +77,8 @@ class modAuthProcess {
             val parser = JsonParser()
             val rootObj = parser.parse(str)
 
+
+
             var post = gson.fromJson(rootObj, webLoginVO::class.java)//뭐가 들어가야 하지?
 
             return post
@@ -142,6 +144,28 @@ class modAuthProcess {
 
             return str
         }
+    }
 
+    inner class logout : AsyncTask<String, Long, String>() {
+        override fun doInBackground(vararg params: String?): String {
+            var url = "http://106.10.51.32/ajax_process/web_process"
+            var type = "logout"
+            var token = params[0]
+
+            val requestBody: RequestBody = FormBody.Builder()
+                .add("type", "$type")
+                .add("token", "$token")
+                .build()
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
+
+            val response: Response = client.newCall(request).execute()
+            var str = response.body()?.string()!!
+
+            return str
+        }
     }
 }

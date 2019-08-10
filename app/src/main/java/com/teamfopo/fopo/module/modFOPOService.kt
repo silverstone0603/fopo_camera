@@ -8,21 +8,24 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.SystemClock
+import android.support.v7.preference.PreferenceManager
 import android.widget.Toast
+import com.teamfopo.fopo.MainActivity
 import com.teamfopo.fopo.PassportActivity
 import com.teamfopo.fopo.module.FOPOService.Companion.Context_FOPOService
 import com.teamfopo.fopo.module.FOPOService.Companion.dataMemberVO
+import com.teamfopo.fopo.module.FOPOService.Companion.setting_push
 import kotlinx.android.synthetic.main.nav_header_main.*
 import java.util.*
 
 class FOPOService : Service() {
     companion object {
-        const val Toast_Notice: Int = 1
-
         var serviceIntent: Intent? = null
         var Context_FOPOService: Application? = null
 
         var dataMemberVO: modSysData? = null
+
+        var setting_push: Boolean? = null
     }
 
     var AuthThread: Thread? = AuthThread()
@@ -33,6 +36,9 @@ class FOPOService : Service() {
 
         var dbms = modDBMS(Context_FOPOService!!.applicationContext)
         dataMemberVO = dbms.getMember()
+
+        val sps = PreferenceManager.getDefaultSharedPreferences(Context_FOPOService!!.applicationContext)
+        setting_push = sps.getBoolean("key_push", false)
 
         AuthThread?.start()
 

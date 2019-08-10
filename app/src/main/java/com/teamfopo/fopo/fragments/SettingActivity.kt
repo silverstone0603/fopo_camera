@@ -2,15 +2,15 @@ package com.teamfopo.fopo.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
+import android.webkit.WebView
 import com.teamfopo.fopo.R
 
-class SettingActivity : Fragment(), View.OnClickListener {
+class SettingActivity : Fragment() {
 
     private val TAG = "MainActivity"
     private var trackableGestureDetector: GestureDetector? = null
@@ -25,34 +25,13 @@ class SettingActivity : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        //var viewCamera: View
-        //viewCamera = inflater.inflate(R.layout.content_setting, container, false)
-        var viewRoot: View = inflater!!.inflate(R.layout.content_setting, container, false)
-
-        /** 갑자기 와있노 이거 ㅅㅂ -기원 7.10
-        var btnFopozones: Button = viewRoot.findViewById(R.id.btnFopozones) as Button
-        btnFopozones.setOnClickListener(this)
-        */
-        initFragment()
+        var viewRoot: View
+        viewRoot = inflater.inflate(R.layout.content_setting, container, false)
 
         return viewRoot
     }
 
-    fun initFragment(){
-        /*
-            AR Fragment 생성 부분
-        */
+    fun initFragment(view: View){
 
-
-    }
-
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            /** 7.10 오류나서 주석 - 기원
-            R.id.btnFopozones -> {
-
-            }
-            */
-        }
     }
 }
