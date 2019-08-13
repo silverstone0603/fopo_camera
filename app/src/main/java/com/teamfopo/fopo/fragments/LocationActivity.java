@@ -180,11 +180,7 @@ public class LocationActivity extends AppCompatActivity {
                                                         View eView = distanceRenderables.get(i).getView();
 
                                                         // distance layout 위도 및 경도 설정, 노드 설정
-                                                        LocationMarker layoutLocationMarker = new LocationMarker(
-                                                                longitude,
-                                                                latitude,
-                                                                base
-                                                        );
+                                                        LocationMarker layoutLocationMarker = new LocationMarker(longitude, latitude, base);
 
                                                         // An example "onRender" event, called every frame
                                                         // Updates the layout with the markers distance
@@ -203,11 +199,7 @@ public class LocationActivity extends AppCompatActivity {
                                                         locationScene.mLocationMarkers.add(layoutLocationMarker);
 
                                                         // 3D marker 위도 및 경도 설정, 노드 설정
-                                                        LocationMarker locationMarker = new LocationMarker(
-                                                                longitude,
-                                                                latitude,
-                                                                getAndy(title, address, time)
-                                                        );
+                                                        LocationMarker locationMarker = new LocationMarker(longitude, latitude, getAndy(title, address, time));
 
                                                         // 3D marker meter 반경 설정
                                                         locationMarker.setOnlyRenderWhenWithin(500);
