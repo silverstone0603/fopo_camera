@@ -6,9 +6,10 @@ import java.io.InputStream
 class modProtocol{
     fun getResultString(strURL: String, argType: Array<String>, argValues: Array<String>): String {
         val frmBody = FormBody.Builder()
-
-        for(i in 0..argType.size-1){
-            frmBody.add(argType[i], argValues[i])
+        if (!argType.isEmpty()){
+            for (i in 0..argType.size) {
+                frmBody.add(argType[i], argValues[i])
+            }
         }
         frmBody.build()
 
@@ -29,8 +30,10 @@ class modProtocol{
     fun getResultByteArray(strURL: String, argType: Array<String>, argValues: Array<String>): ByteArray {
         val frmBody = FormBody.Builder()
 
-        for(i in 0..argType.size-1){
-            frmBody.add(argType[i], argValues[i])
+        if (!argType.isEmpty()){
+            for (i in 0..argType.size) {
+                frmBody.add(argType[i], argValues[i])
+            }
         }
         frmBody.build()
 
@@ -51,8 +54,10 @@ class modProtocol{
     fun getResultByteStream(strURL: String, argType: Array<String>, argValues: Array<String>): InputStream {
         val frmBody = FormBody.Builder()
 
-        for(i in 0..argType.size-1){
-            frmBody.add(argType[i], argValues[i])
+        if (!argType.isEmpty()){
+            for (i in 0..argType.size) {
+                frmBody.add(argType[i], argValues[i])
+            }
         }
         frmBody.build()
 
