@@ -63,7 +63,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         // Create persistent LocationManager reference
         lmMain = super.getActivity()!!.getSystemService(LOCATION_SERVICE) as LocationManager?
         */
-        
+
         initArFragment(viewCamera)
 
         return viewCamera
