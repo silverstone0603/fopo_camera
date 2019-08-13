@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0'
 
+    implementation 'com.google.ar:core:1.9.0'
     implementation "com.google.ar.sceneform:core:1.9.0"
     implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.9.0'
 
@@ -63,8 +64,9 @@ dependencies {
     implementation 'junit:junit:4.12'
 
     implementation "com.android.support:design:28.0.0"
-
     implementation "com.android.support:preference-v7:28.0.0"
+
+    compile project(':arcore-location')
 }
 
 kotlin {
