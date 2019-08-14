@@ -25,6 +25,8 @@ import com.google.ar.sceneform.rendering.ViewRenderable
 import com.teamfopo.fopo.R
 import com.teamfopo.fopo.module.modProtocol
 import com.teamfopo.fopo.nodes.PointCloudNode
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -96,8 +98,19 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         arSceneView!!.scene.addChild(pointCloudNode)
 
         // 데이터 가져오기
-        jsonString = protMain!!.getResultString("http://106.10.51.32/ajax_process/location_process",null as Array<String>,null as Array<String>)
-        Log.d("ARCore","가져온 값 : "+jsonString)
+        // Log.d("ARCore","토큰 값 : "+FOPOService.dataMemberVO!!.token)
+        GlobalScope.launch {
+            jsonString = protMain!!.getResultString("http://106.10.51.32/ajax_process/location_process", arrayOf("token"), arrayOf("5d52aa5a9786d"))
+            Log.d("ARCore","가져온 값 : "+jsonString)
+        }
+
+        while(true){
+            if(protMain!!.isFinish()){
+                break
+            }else{
+                Thread.sleep(1000)
+            }
+        }
 
         // 카메라 및 위치 권한 가져오기
         ARLocationPermissionHelper.requestPermission(this.activity)
@@ -126,7 +139,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                 null
             }
 
-        CompletableFuture.allOf(completableFutures.get(0), marker)
+        CompletableFuture.allOf(completableFutures[0], marker)
             .handle { notUsed: Void, throwable: Throwable ->
                 if(throwable != null){
                     DemoUtils.displayError(viewCamera!!.context, "Unable to load renderables", throwable)
@@ -153,11 +166,11 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                         for (i in 0..jsonArray!!.length()) {
                                             jsonObject = jsonArray!!.getJSONObject(i)
 
-                                            var title = jsonObject!!.getString("title")
-                                            var address = jsonObject!!.getString("title")
-                                            var time = jsonObject!!.getString("title")
-                                            var latitude = jsonObject!!.getDouble("latitude")
-                                            var longitude = jsonObject!!.getDouble("longitude")
+                                            var title = jsonObject!!.getString("zone_placename")
+                                            var address = jsonObject!!.getString("zone_placename")
+                                            var time = jsonObject!!.getString("zone_regdate")
+                                            var latitude = jsonObject!!.getDouble("zone_x")
+                                            var longitude = jsonObject!!.getDouble("zone_y")
 
                                             // 노드 생성 및 Renderable 지정
                                             var base: Node? = null
@@ -270,6 +283,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
     }
 
     private fun showLoadingMessage(){
+        /*
         if(loadingMessageSnackbar != null && loadingMessageSnackbar!!.isShownOrQueued) return
         loadingMessageSnackbar = Snackbar.make(
             viewCamera!!.findViewById(android.R.id.content),
@@ -277,6 +291,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
             Snackbar.LENGTH_INDEFINITE)
         loadingMessageSnackbar!!.view.setBackgroundColor(0xbf323232.toInt())
         loadingMessageSnackbar!!.show()
+        */
     }
 
     private fun hideLoadingMessage(){

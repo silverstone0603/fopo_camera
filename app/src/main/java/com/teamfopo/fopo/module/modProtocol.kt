@@ -1,17 +1,22 @@
 package com.teamfopo.fopo.module
 
+import android.util.Log
 import okhttp3.*
 import java.io.InputStream
 
 class modProtocol{
-    fun getResultString(strURL: String, argType: Array<String>, argValues: Array<String>): String {
+    var blFinish: Boolean = false
+
+    fun getResultString(strURL: String, argType: Array<String>, argValues: Array<String>): String{
+        blFinish = false
         val frmBody = FormBody.Builder()
-        if (!argType.isEmpty()){
-            for (i in 0..argType.size) {
+        if (argType.isNotEmpty()){
+            Log.d("modProtocol","[String] 배열이 존재합니다.")
+            for (i in 0 until argType.size) {
                 frmBody.add(argType[i], argValues[i])
+                Log.d("modProtocol","[String] 배열 추가 : "+argType[i]+" / "+argValues[i])
             }
         }
-        frmBody.build()
 
         val requestBody: RequestBody = frmBody.build()
 
@@ -21,23 +26,27 @@ class modProtocol{
             .post(requestBody)
             .build()
 
-        val response: Response = client.newCall(request).execute()
+        var response: Response = client.newCall(request).execute()
+
+        response = client.newCall(request).execute()
         var tmpResult = response.body()?.string()!!
+        blFinish = true
 
         return tmpResult
     }
 
     fun getResultByteArray(strURL: String, argType: Array<String>, argValues: Array<String>): ByteArray {
+        blFinish = false
         val frmBody = FormBody.Builder()
-
-        if (!argType.isEmpty()){
-            for (i in 0..argType.size) {
+        if (argType.isNotEmpty()){
+            Log.d("modProtocol","[ByteArray] 배열이 존재합니다.")
+            for (i in 0 until argType.size) {
                 frmBody.add(argType[i], argValues[i])
+                Log.d("modProtocol","[ByteArray] 배열 추가 : "+argType[i]+" / "+argValues[i])
             }
         }
-        frmBody.build()
 
-        val requestBody: RequestBody = frmBody.build()
+        val requestBody: RequestBody = frmBody.build() as RequestBody
 
         val client = OkHttpClient()
         val request = Request.Builder()
@@ -47,21 +56,23 @@ class modProtocol{
 
         val response: Response = client.newCall(request).execute()
         var tmpResult = response.body()?.bytes()!!
+        blFinish = true
 
         return tmpResult
     }
 
-    fun getResultByteStream(strURL: String, argType: Array<String>, argValues: Array<String>): InputStream {
+    fun getResultInputStream(strURL: String, argType: Array<String>, argValues: Array<String>): InputStream {
+        blFinish = false
         val frmBody = FormBody.Builder()
-
-        if (!argType.isEmpty()){
-            for (i in 0..argType.size) {
+        if (argType.isNotEmpty()){
+            Log.d("modProtocol","[InputStream] 배열이 존재합니다.")
+            for (i in 0 until argType.size) {
                 frmBody.add(argType[i], argValues[i])
+                Log.d("modProtocol","[InputStream] 배열 추가 : "+argType[i]+" / "+argValues[i])
             }
         }
-        frmBody.build()
 
-        val requestBody: RequestBody = frmBody.build()
+        val requestBody: RequestBody = frmBody.build() as RequestBody
 
         val client = OkHttpClient()
         val request = Request.Builder()
@@ -71,7 +82,12 @@ class modProtocol{
 
         val response: Response = client.newCall(request).execute()
         var tmpResult = response.body()?.byteStream()!!
+        blFinish = true
 
         return tmpResult
+    }
+
+    fun isFinish(): Boolean{
+        return blFinish
     }
 }
