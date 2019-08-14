@@ -201,7 +201,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                             }
 
                                             // distance Layout meter 반경 설정
-                                            layoutLocationMarker.onlyRenderWhenWithin = 1000
+                                            layoutLocationMarker.onlyRenderWhenWithin = 500
 
                                             // distance layout 높이 설정
                                             layoutLocationMarker.height = -3.5F
