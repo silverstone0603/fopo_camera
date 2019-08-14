@@ -94,8 +94,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         pointCloudNode = PointCloudNode(viewCamera!!.context)
         protMain = modProtocol()
 
-        //CloudNode를 추가함
-        // arSceneView!!.scene.addChild(pointCloudNode)
+        // CloudNode를 추가함
+        arSceneView!!.scene.addChild(pointCloudNode)
 
         // 데이터 가져오기
         // Log.d("ARCore","토큰 값 : "+FOPOService.dataMemberVO!!.token)
@@ -105,19 +105,21 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         }
         while(true){
             if(protMain!!.isFinish()) break
-            else Thread.sleep(1000)
+            // else Thread.sleep(1000)
         }
-        Log.d("ARCore","가져온 정보를 바탕으로 작업을 계속합니다.")
+        Log.d("ARCore","FOPO 서버로부터 포포존 정보를 성공적으로 가져왔습니다.")
 
         // 카메라 및 위치 권한 가져오기
         ARLocationPermissionHelper.requestPermission(this.activity)
         
         // 거리 표시 레이아웃 추가
         try{
+            Log.d("ARCore","거리 표시 레이아웃을 추가합니다.")
             jsonArray = JSONArray(jsonString)
-            for(i in 0..jsonArray!!.length()){
+            for(i in 0 until jsonArray!!.length()){
+                Log.d("ARCore","$i"+"번째 거리 표시 레이아웃 추가")
                 var distanceLayout: CompletableFuture<ViewRenderable> = ViewRenderable.builder()
-                    .setView(viewCamera!!.context, R.layout.arcore_inform_view)
+                    .setView(this.context, R.layout.arcore_inform_view)
                     .build()
                 completableFutures.add(i, distanceLayout)
             }
@@ -126,6 +128,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         }
 
         // 마커 추가
+        Log.d("ARCore","마커를 추가합니다.")
         var marker: CompletableFuture<ModelRenderable> = ModelRenderable.builder()
             .setSource(viewCamera!!.context, Uri.parse("fopoMarker.sfb"))
             .build()
@@ -136,14 +139,24 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                 null
             }
 
+        Log.d("ARCore","CompletableFuture 작업을 계속 진행합니다.")
         CompletableFuture.allOf(completableFutures[0], marker)
-            .handle { notUsed: Void, throwable: Throwable ->
-                if(throwable != null){
-                    DemoUtils.displayError(viewCamera!!.context, "Unable to load renderables", throwable)
+            .handleAsync{ v, t->
+                Log.d("ARCore","[CompletableFuture] throwable 개체가 있는지 확인합니다.")
+                if(t != null){
+                    DemoUtils.displayError(viewCamera!!.context, "Unable to load renderables", t)
+                    Log.d("ARCore","마커 로드에 실패 했습니다.")
                 }else {
+                    Log.d("ARCore","[CompletableFuture] JSON 코드를 처리합니다.")
                     try {
                         // JSON 디코딩 오류가 발생할 시 이벤트 처리
                         try {
+                            jsonArray = JSONArray(jsonString)
+
+                            for(i in 0 until jsonArray!!.length()){
+                                distanceRenderables.add(i, completableFutures[i].get() as ViewRenderable)
+                                //distanceRenderables.add(i, (ViewRenderable) completableFutures.get(i).get());
+                            }
                         } catch (e: JSONException) {
                             e.printStackTrace()
                         }
@@ -152,6 +165,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                         hasFinishedLoading = true
 
                         // 마커와 거리 표시 distance layout을 추가하는 부분
+                        Log.d("ARCore","SceneView에 객체를 추가합니다.")
                         arSceneView!!
                             .scene
                             .addOnUpdateListener { frameTime: FrameTime? ->
@@ -160,7 +174,9 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                     locationScene = LocationScene(this.activity, arSceneView)
                                     try {
                                         jsonArray = JSONArray(jsonString)
-                                        for (i in 0..jsonArray!!.length()) {
+                                        Log.d("ARCore","총 "+(jsonArray!!.length().toString())+"개의 포포존이 있습니다.")
+                                        for (i in 0 until jsonArray!!.length()) {
+                                            Log.d("ARCore","$i"+"번째 포포존 정보를 추가중입니다.")
                                             jsonObject = jsonArray!!.getJSONObject(i)
 
                                             var title = jsonObject!!.getString("zone_placename")
@@ -170,9 +186,9 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                             var longitude = jsonObject!!.getDouble("zone_y")
 
                                             // 노드 생성 및 Renderable 지정
-                                            var base: Node? = null
-                                            base!!.renderable = distanceRenderables.get(i)
-                                            var eView: View = distanceRenderables.get(i).view
+                                            var base: Node = Node()
+                                            base!!.renderable = distanceRenderables[i]
+                                            var eView: View = distanceRenderables[i].view
 
                                             // distance Layout 위도 및 경도 설정, 노드 설정
                                             var layoutLocationMarker: LocationMarker =
@@ -181,14 +197,14 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                             // onRender 이벤트가 발생할때마다 마커의 거리가 표시된 레이아웃을 업데이트
                                             layoutLocationMarker.setRenderEvent { node ->
                                                 var distanceTextView: TextView = eView.findViewById(R.id.text_distance)
-                                                distanceTextView.text = (node.distance as String) + "m"
+                                                distanceTextView.text = node.distance.toString() + "m"
                                             }
 
                                             // distance Layout meter 반경 설정
                                             layoutLocationMarker.onlyRenderWhenWithin = 1000
 
                                             // distance layout 높이 설정
-                                            layoutLocationMarker.height = 3 as Float
+                                            layoutLocationMarker.height = (3.0 as Float)
 
                                             // distanceView 추가
                                             locationScene!!.mLocationMarkers.add(layoutLocationMarker)
@@ -204,7 +220,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                             locationMarker.onlyRenderWhenWithin = 500
 
                                             // 3D marker meter 높이 설정
-                                            locationMarker.height = -0.6 as Float
+                                            // locationMarker.height = -0.6 as Float
 
                                             // 3D marker 추가
                                             locationScene!!.mLocationMarkers.add(locationMarker)
@@ -214,10 +230,12 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                                 "위도 및 경도 : " + latitude.toString() + " / " + longitude.toString()
                                             )
                                         }
+                                        Log.d("ARCore","포포존 정보 추가가 완료되었습니다.")
                                     } catch (e: JSONException) {
                                         e.printStackTrace()
                                     }
                                 }
+
                                 var frame: Frame? = arSceneView!!.arFrame
                                 if (frame == null) null
                                 if (frame!!.camera.trackingState != TrackingState.TRACKING) null
@@ -234,7 +252,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                     } catch (e: Exception) {
                         when (e) {
                             is InterruptedException, is ExecutionException -> {
-                                DemoUtils.displayError(viewCamera!!.context, "Unable to load renderables", e)
+                                DemoUtils.displayError(this.context, "Unable to load renderables", e)
                             }
                             else -> {
                             }
@@ -243,6 +261,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                 }
                 null
             }
+
+        Log.d("ARCore","init 작업을 완료 했습니다.")
     }
 
     private fun getMarker(viewRoot: Context, title: String, address: String, time: String): Node{
@@ -280,15 +300,13 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
     }
 
     private fun showLoadingMessage(){
-        /*
         if(loadingMessageSnackbar != null && loadingMessageSnackbar!!.isShownOrQueued) return
         loadingMessageSnackbar = Snackbar.make(
-            viewCamera!!.findViewById(android.R.id.content),
+            viewCamera!!,
             "포포존 정보를 가져오고 있습니다...",
             Snackbar.LENGTH_INDEFINITE)
         loadingMessageSnackbar!!.view.setBackgroundColor(0xbf323232.toInt())
         loadingMessageSnackbar!!.show()
-        */
     }
 
     private fun hideLoadingMessage(){
@@ -306,14 +324,12 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
     }
 
     override fun onUpdate(frameTime: FrameTime?) {
-        /*
         // Visualize tracked points.
         val pointCloud = arSceneView!!.arFrame!!.acquirePointCloud()
         pointCloudNode!!.update(pointCloud)
 
         // Application is responsible for releasing the point cloud resources after using it.
         pointCloud.release()
-        */
     }
 
     override fun onResume() {
@@ -340,7 +356,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         try{
             arSceneView!!.resume()
         }catch(e: CameraNotAvailableException){
-            DemoUtils.displayError(viewCamera!!.context, "Unable to get camera", e)
+            DemoUtils.displayError(viewCamera!!.context, "카메라를 사용할 수 없습니다.", e)
             return
         }
         if(arSceneView!!.session != null) showLoadingMessage()
