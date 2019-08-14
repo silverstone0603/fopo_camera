@@ -1,44 +1,41 @@
 package com.teamfopo.fopo.fragments
 
 import android.app.AlertDialog
-import android.content.Context.LOCATION_SERVICE
-import android.graphics.Bitmap
-import android.graphics.ImageFormat
-import android.graphics.Rect
-import android.graphics.YuvImage
-import android.location.LocationManager
-import android.media.Image
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
-import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
-import com.google.ar.core.Anchor
-import com.google.ar.core.HitResult
+import com.google.ar.core.Frame
 import com.google.ar.core.Plane
+import com.google.ar.core.Session
 import com.google.ar.core.TrackingState
-import com.google.ar.sceneform.AnchorNode
+import com.google.ar.core.exceptions.CameraNotAvailableException
+import com.google.ar.core.exceptions.UnavailableException
+import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.FrameTime
-import com.google.ar.sceneform.HitTestResult
+import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.Scene
-import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ModelRenderable
-import com.google.ar.sceneform.ux.ArFragment
-import com.google.ar.sceneform.ux.TransformableNode
-import com.teamfopo.fopo.MainActivity
+import com.google.ar.sceneform.rendering.ViewRenderable
 import com.teamfopo.fopo.R
+import com.teamfopo.fopo.module.modProtocol
 import com.teamfopo.fopo.nodes.PointCloudNode
-import java.io.BufferedOutputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.lang.Math.*
-import java.nio.ByteBuffer
-import java.time.Instant
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import uk.co.appoly.arcorelocation.LocationMarker
+import uk.co.appoly.arcorelocation.LocationScene
+import uk.co.appoly.arcorelocation.utils.ARLocationPermissionHelper
+import uk.co.appoly.arcorelocation.utils.DemoUtils
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ExecutionException
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -51,154 +48,339 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, Scene.OnPeekTouchListener,
-    Scene.OnUpdateListener {
+class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener {
+    // Fragment(), View.OnClickListener, Scene.OnTouchListener, Scene.OnPeekTouchListener, Scene.OnUpdateListener
 
-    private val TAG = "CameraActivity"
-    private var trackableGestureDetector: GestureDetector? = null
+    private var installRequested: Boolean = false
+    private var hasFinishedLoading = false
 
-    private var arFragment: ArFragment? = null
-    private lateinit var markerRenderable: ModelRenderable
-    private lateinit var pointCloudNode: PointCloudNode
+    private var viewCamera: View ?= null
 
-    private var strTitle = ""
+    private var loadingMessageSnackbar: Snackbar? = null
 
-    private var lmMain : LocationManager? = null
+    private var protMain: modProtocol? = null
+    private var arSceneView: ArSceneView? = null
+    private var pointCloudNode: PointCloudNode? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //setContentView(R.layout.content_camera)
-    }
+    // Renderables for this example
+    private var markerRenderable: ModelRenderable? = null
+    private val distanceRenderable: ViewRenderable? = null
+
+    // Our ARCore-Location scene
+    private var locationScene: LocationScene? = null
+
+    private var jsonString = ""
+    private var jsonArray: JSONArray? = null
+    private var jsonObject: JSONObject? = null
+
+    var distanceRenderables: ArrayList<ViewRenderable> = ArrayList()
+    var completableFutures: ArrayList<CompletableFuture<*>> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        var viewCamera: View
         viewCamera = inflater.inflate(R.layout.content_camera, container, false)
 
-        // Create persistent LocationManager reference
-        lmMain = super.getActivity()!!.getSystemService(LOCATION_SERVICE) as LocationManager?
-
-        initArFragment(viewCamera)
+        initArFragment()
 
         return viewCamera
     }
 
-    fun initArFragment(viewRoot: View) {
-        /*
-            AR Fragment 생성 부분
-        */
-        arFragment = childFragmentManager.findFragmentById(R.id.fopo_ar_fragment) as? ArFragment
-        arFragment!!.planeDiscoveryController.hide()
-        arFragment!!.planeDiscoveryController.setInstructionView(null)
+    fun initArFragment() {
+        //ARCore 초기화
+        arSceneView = viewCamera!!.findViewById(R.id.fopo_arcore_sceneview)
+        pointCloudNode = PointCloudNode(viewCamera!!.context)
+        protMain = modProtocol()
 
-        pointCloudNode = PointCloudNode(this.activity)
-        arFragment!!.arSceneView.scene.addChild(pointCloudNode)
+        // CloudNode를 추가함
+        arSceneView!!.scene.addChild(pointCloudNode)
 
-        arFragment!!.arSceneView.planeRenderer.isEnabled = false
+        // 데이터 가져오기
+        // Log.d("ARCore","토큰 값 : "+FOPOService.dataMemberVO!!.token)
+        GlobalScope.launch {
+            jsonString = protMain!!.getResultString("http://106.10.51.32/ajax_process/location_process", arrayOf("token"), arrayOf("5d52aa5a9786d"))
+            Log.d("ARCore","가져온 값 : "+jsonString)
+        }
+        while(true){
+            if(protMain!!.isFinish()) break
+            // else Thread.sleep(1000)
+        }
+        Log.d("ARCore","FOPO 서버로부터 포포존 정보를 성공적으로 가져왔습니다.")
 
-        arFragment!!.arSceneView.scene.addOnUpdateListener(::onFrame)
+        // 카메라 및 위치 권한 가져오기
+        ARLocationPermissionHelper.requestPermission(this.activity)
+        
+        // 거리 표시 레이아웃 추가
+        try{
+            Log.d("ARCore","거리 표시 레이아웃을 추가합니다.")
+            jsonArray = JSONArray(jsonString)
+            for(i in 0 until jsonArray!!.length()){
+                Log.d("ARCore","$i"+"번째 거리 표시 레이아웃 추가")
+                var distanceLayout: CompletableFuture<ViewRenderable> = ViewRenderable.builder()
+                    .setView(this.context, R.layout.arcore_inform_view)
+                    .build()
+                completableFutures.add(i, distanceLayout)
+            }
+        }catch (e: JSONException){
+            e.printStackTrace()
+        }
 
-        ModelRenderable.builder()
-            .setSource(this.activity, Uri.parse("fopoMarker.sfb"))
+        // 마커 추가
+        Log.d("ARCore","마커를 추가합니다.")
+        var marker: CompletableFuture<ModelRenderable> = ModelRenderable.builder()
+            .setSource(viewCamera!!.context, Uri.parse("fopoMarker.sfb"))
             .build()
-            .thenAccept { renderable -> markerRenderable = renderable }
-            .exceptionally { throwable ->
-                val toast = Toast.makeText(this.activity, "마커를 불러오지 못했습니다.", Toast.LENGTH_LONG)
-                toast.setGravity(Gravity.CENTER, 0, 0)
-                toast.show()
+            .exceptionally {t: Throwable? ->
+                val toastMessage = Toast.makeText(viewCamera!!.context, "마커를 불러오지 못했습니다.", Toast.LENGTH_LONG)
+                toastMessage.setGravity(Gravity.CENTER, 0, 0)
+                toastMessage.show()
                 null
             }
 
-        // set on tap listener
-        // arFragment!!.arSceneView.scene.addOnPeekTouchListener(this)
-        arFragment!!.arSceneView.scene.setOnTouchListener(this)
-        arFragment!!.arSceneView.scene.addOnUpdateListener(this)
-        arFragment!!.setOnTapArPlaneListener { hitResult: HitResult, plane: Plane, motionEvent: MotionEvent ->
-            Toast.makeText(this.context, "setOnTapArPlaneListener가 실행 되었습니다.", Toast.LENGTH_LONG).show()
-        }
+        Log.d("ARCore","CompletableFuture 작업을 계속 진행합니다.")
+        CompletableFuture.allOf(completableFutures[0], marker)
+            .handleAsync{ v, t->
+                Log.d("ARCore","[CompletableFuture] throwable 개체가 있는지 확인합니다.")
+                if(t != null){
+                    DemoUtils.displayError(viewCamera!!.context, "Unable to load renderables", t)
+                    Log.d("ARCore","마커 로드에 실패 했습니다.")
+                }else {
+                    Log.d("ARCore","[CompletableFuture] JSON 코드를 처리합니다.")
+                    try {
+                        // JSON 디코딩 오류가 발생할 시 이벤트 처리
+                        try {
+                            jsonArray = JSONArray(jsonString)
 
-        trackableGestureDetector = GestureDetector(this.activity,
-            object : GestureDetector.SimpleOnGestureListener() {
-                override fun onSingleTapUp(e: MotionEvent): Boolean {
-                    onSingleTap(e)
-                    return true
-                }
+                            for(i in 0 until jsonArray!!.length()){
+                                distanceRenderables.add(i, completableFutures[i].get() as ViewRenderable)
+                                //distanceRenderables.add(i, (ViewRenderable) completableFutures.get(i).get());
+                            }
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
 
-                override fun onDown(e: MotionEvent): Boolean {
-                    return true
+                        markerRenderable = marker.get()
+                        hasFinishedLoading = true
+
+                        // 마커와 거리 표시 distance layout을 추가하는 부분
+                        Log.d("ARCore","SceneView에 객체를 추가합니다.")
+                        arSceneView!!
+                            .scene
+                            .addOnUpdateListener { frameTime: FrameTime? ->
+                                if (!hasFinishedLoading) null
+                                if (locationScene == null) {
+                                    locationScene = LocationScene(this.activity, arSceneView)
+                                    try {
+                                        jsonArray = JSONArray(jsonString)
+                                        Log.d("ARCore","총 "+(jsonArray!!.length().toString())+"개의 포포존이 있습니다.")
+                                        for (i in 0 until jsonArray!!.length()) {
+                                            Log.d("ARCore","$i"+"번째 포포존 정보를 추가중입니다.")
+                                            jsonObject = jsonArray!!.getJSONObject(i)
+
+                                            var title = jsonObject!!.getString("zone_placename")
+                                            var address = jsonObject!!.getString("zone_placename")
+                                            var time = jsonObject!!.getString("zone_regdate")
+                                            var latitude = jsonObject!!.getDouble("zone_x")
+                                            var longitude = jsonObject!!.getDouble("zone_y")
+
+                                            // 노드 생성 및 Renderable 지정
+                                            var base: Node = Node()
+                                            base!!.renderable = distanceRenderables[i]
+                                            var eView: View = distanceRenderables[i].view
+
+                                            // distance Layout 위도 및 경도 설정, 노드 설정
+                                            var layoutLocationMarker: LocationMarker =
+                                                LocationMarker(longitude, latitude, base)
+
+                                            // onRender 이벤트가 발생할때마다 마커의 거리가 표시된 레이아웃을 업데이트
+                                            layoutLocationMarker.setRenderEvent { node ->
+                                                var distanceTextView: TextView = eView.findViewById(R.id.text_distance)
+                                                distanceTextView.text = node.distance.toString() + "m"
+                                            }
+
+                                            // distance Layout meter 반경 설정
+                                            layoutLocationMarker.onlyRenderWhenWithin = 500
+
+                                            // distance layout 높이 설정
+                                            layoutLocationMarker.height = -3.5F
+
+                                            // distanceView 추가
+                                            locationScene!!.mLocationMarkers.add(layoutLocationMarker)
+
+                                            // 3D marker 위도 및 경도 설정, 노드 설정
+                                            var locationMarker: LocationMarker = LocationMarker(
+                                                longitude,
+                                                latitude,
+                                                getMarker(viewCamera!!.context, title, address, time)
+                                            )
+
+                                            // 3D marker emter 반경 설정
+                                            locationMarker.onlyRenderWhenWithin = 500
+
+                                            // 3D marker meter 높이 설정
+                                            locationMarker.height = -0.6F
+
+                                            // 3D marker 추가
+                                            locationScene!!.mLocationMarkers.add(locationMarker)
+
+                                            Log.d(
+                                                "ARCore",
+                                                "위도 및 경도 : " + latitude.toString() + " / " + longitude.toString()
+                                            )
+                                        }
+                                        Log.d("ARCore","포포존 정보 추가가 완료되었습니다.")
+                                    } catch (e: JSONException) {
+                                        e.printStackTrace()
+                                    }
+                                }
+
+                                var frame: Frame? = arSceneView!!.arFrame
+                                if (frame == null) null
+                                if (frame!!.camera.trackingState != TrackingState.TRACKING) null
+                                if (locationScene != null) locationScene!!.processFrame(frame)
+
+                                if (loadingMessageSnackbar != null) {
+                                    for (plane: Plane in frame.getUpdatedTrackables(Plane::class.java)) {
+                                        if (plane.trackingState == TrackingState.TRACKING) {
+                                            hideLoadingMessage()
+                                        }
+                                    }
+                                }
+                            }
+                    } catch (e: Exception) {
+                        when (e) {
+                            is InterruptedException, is ExecutionException -> {
+                                DemoUtils.displayError(this.context, "Unable to load renderables", e)
+                            }
+                            else -> {
+                            }
+                        }
+                    }
                 }
+                null
             }
-        )
 
-        // Capture the Image
-        var btnCapture: ImageButton = viewRoot.findViewById(R.id.btnCapture) as ImageButton
-        btnCapture.setOnClickListener(this)
-
-        (activity as MainActivity).showSystemUI()
-
-        /*
-        arFragment!!.setOnTapArPlaneListener { hitResult, plane, motionEvent ->
-            val anchor = hitResult.createAnchor()
-
-            ModelRenderable.builder()
-                .setSource(this.activity, Uri.parse("fopoMarker.sfb"))
-                .build()
-                .thenAccept({ modelRenderable -> addModelToScene(anchor, modelRenderable) })
-                .exceptionally({ throwable ->
-                    val builder = AlertDialog.Builder(this.context)
-                    builder.setMessage(throwable.message)
-                        .show()
-                    null
-                })
-        }
-        */
-
+        Log.d("ARCore","init 작업을 완료 했습니다.")
     }
 
-    fun onFrame(frameTime: FrameTime) {
-        arFragment!!.onUpdate(frameTime)
-        val frame = arFragment!!.arSceneView.arFrame
-        val camera = frame!!.camera
-
-        var dim: IntArray = camera.getImageIntrinsics().getImageDimensions()
-        Log.d("ARCore","Camera Dimensions: "+dim[0]+" x "+dim[1]);
-
-        // If not tracking, don't draw 3d objects.
-        if (camera.trackingState == TrackingState.PAUSED) {
-            return
+    private fun getMarker(viewRoot: Context, title: String, address: String, time: String): Node{
+        var base: Node = Node()
+        base.renderable = markerRenderable
+        var c: Context = viewRoot
+        base.setOnTapListener{v, event ->
+            preview(viewRoot, title, address, time)
         }
+        return base
+    }
 
+    fun preview(viewRoot: Context, title: String, address: String, time: String){
+        var alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(viewRoot)
+
+        // 제목 생성
+        alertDialogBuilder.setTitle(title)
+
+        // AlertDialog 셋팅
+        alertDialogBuilder
+            .setMessage("선택하신 포토존에서 어떤 작업을 진행할까요?")
+            .setCancelable(false)
+            .setPositiveButton("사진 찍기"){dialog, which ->
+                Log.d("ARCore","사진 찍기 선택하셨습니다.")
+                dialog.cancel()
+            }
+            .setNegativeButton("포포존 바로가기"){dialog, which ->
+                Log.d("ARCore","포포존 바로가기 선택하셨습니다.")
+                dialog.cancel()
+            }
+
+        // 다이얼로그 생성 및 표시
+        var alertDialog: AlertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+    private fun showLoadingMessage(){
+        if(loadingMessageSnackbar != null && loadingMessageSnackbar!!.isShownOrQueued) return
+        loadingMessageSnackbar = Snackbar.make(
+            viewCamera!!,
+            "포포존 정보를 가져오고 있습니다...",
+            Snackbar.LENGTH_INDEFINITE)
+        loadingMessageSnackbar!!.view.setBackgroundColor(0xbf323232.toInt())
+        loadingMessageSnackbar!!.show()
+    }
+
+    private fun hideLoadingMessage(){
+        if(loadingMessageSnackbar == null) return
+        loadingMessageSnackbar!!.dismiss()
+        loadingMessageSnackbar = null
+    }
+
+    private fun getDistanceView(): Node{
+        var base: Node = Node()
+        base.renderable = distanceRenderable
+        var c: Context = viewCamera!!.context
+        var eView: View = distanceRenderable!!.view
+        return base
+    }
+
+    override fun onUpdate(frameTime: FrameTime?) {
         // Visualize tracked points.
-        val pointCloud = frame.acquirePointCloud()
-        pointCloudNode.update(pointCloud)
+        val pointCloud = arSceneView!!.arFrame!!.acquirePointCloud()
+        pointCloudNode!!.update(pointCloud)
 
         // Application is responsible for releasing the point cloud resources after using it.
         pointCloud.release()
-
     }
 
-    fun onSingleTap(motionEvent: MotionEvent) {
-        val arSceneView = arFragment!!.arSceneView
-        val frame = arSceneView.arFrame
+    override fun onResume() {
+        super.onResume()
 
-        when (motionEvent?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                Log.d("ARCore", "터치 : " + motionEvent?.getY().toString() + "," + motionEvent?.getY().toString())
-                for (hit in frame!!.hitTest(motionEvent)) {
-                    val trackable = hit.trackable
-                    val anchor = hit!!.createAnchor()
-                    if (trackable is Plane) {
-                        addModelToScene(anchor, markerRenderable)
-                        Log.d(
-                            "ARCore",
-                            "터치 후 움직임 : " + motionEvent?.getY().toString() + "," + motionEvent?.getY().toString()
-                        )
-                        break
-                    }
+        if(locationScene != null) locationScene!!.resume()
+
+        if(arSceneView!!.session == null){
+            // 세션이 생성되지 않은 경우 렌더링을 다시 시작안함
+            // ARCore를 업데이트 해야 하거나 권한이 없을 경우 시작됨
+            try{
+                var session: Session = DemoUtils.createArSession(this.activity, installRequested)
+                if(session == null){
+                    installRequested = ARLocationPermissionHelper.hasPermission(this.activity)
+                    return
+                }else{
+                    arSceneView!!.setupSession(session)
                 }
+            }catch(e: UnavailableException){
+                DemoUtils.handleSessionException(this.activity, e)
+            }
+        }
+
+        try{
+            arSceneView!!.resume()
+        }catch(e: CameraNotAvailableException){
+            DemoUtils.displayError(viewCamera!!.context, "카메라를 사용할 수 없습니다.", e)
+            return
+        }
+        if(arSceneView!!.session != null) showLoadingMessage()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        if(locationScene != null) locationScene!!.pause()
+        arSceneView!!.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        arSceneView!!.destroy()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if(!ARLocationPermissionHelper.hasPermission(this.activity)){
+            if(!ARLocationPermissionHelper.shouldShowRequestPermissionRationale(this.activity)){
+                // 다시 묻지 않음을 확인
+                ARLocationPermissionHelper.launchPermissionSettings(this.activity)
+            }else{
+                Toast.makeText(viewCamera!!.context, "FOPO를 사용하시려면 카메라 권한이 필요합니다.", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -206,27 +388,11 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btnCapture -> {
-                takePhoto()
-            }
-            else -> {
+
+            }else -> {
+
             }
         }
-    }
-
-    fun goToFopozone() {
-        Toast.makeText(context, "해당 포토존으로 이동합니다", Toast.LENGTH_LONG).show()
-        // Set title bar
-        (activity as MainActivity).setActionBarTitle("포포맵")
-        (activity as MainActivity).setTestGOGO()
-        //val fragment1 = FopomapActivity()
-        val fragment2 = FopozoneActivity()
-        val bundle = Bundle()
-        bundle.putString("zone_no", "3")
-        fragment2.arguments = bundle
-        val fragmentManager = fragmentManager
-        val fragmentTransaction = fragmentManager!!.beginTransaction()
-        fragmentTransaction.replace(R.id.fraMain, fragment2)
-        fragmentTransaction.commit()
     }
 
     fun showDialogBox(title: String, contents: String, strYes: String, strNo: String): Boolean {
@@ -240,205 +406,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnTouchListener, 
         builder.setNegativeButton(strNo) { dialog, which ->
             blSelect = false
         }
-        builder.show();
+        builder.show()
         return blSelect
     }
-
-    private fun addModelToScene(anchor: Anchor, modelRenderable: ModelRenderable) {
-        val anchorNode = AnchorNode(anchor)
-        val transformableNode = TransformableNode(arFragment!!.getTransformationSystem())
-
-        Log.d("ARCore", "추가 : 이까지 오긴 합니다")
-        transformableNode.setParent(anchorNode)
-        transformableNode.renderable = modelRenderable
-        transformableNode.setLocalScale(Vector3(0.55f, 0.55f, 0.55f))
-        transformableNode.rotationController.isEnabled = false
-        transformableNode.scaleController.isEnabled = false
-        transformableNode.setOnTapListener { hitTestResult: HitTestResult, motionEvent: MotionEvent ->
-            var blSelect: Boolean = showDialogBox("포포존 이동", "선택하신 포포존으로 이동할까요?", "네", "아니오")
-            if (blSelect == true) goToFopozone()
-            else hitTestResult.node!!.removeChild(hitTestResult.node)
-        }
-        arFragment!!.getArSceneView().scene.addChild(anchorNode)
-        transformableNode.select()
-    }
-
-    fun onCameraClick(buffer: ByteBuffer, width: Int, height: Int): Bitmap {
-
-        buffer.rewind()
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        bitmap.copyPixelsFromBuffer(buffer)
-        return bitmap
-    }
-
-    fun getScreenShot(view: View): Bitmap {
-        val screenView = view.rootView
-        screenView.isDrawingCacheEnabled = true
-        val bitmap = Bitmap.createBitmap(screenView.drawingCache)
-        screenView.isDrawingCacheEnabled = false
-        return bitmap
-    }
-
-    override fun onSceneTouch(hitTestResult: HitTestResult?, motionEvent: MotionEvent?): Boolean {
-        /*
-        val arSceneView = arFragment!!.arSceneView
-        val frame = arSceneView.arFrame
-
-        when (motionEvent?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                Log.d("ARCore", "터치 : " + motionEvent?.getY().toString() + "," + motionEvent?.getY().toString())
-                for (hit in frame!!.hitTest(motionEvent)) {
-                    val trackable = hit.trackable
-                    val anchor = hit!!.createAnchor()
-                    if (trackable is Plane) {
-                        addModelToScene(anchor, markerRenderable)
-                        Log.d(
-                            "ARCore",
-                            "터치 후 움직임 : " + motionEvent?.getY().toString() + "," + motionEvent?.getY().toString()
-                        )
-                        return true
-                    }
-                }
-            }
-        }
-        return true
-        */
-        return true
-    }
-
-    override fun onPeekTouch(hitTestResult: HitTestResult?, motionEvent: MotionEvent?) {
-        arFragment!!.onPeekTouch(hitTestResult, motionEvent)
-        val arSceneView = arFragment!!.arSceneView
-        val frame = arSceneView.arFrame
-
-        Log.d("ARCore", "OnPeekTouch 상태 : ${frame!!.camera.trackingState}")
-    }
-
-    fun getDegre(latSource: Double, lngSource: Double, latDestination: Double, lngDestination: Double): Double {
-        val lat1: Double = latSource / 180 * Math.PI
-        val lng1: Double = lngSource / 180 * Math.PI
-        val lat2: Double = latDestination / 180 * Math.PI
-        val lng2: Double = lngDestination / 180 * Math.PI
-
-        val y = sin(lng2 - lng1) * cos(lat2)
-        val x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lng2 - lng1)
-
-        val tan2 = atan2(y, x)
-        val degre = tan2 * 180 / Math.PI
-        if (degre < 0) {
-            return degre + 360
-        } else {
-            return degre
-        }
-    }
-
-    override fun onUpdate(frameTime: FrameTime) {
-    }
-
-    fun takePhoto() {
-        try {
-            // var currentFrame: Frame = arFragment.arSceneView.scene.view.getArFrame()
-            var currentImage: Image = arFragment!!.arSceneView.arFrame!!.acquireCameraImage() as Image
-            var imageFormat = currentImage.format
-
-            if (imageFormat == ImageFormat.YUV_420_888) {
-                Log.d("CameraCore", "이미지 변환이 정상적으로 처리 되었으며, 포맷은 YUV_420_888 입니다.")
-                var tmpPath = getFileName()
-                if (!tmpPath.equals("")) {
-                    Log.d("CameraCore", "저장 경로 : $tmpPath")
-
-                    WriteImageInformation(currentImage, "$tmpPath")
-                    Log.d("CameraCore", "사진이 저장 되었습니다.")
-                    // Toast.makeText(context, "사진을 저장 했습니다.", Toast.LENGTH_LONG).show()
-                    (activity as MainActivity).setSnackbar("사진을 저장 했습니다.")
-                } else {
-                    // Toast.makeText(context, "사진 저장에 실패 했습니다.", Toast.LENGTH_LONG).show()
-                    (activity as MainActivity).setSnackbar("사진 저장에 실패 했습니다.")
-                }
-            } else {
-                Log.d("CameraCore", "촬영 조건이 맞지 않습니다.")
-                // Toast.makeText(context, "촬영 조건을 다시 맞춰주세요.", Toast.LENGTH_LONG).show()
-                (activity as MainActivity).setSnackbar("촬영 조건을 다시 맞춰주세요.")
-            }
-        } catch (e: Exception) {
-            Log.d("CameraCore", "오류가 발생했습니다 : " + e.toString())
-        }
-    }
-
-
-    fun YUV_420_888toNV21(image: Image): ByteArray {
-        val nv21: ByteArray
-        val yBuffer = image.planes[0].buffer
-        val uBuffer = image.planes[1].buffer
-        val vBuffer = image.planes[2].buffer
-
-        val ySize = yBuffer.remaining()
-        val uSize = uBuffer.remaining()
-        val vSize = vBuffer.remaining()
-
-        nv21 = ByteArray(ySize + uSize + vSize)
-
-//U and V are swapped
-        yBuffer.get(nv21, 0, ySize)
-        vBuffer.get(nv21, ySize, vSize)
-        uBuffer.get(nv21, ySize + vSize, uSize)
-
-        return nv21
-    }
-
-    fun NV21toJPEG(nv21: ByteArray, width: Int, height: Int): ByteArray {
-        val out = ByteArrayOutputStream()
-        val yuv = YuvImage(nv21, ImageFormat.NV21, width, height, null)
-        yuv.compressToJpeg(Rect(0, 0, width, height), 100, out)
-        return out.toByteArray()
-    }
-
-    fun getFileName(): String {
-
-        var path = "/sdcard/DCIM/" // this.activity!!.applicationContext.filesDir.path.toString()
-
-        var datetime = DateTimeFormatter
-            .ofPattern("yyyyMMddHHmmss")
-            .withZone(ZoneOffset.UTC)
-            .format(Instant.now())
-
-        path = path + "/FOPO_" + datetime + ".jpg"
-        var file = File(path)
-
-        Log.d("FileManager", "파일 경로 : $path")
-
-// create a new file
-        val isNewFileCreated: Boolean = file.createNewFile()
-
-        if (isNewFileCreated) {
-            Log.d("FileManager", "파일이 생성 되었습니다 : $path")
-            return path
-        } else {
-            Log.d("FileManager", "파일이 이미 존재합니다 : $path")
-        }
-
-// 이미 파일이 존재하더라도 한번 더 생성을 진행함
-        val isFileCreated: Boolean = file.createNewFile()
-
-        if (isFileCreated) {
-            Log.d("FileManager", "파일이 생성 되었습니다 : $path")
-            return path
-        } else {
-            Log.d("FileManager", "파일이 이미 존재합니다 : $path")
-            return ""
-        }
-    }
-
-    fun WriteImageInformation(image: Image, path: String) {
-        var data: ByteArray? = null
-        data = NV21toJPEG(
-            YUV_420_888toNV21(image),
-            image.width, image.height
-        )
-        val bos = BufferedOutputStream(FileOutputStream(path))
-        bos.write(data)
-        bos.flush()
-        bos.close()
-    }
-
 }
