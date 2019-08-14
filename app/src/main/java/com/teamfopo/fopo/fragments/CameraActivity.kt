@@ -204,7 +204,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                             layoutLocationMarker.onlyRenderWhenWithin = 1000
 
                                             // distance layout 높이 설정
-                                            layoutLocationMarker.height = (3.0 as Float)
+                                            layoutLocationMarker.height = -3.5F
 
                                             // distanceView 추가
                                             locationScene!!.mLocationMarkers.add(layoutLocationMarker)
@@ -220,7 +220,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                             locationMarker.onlyRenderWhenWithin = 500
 
                                             // 3D marker meter 높이 설정
-                                            // locationMarker.height = -0.6 as Float
+                                            locationMarker.height = -0.6F
 
                                             // 3D marker 추가
                                             locationScene!!.mLocationMarkers.add(locationMarker)
