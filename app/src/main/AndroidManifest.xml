@@ -6,12 +6,12 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <!--
  This tag indicates that this application requires ARCore. This results in the application
         only being visible in the Google Play Store on devices that support ARCore.
@@ -28,7 +28,8 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-
+        <activity android:name=".FriendInformActivity">
+        </activity>
         <!--
          This tag indicates that this application requires ARCore. This results in the
             application only being visible in the Google Play Store on devices that support
@@ -54,15 +55,16 @@
                 android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
                 android:name=".MainActivity"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar"
                 android:enabled="true"
-                android:exported="true">
+                android:exported="true"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
                 android:name=".AuthActivity"
@@ -70,18 +72,19 @@
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-                android:windowSoftInputMode="stateAlwaysHidden"
                 android:name=".ViewActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
                 android:name=".WriteActivity"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".PassportActivity"
-                  android:theme="@style/AppTheme.NoActionBar"
-                  android:enabled="true"
-                  android:exported="true">
+        <activity
+                android:name=".PassportActivity"
+                android:enabled="true"
+                android:exported="true"
+                android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <provider
@@ -98,21 +101,19 @@
                 android:name=".module.FOPOService"
                 android:enabled="true"
                 android:exported="true"/>
-
         <service
                 android:name=".module.RestartService"
                 android:enabled="true"
-                android:exported="true" />
+                android:exported="true"/>
 
         <receiver android:name=".module.AlarmRecever"/>
-
         <receiver
                 android:name=".module.RebootRecever"
                 android:enabled="true"
                 android:exported="false"
                 android:process=":remote">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
     </application>

@@ -1,6 +1,7 @@
 package com.teamfopo.fopo.fragments
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -11,8 +12,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.teamfopo.fopo.FriendInformActivity
 import com.teamfopo.fopo.MainActivity
 import com.teamfopo.fopo.R
+import com.teamfopo.fopo.ViewActivity
 import com.teamfopo.fopo.databinding.ItemMemberBinding
 import com.teamfopo.fopo.module.FriendsVO
 import com.teamfopo.fopo.module.modFriendProcess
@@ -45,11 +48,14 @@ class FriendListActivity : Fragment() {
         var txtFriendCount: TextView = viewRoot.findViewById(R.id.txtFriendCount)
         txtFriendCount.setText("친구 " + memberlist.size + "명")
 
-        var mRecyclerView: RecyclerView = viewRoot.findViewById(R.id.recycler_view)
-        mRecyclerView.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = MemberAdapter(memberlist) { member ->
-                Toast.makeText(context,"$member", Toast.LENGTH_SHORT).show()
+         var mRecyclerView: RecyclerView = viewRoot.findViewById(R.id.recycler_view)
+                mRecyclerView.apply {
+                    layoutManager = LinearLayoutManager(activity)
+                    adapter = MemberAdapter(memberlist) { member ->
+                        Toast.makeText(context,"$member", Toast.LENGTH_SHORT).show()
+                        val i = Intent(super.getContext(), FriendInformActivity::class.java)
+                        i.putExtra("m_select", member.mem_no)
+                        startActivityForResult(i, 1)
             }
         }
     }

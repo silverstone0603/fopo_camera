@@ -3,6 +3,8 @@ package com.teamfopo.fopo.fragments;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.BindingAdapter;
+import android.graphics.Bitmap;
 import android.graphics.Camera;
 import android.location.Location;
 import android.net.Uri;
@@ -17,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -288,4 +291,10 @@ public class MapActivity extends Fragment implements OnMapReadyCallback {
                 }
         }
     }
+
+    @BindingAdapter({"imgRes"})
+    public static void imgload(ImageView imageView, Bitmap resid) {
+        imageView.setImageBitmap(resid);
+    }
+
 }

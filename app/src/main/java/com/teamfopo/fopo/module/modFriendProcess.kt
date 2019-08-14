@@ -10,6 +10,7 @@ import okhttp3.*
 
 data class FriendsVO(var mem_no: Int, var mem_nick: String, var art_cnt: Int)
 data class UserVO(var mem_no: Int, var mem_nick: String, var art_cnt: Int, var status: Int)
+data class FriendArticleVO(var mem_no: Int)
 
 class modFriendProcess {
     inner class getFriends : AsyncTask<String, Long, List<FriendsVO>>() {
