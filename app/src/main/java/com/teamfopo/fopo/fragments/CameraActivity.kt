@@ -95,7 +95,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         protMain = modProtocol()
 
         //CloudNode를 추가함
-        arSceneView!!.scene.addChild(pointCloudNode)
+        // arSceneView!!.scene.addChild(pointCloudNode)
 
         // 데이터 가져오기
         // Log.d("ARCore","토큰 값 : "+FOPOService.dataMemberVO!!.token)
@@ -103,14 +103,11 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
             jsonString = protMain!!.getResultString("http://106.10.51.32/ajax_process/location_process", arrayOf("token"), arrayOf("5d52aa5a9786d"))
             Log.d("ARCore","가져온 값 : "+jsonString)
         }
-
         while(true){
-            if(protMain!!.isFinish()){
-                break
-            }else{
-                Thread.sleep(1000)
-            }
+            if(protMain!!.isFinish()) break
+            else Thread.sleep(1000)
         }
+        Log.d("ARCore","가져온 정보를 바탕으로 작업을 계속합니다.")
 
         // 카메라 및 위치 권한 가져오기
         ARLocationPermissionHelper.requestPermission(this.activity)
@@ -309,14 +306,14 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
     }
 
     override fun onUpdate(frameTime: FrameTime?) {
-        val frame = arSceneView!!.arFrame
-
+        /*
         // Visualize tracked points.
-        val pointCloud = frame!!.acquirePointCloud()
+        val pointCloud = arSceneView!!.arFrame!!.acquirePointCloud()
         pointCloudNode!!.update(pointCloud)
 
         // Application is responsible for releasing the point cloud resources after using it.
         pointCloud.release()
+        */
     }
 
     override fun onResume() {
