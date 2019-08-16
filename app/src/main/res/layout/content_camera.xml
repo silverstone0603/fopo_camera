@@ -50,9 +50,32 @@
             android:orientation="horizontal"
             android:layout_marginBottom="30dp"
             android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:gravity="center"
+            android:id="@+id/camera_bottom_desc_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <TextView
+                android:text="화면에 표시된 포포존을 선택하세요."
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtCameraDesc"
+                android:layout_weight="1"
+                android:textColor="@color/colorTextHighlight"
+                android:textSize="16dp"
+                android:textAlignment="center"
+                android:gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginBottom="30dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:id="@+id/camera_bottom_layout"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
@@ -76,6 +99,7 @@
                 android:layout_height="65dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="0dp"
+                android:onClick="onClick"
                 android:background="@drawable/img_camera_shooting"
                 android:layout_gravity="center"/>
         <ImageButton
@@ -94,8 +118,6 @@
                 android:layout_marginTop="0dp"
                 android:background="@drawable/img_gallery"
                 android:layout_gravity="center"/>
-
-
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

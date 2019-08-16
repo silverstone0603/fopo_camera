@@ -23,8 +23,10 @@ import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.teamfopo.fopo.R
+import com.teamfopo.fopo.module.modDBMS
 import com.teamfopo.fopo.module.modProtocol
 import com.teamfopo.fopo.nodes.PointCloudNode
+import kotlinx.android.synthetic.main.content_camera.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -59,6 +61,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
     private var loadingMessageSnackbar: Snackbar? = null
 
     private var protMain: modProtocol? = null
+    private var modDBMS: modDBMS?= null
     private var arSceneView: ArSceneView? = null
     private var pointCloudNode: PointCloudNode? = null
 
@@ -93,14 +96,15 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         arSceneView = viewCamera!!.findViewById(R.id.fopo_arcore_sceneview)
         pointCloudNode = PointCloudNode(viewCamera!!.context)
         protMain = modProtocol()
+        modDBMS = modDBMS(viewCamera!!.context)
 
         // CloudNode를 추가함
         arSceneView!!.scene.addChild(pointCloudNode)
 
         // 데이터 가져오기
-        // Log.d("ARCore","토큰 값 : "+FOPOService.dataMemberVO!!.token)
+        Log.d("ARCore","토큰 값 : "+ modDBMS!!.getMember().token)
         GlobalScope.launch {
-            jsonString = protMain!!.getResultString("http://106.10.51.32/ajax_process/location_process", arrayOf("token"), arrayOf("5d52aa5a9786d"))
+            jsonString = protMain!!.getResultString("http://106.10.51.32/ajax_process/location_process", arrayOf("token"), arrayOf(modDBMS!!.getMember().token))
             Log.d("ARCore","가져온 값 : "+jsonString)
         }
         while(true){
@@ -179,6 +183,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                             Log.d("ARCore","$i"+"번째 포포존 정보를 추가중입니다.")
                                             jsonObject = jsonArray!!.getJSONObject(i)
 
+                                            var zone_no = jsonObject!!.getInt("zone_no")
                                             var title = jsonObject!!.getString("zone_placename")
                                             var address = jsonObject!!.getString("zone_placename")
                                             var time = jsonObject!!.getString("zone_regdate")
@@ -213,7 +218,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                             var locationMarker: LocationMarker = LocationMarker(
                                                 longitude,
                                                 latitude,
-                                                getMarker(viewCamera!!.context, title, address, time)
+                                                getMarker(viewCamera!!.context, zone_no, title, address, time)
                                             )
 
                                             // 3D marker emter 반경 설정
@@ -265,17 +270,17 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         Log.d("ARCore","init 작업을 완료 했습니다.")
     }
 
-    private fun getMarker(viewRoot: Context, title: String, address: String, time: String): Node{
+    private fun getMarker(viewRoot: Context, zone_no: Int, title: String, address: String, time: String): Node{
         var base: Node = Node()
         base.renderable = markerRenderable
         var c: Context = viewRoot
         base.setOnTapListener{v, event ->
-            preview(viewRoot, title, address, time)
+            preview(viewRoot, zone_no, title, address, time)
         }
         return base
     }
 
-    fun preview(viewRoot: Context, title: String, address: String, time: String){
+    fun preview(viewRoot: Context, zone_no: Int, title: String, address: String, time: String){
         var alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(viewRoot)
 
         // 제목 생성
@@ -285,8 +290,10 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         alertDialogBuilder
             .setMessage("선택하신 포토존에서 어떤 작업을 진행할까요?")
             .setCancelable(false)
-            .setPositiveButton("사진 찍기"){dialog, which ->
-                Log.d("ARCore","사진 찍기 선택하셨습니다.")
+            .setPositiveButton("사진 촬영"){dialog, which ->
+                Log.d("ARCore","포포존 "+zone_no+"번에서 사진을 촬영합니다.")
+                camera_bottom_desc_layout.visibility = View.INVISIBLE
+                camera_bottom_layout.visibility = View.VISIBLE
                 dialog.cancel()
             }
             .setNegativeButton("포포존 바로가기"){dialog, which ->
