@@ -7,12 +7,8 @@ import android.os.SystemClock
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
-import com.google.a.b.a.a.a.e
-import com.teamfopo.fopo.module.AuthThread
-import com.teamfopo.fopo.module.FOPOService
 import com.teamfopo.fopo.module.FOPOService.Companion.serviceIntent
 import com.teamfopo.fopo.module.modAuthProcess
-import com.teamfopo.fopo.module.modNotificator
 import kotlinx.android.synthetic.main.activity_passport.*
 
 class PassportActivity:AppCompatActivity(), View.OnClickListener {
@@ -86,7 +82,7 @@ class AuthCheckThread: Thread() {
 
         while (run) {
             try {
-                SystemClock.sleep(5000)
+                SystemClock.sleep(1000)
 
                 var auth_check = modAuthProcess().auth_check()
                 var result = auth_check.execute("${PassportActivity.sess_no}").get()
