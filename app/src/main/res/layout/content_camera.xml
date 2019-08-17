@@ -99,7 +99,6 @@
                 android:layout_height="65dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="0dp"
-                android:onClick="onClick"
                 android:background="@drawable/img_camera_shooting"
                 android:layout_gravity="center"/>
         <ImageButton

@@ -1,5 +1,6 @@
 package com.teamfopo.fopo.fragments
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
@@ -8,6 +9,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import com.google.ar.core.Frame
@@ -65,6 +67,9 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
     private var arSceneView: ArSceneView? = null
     private var pointCloudNode: PointCloudNode? = null
 
+    // Add Button for Click Event Listener
+    private var btnCapture: ImageButton? = null
+
     // Renderables for this example
     private var markerRenderable: ModelRenderable? = null
     private val distanceRenderable: ViewRenderable? = null
@@ -91,12 +96,17 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         return viewCamera
     }
 
+    @SuppressLint("WrongViewCast")
     fun initArFragment() {
         //ARCore 초기화
         arSceneView = viewCamera!!.findViewById(R.id.fopo_arcore_sceneview)
         pointCloudNode = PointCloudNode(viewCamera!!.context)
         protMain = modProtocol()
         modDBMS = modDBMS(viewCamera!!.context)
+
+        // 버튼 등록
+        btnCapture = viewCamera!!.findViewById(R.id.btnCapture)
+        btnCapture!!.setOnClickListener(this)
 
         // CloudNode를 추가함
         arSceneView!!.scene.addChild(pointCloudNode)
@@ -249,6 +259,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                 if (loadingMessageSnackbar != null) {
                                     for (plane: Plane in frame.getUpdatedTrackables(Plane::class.java)) {
                                         if (plane.trackingState == TrackingState.TRACKING) {
+                                            Log.d("ARCore","포포존 정보 추가가 완료 되어 메시지가 제거됩니다.")
                                             hideLoadingMessage()
                                         }
                                     }
@@ -294,6 +305,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                 Log.d("ARCore","포포존 "+zone_no+"번에서 사진을 촬영합니다.")
                 camera_bottom_desc_layout.visibility = View.INVISIBLE
                 camera_bottom_layout.visibility = View.VISIBLE
+
                 dialog.cancel()
             }
             .setNegativeButton("포포존 바로가기"){dialog, which ->
@@ -395,7 +407,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btnCapture -> {
-
+                Toast.makeText(viewCamera!!.context, "사진 촬영 버튼을 누르셨습니다.", Toast.LENGTH_LONG).show()
             }else -> {
 
             }
