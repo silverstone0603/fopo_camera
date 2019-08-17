@@ -52,9 +52,9 @@ class FriendListActivity : Fragment() {
                 mRecyclerView.apply {
                     layoutManager = LinearLayoutManager(activity)
                     adapter = MemberAdapter(memberlist) { member ->
-                        Toast.makeText(context,"$member", Toast.LENGTH_SHORT).show()
                         val i = Intent(super.getContext(), FriendInformActivity::class.java)
                         i.putExtra("m_select", member.mem_no)
+                        i.putExtra("mem_nick", member.mem_nick)
                         startActivityForResult(i, 1)
             }
         }

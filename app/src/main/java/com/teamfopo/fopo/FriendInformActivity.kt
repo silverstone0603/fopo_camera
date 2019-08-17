@@ -1,17 +1,23 @@
 package com.teamfopo.fopo
 
+import android.content.Intent
 import android.databinding.BindingAdapter
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import com.teamfopo.fopo.databinding.ItemFriendArticleBinding
+import com.teamfopo.fopo.module.modBoardProcess
+import com.teamfopo.fopo.module.modFriendProcess
 import com.teamfopo.fopo.nodes.FriendArticle
+import kotlinx.android.synthetic.main.activity_friend_inform.*
 
 class FriendInformActivity : AppCompatActivity() {
 
@@ -21,25 +27,30 @@ class FriendInformActivity : AppCompatActivity() {
 
         var i = getIntent()
         var mem_no = i.getIntExtra("m_select", 0)
+        var mem_nick = i.getStringExtra("mem_nick")
 
         var articleList = arrayListOf<FriendArticle>()
 
-        //articleList.add(FriendArticle(1, R.drawable.img_logo))
-        //articleList.add(FriendArticle(2, R.drawable.img_marker))
-        //articleList.add(FriendArticle(3, R.drawable.img_logo))
-        //articleList.add(FriendArticle(4, R.drawable.img_marker))
-        articleList.add(FriendArticle(4, BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.img_marker)))
-        articleList.add(FriendArticle(4, BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.img_marker)))
-        articleList.add(FriendArticle(4, BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.img_marker)))
-        articleList.add(FriendArticle(4, BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.img_marker)))
-        articleList.add(FriendArticle(4, BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.img_marker)))
+        var bm: Bitmap
+        var getFriendArticles = modBoardProcess().getFriendArticles()
+        var temp = getFriendArticles.execute("${mem_no.toString()}").get()
+
+        for (i in 0..temp.size - 1) {
+            var getBoardImage = modBoardProcess().GetImage()
+            bm = getBoardImage.execute(temp.get(i).file_no).get()
+
+            articleList.add(FriendArticle(temp.get(i).brd_no, bm))
+        }
+
+        txtFriendInformTitle.text = mem_nick + "님의 포토존"
 
         var mRecyclerView: RecyclerView = findViewById(R.id.rcvFriendInform)
         mRecyclerView.apply {
             layoutManager = GridLayoutManager(this@FriendInformActivity,3)
-            //layoutManager = LinearLayoutManager(this@FriendInformActivity)
             adapter = FriendArticleAdapter(articleList) { member ->
-                Toast.makeText(context,"$member", Toast.LENGTH_SHORT).show()
+                val i = Intent(context, ViewActivity::class.java)
+                i.putExtra("m_select", member.art_no)
+                startActivityForResult(i, 1)
             }
         }
     }
@@ -49,22 +60,16 @@ class FriendArticleAdapter(var items: List<FriendArticle>,
                     private val clickListener: (member: FriendArticle) -> Unit) :
     RecyclerView.Adapter<FriendArticleAdapter.FriendArticleViewHolder>() {
 
-    companion object {
-        /*
-        @JvmStatic
-        @BindingAdapter("imgRes")
-        fun imgload(imageView: ImageView, resid: Int) {
-            imageView.setImageResource(resid)
-        }
-        */
-    }
-
     class FriendArticleViewHolder(val binding: ItemFriendArticleBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendArticleAdapter.FriendArticleViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_friend_article, parent, false)
         val viewHolder = FriendArticleAdapter.FriendArticleViewHolder(ItemFriendArticleBinding.bind(view))
+
+        view.setOnClickListener{
+            clickListener.invoke(items[viewHolder.adapterPosition])
+        }
 
         return viewHolder
     }

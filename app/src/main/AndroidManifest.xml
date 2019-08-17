@@ -28,7 +28,8 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".FriendInformActivity">
+        <activity android:name=".FriendInformActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <!--
          This tag indicates that this application requires ARCore. This results in the
