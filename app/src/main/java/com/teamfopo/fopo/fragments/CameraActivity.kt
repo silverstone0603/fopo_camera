@@ -253,10 +253,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                             // 3D marker 추가
                                             locationScene!!.mLocationMarkers.add(locationMarker)
 
-                                            Log.d(
-                                                "ARCore",
-                                                "위도 및 경도 : " + latitude.toString() + " / " + longitude.toString()
-                                            )
+                                            Log.d("ARCore", "위도 및 경도 : " + latitude.toString() + " / " + longitude.toString())
                                         }
                                         Log.d("ARCore","포포존 정보 추가가 완료되었습니다.")
                                     } catch (e: JSONException) {
