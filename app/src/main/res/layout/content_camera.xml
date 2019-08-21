@@ -23,8 +23,19 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="top"/>
 
-    </RelativeLayout>
+        <FrameLayout
+                android:id="@+id/fopo_camera_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+        />
 
+        <ImageView
+                android:id="@+id/fraPoseSet"
+                android:scaleType="fitXY"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+    </RelativeLayout>
 
     <LinearLayout
             android:orientation="horizontal"
@@ -36,13 +47,25 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+        <include android:id="@+id/vFilters"
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 layout="@layout/layout_filter_lists"
+        />
+
+        <include android:id="@+id/vPose"
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 layout="@layout/layout_pose_lists"
+        />
+
         <TextView
                 android:id="@+id/txtGPSInfo"
                 android:text="위도/경도/고도/높이"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"/>
-
+                android:textAlignment="center"
+                android:visibility="invisible"/>
     </LinearLayout>
 
 

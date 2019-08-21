@@ -2,16 +2,16 @@ package com.teamfopo.fopo.fragments
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.hardware.Camera
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.google.ar.core.Frame
 import com.google.ar.core.Plane
 import com.google.ar.core.Session
@@ -25,10 +25,12 @@ import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.teamfopo.fopo.R
+import com.teamfopo.fopo.module.modCameraProcess
 import com.teamfopo.fopo.module.modDBMS
 import com.teamfopo.fopo.module.modProtocol
 import com.teamfopo.fopo.nodes.PointCloudNode
 import kotlinx.android.synthetic.main.content_camera.*
+import kotlinx.android.synthetic.main.layout_pose_lists.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -38,6 +40,7 @@ import uk.co.appoly.arcorelocation.LocationMarker
 import uk.co.appoly.arcorelocation.LocationScene
 import uk.co.appoly.arcorelocation.utils.ARLocationPermissionHelper
 import uk.co.appoly.arcorelocation.utils.DemoUtils
+import uk.co.senab.photoview.PhotoViewAttacher
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutionException
 
@@ -84,6 +87,17 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
     var distanceRenderables: ArrayList<ViewRenderable> = ArrayList()
     var completableFutures: ArrayList<CompletableFuture<*>> = ArrayList()
 
+    // Camera Functions Setting
+    private var CAMERA_FACING = Camera.CameraInfo.CAMERA_FACING_FRONT
+    private var m_imageview: ImageView? = null
+    private var mAttacher: PhotoViewAttacher? = null
+
+    private var myCameraPreview: modCameraProcess? = null
+    private var horizontalScrollView1: HorizontalScrollView? = null
+    private var horizontalScrollView2: HorizontalScrollView? = null
+    private var mCamera: Camera? = null
+    private var str_filter: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -92,7 +106,6 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         viewCamera = inflater.inflate(R.layout.content_camera, container, false)
 
         initArFragment()
-
         return viewCamera
     }
 
@@ -306,6 +319,12 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                 camera_bottom_desc_layout.visibility = View.INVISIBLE
                 camera_bottom_layout.visibility = View.VISIBLE
 
+                fopo_arcore_sceneview.visibility = View.INVISIBLE
+                fopo_camera_view.visibility = View.VISIBLE
+
+                startCamera()
+                initButton()
+
                 dialog.cancel()
             }
             .setNegativeButton("포포존 바로가기"){dialog, which ->
@@ -341,6 +360,151 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         var eView: View = distanceRenderable!!.view
         return base
     }
+
+    /*
+    * 카메라 전환 부분
+    */
+
+    private fun initButton() {
+        btnCapture?.setOnClickListener {
+            myCameraPreview?.takePicture()
+            horizontalScrollView1!!.setVisibility(View.GONE)
+            horizontalScrollView2!!.setVisibility(View.GONE)
+        }
+
+        btnFilter.setOnClickListener {
+            // 필터 선택시 위에 메뉴바 표시
+            if (horizontalScrollView2!!.getVisibility() == View.VISIBLE) {
+                horizontalScrollView2!!.setVisibility(View.GONE)
+            } else {
+                horizontalScrollView2!!.setVisibility(View.VISIBLE)
+                horizontalScrollView1!!.setVisibility(View.GONE)
+            }
+        }
+
+        btnPose.setOnClickListener{
+            // 포즈 선택시 위에 메뉴바 표시
+            if (horizontalScrollView1!!.getVisibility() == View.VISIBLE) {
+                horizontalScrollView1!!.setVisibility(View.GONE)
+            } else {
+                horizontalScrollView1!!.setVisibility(View.VISIBLE)
+                horizontalScrollView2!!.setVisibility(View.GONE)
+            }
+        }
+
+        pose1.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            if(fraPoseSet!!.getVisibility() == View.VISIBLE) {
+                fraPoseSet.setImageResource(R.drawable.ic_frame1)
+                myCameraPreview?.setFrameId(R.drawable.ic_frame1)
+            } else {
+                fraPoseSet.setImageBitmap(null)
+            }
+        }
+
+        pose2.setOnClickListener {
+            fraPoseSet.setImageResource(R.drawable.ic_frame2)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame2)
+        }
+
+        pose3.setOnClickListener {
+            fraPoseSet.setImageResource(R.drawable.ic_frame3)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame3)
+        }
+
+        pose4.setOnClickListener {
+            fraPoseSet.setImageResource(R.drawable.ic_frame4)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame4)
+        }
+
+        pose5.setOnClickListener {
+            fraPoseSet.setImageResource(R.drawable.ic_frame5)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame5)
+        }
+
+        pose6.setOnClickListener {
+            fraPoseSet.setImageResource(R.drawable.ic_frame6)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame6)
+        }
+
+        pose7.setOnClickListener {
+            fraPoseSet.setImageResource(R.drawable.ic_frame7)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame7)
+        }
+
+        pose8.setOnClickListener {
+            fraPoseSet.setImageResource(R.drawable.ic_frame8)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame8)
+        }
+
+        pose9.setOnClickListener {
+            fraPoseSet.setImageResource(R.drawable.ic_frame9)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame9)
+        }
+
+        pose10.setOnClickListener {
+            fraPoseSet.setImageResource(R.drawable.ic_frame10)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame10)
+        }
+    }
+
+    private fun startCamera() {
+
+        Log.e(TAG, "startCamera")
+        mCamera = getCameraInstance()
+        // Create our Preview view and set it as the content of our activity.
+        myCameraPreview = modCameraProcess(this.context, mCamera ,CAMERA_FACING)
+
+        fopo_camera_view.addView(myCameraPreview)
+
+    }
+
+    private fun getCameraInstance(): Camera? {
+        var c: Camera? = null
+        try {
+            c = Camera.open()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return c
+    }
+
+    fun colorEffectFilter(v: View) {
+
+        try {
+            val parameters: Camera.Parameters = mCamera?.parameters!!
+            when (v.id) {
+                R.id.rlNone -> {
+                    parameters!!.colorEffect = Camera.Parameters.EFFECT_NONE
+                    mCamera?.parameters = parameters
+                    Toast.makeText(this.context, "기본필터선택", Toast.LENGTH_LONG).show()
+                    str_filter = "기본필터"
+                }
+                R.id.rlMono -> {
+                    parameters!!.colorEffect = Camera.Parameters.EFFECT_MONO
+                    Toast.makeText(this.context, "Mono필터선택", Toast.LENGTH_LONG).show()
+                    mCamera?.setParameters(parameters)
+                    str_filter = "Mono필터"
+                }
+                R.id.rlNegative -> {
+                    parameters!!.colorEffect = Camera.Parameters.EFFECT_NEGATIVE
+                    Toast.makeText(this.context, "Negative필터선택", Toast.LENGTH_LONG).show()
+                    mCamera?.setParameters(parameters)
+                    str_filter = "Negative필터"
+                }
+                R.id.rlSepia -> {
+                    parameters!!.colorEffect = Camera.Parameters.EFFECT_SEPIA
+                    Toast.makeText(this.context, "Sepia필터선택", Toast.LENGTH_LONG).show()
+                    mCamera?.setParameters(parameters)
+                    str_filter = "Sepia필터"
+                }
+            }
+        } catch (ex: Exception) {
+            Log.d(TAG, ex.message)
+        }
+    }
+
 
     override fun onUpdate(frameTime: FrameTime?) {
         // Visualize tracked points.
