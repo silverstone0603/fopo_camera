@@ -134,15 +134,12 @@ class WriteActivity : AppCompatActivity() {
      * 앨범에서 이미지 가져오기
      */
     private fun goToAlbum() {
-
         isCamera = true
 
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = MediaStore.Images.Media.CONTENT_TYPE
         startActivityForResult(intent, PICK_FROM_ALBUM)
-
     }
-
 
 /*
     //카메라에서 이미지 가져오기
@@ -236,14 +233,6 @@ class WriteActivity : AppCompatActivity() {
 
     }
 
-    fun encode(image: Bitmap): String {
-        val baos = ByteArrayOutputStream()
-        image.compress(Bitmap.CompressFormat.PNG, 100, baos)
-        val b = baos.toByteArray()
-
-        return Base64.encodeToString(b, Base64.DEFAULT)
-    }
-
     /**
      * 권한 설정
      */
@@ -275,6 +264,14 @@ class WriteActivity : AppCompatActivity() {
 
         private val PICK_FROM_ALBUM = 1
         private val PICK_FROM_CAMERA = 2
+
+        fun encode(image: Bitmap): String {
+            val baos = ByteArrayOutputStream()
+            image.compress(Bitmap.CompressFormat.PNG, 100, baos)
+            val b = baos.toByteArray()
+
+            return Base64.encodeToString(b, Base64.DEFAULT)
+        }
     }
 
 }

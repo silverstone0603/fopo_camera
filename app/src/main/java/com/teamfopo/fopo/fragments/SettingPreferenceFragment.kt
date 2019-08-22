@@ -7,6 +7,7 @@ import android.support.v7.preference.*
 import android.util.Log
 import android.widget.Toast
 import com.teamfopo.fopo.MainActivity
+import com.teamfopo.fopo.MyInfoActivity
 import com.teamfopo.fopo.R
 import com.teamfopo.fopo.SplashActivity
 import com.teamfopo.fopo.module.FOPOService
@@ -22,6 +23,7 @@ class SettingPreferenceFragment: PreferenceFragmentCompat(), Preference.OnPrefer
         addPreferencesFromResource(R.xml.settings_preference)
 
         val setting_logout = findPreference("key_logout")
+        val setting_myinfo = findPreference("key_myinfo")
         val changetest = findPreference("key_push")
 
         changetest.onPreferenceChangeListener = this
@@ -37,6 +39,13 @@ class SettingPreferenceFragment: PreferenceFragmentCompat(), Preference.OnPrefer
             startActivity(intent)
 
             System.exit(0)
+
+            true
+        }
+
+        setting_myinfo.setOnPreferenceClickListener {
+            var intent = Intent(context, MyInfoActivity::class.java)
+            startActivity(intent)
 
             true
         }

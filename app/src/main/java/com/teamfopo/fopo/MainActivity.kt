@@ -2,6 +2,7 @@ package com.teamfopo.fopo
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -22,6 +23,7 @@ import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
 import com.teamfopo.fopo.fragments.*
 import com.teamfopo.fopo.module.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_view.*
 import kotlinx.android.synthetic.main.nav_header_main.*

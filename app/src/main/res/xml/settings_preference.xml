@@ -7,8 +7,12 @@
         <PreferenceScreen
                 android:key="key_logout"
                 android:title="로그아웃"
-                android:icon="@drawable/ic_person_outline_red_108dp"
-                />
+                android:icon="@drawable/ic_directions_run_black_72dp"/>
+
+        <PreferenceScreen
+                android:key="key_myinfo"
+                android:title="내정보"
+                android:icon="@drawable/ic_person_black_72dp"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="추가 정보">
@@ -16,12 +20,12 @@
                 android:defaultValue="false"
                 android:key="key_push"
                 android:title="푸시 알림"
-                android:icon="@drawable/ic_notifications_red_108dp"/>
+                android:icon="@drawable/ic_notifications_black_72dp"/>
 
         <Preference
                 android:summary="개발자에게 메일을 보냅니다"
                 android:title="메일 보내기"
-                android:icon="@drawable/ic_email_red_108dp">
+                android:icon="@drawable/ic_email_black_72dp">
             <intent
                     android:action="android.intent.action.SENDTO"
                     android:data="mailto:kswon0126@naver.com" />
