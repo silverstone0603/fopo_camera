@@ -111,6 +111,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
 
     @SuppressLint("WrongViewCast")
     fun initArFragment() {
+
         //ARCore 초기화
         arSceneView = viewCamera!!.findViewById(R.id.fopo_arcore_sceneview)
         pointCloudNode = PointCloudNode(viewCamera!!.context)
@@ -365,27 +366,27 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
     private fun initButton() {
         btnCapture?.setOnClickListener {
             myCameraPreview?.takePicture()
-            horizontalScrollView1!!.setVisibility(View.GONE)
-            horizontalScrollView2!!.setVisibility(View.GONE)
+            // horizontalScrollView1!!.setVisibility(View.GONE)
+            // horizontalScrollView2!!.setVisibility(View.GONE)
         }
 
         btnFilter.setOnClickListener {
             // 필터 선택시 위에 메뉴바 표시
-            if (horizontalScrollView2!!.getVisibility() == View.VISIBLE) {
-                horizontalScrollView2!!.setVisibility(View.GONE)
+            if (horizontalScrollView2!!.visibility == View.VISIBLE) {
+                horizontalScrollView2!!.visibility = View.GONE
             } else {
-                horizontalScrollView2!!.setVisibility(View.VISIBLE)
-                horizontalScrollView1!!.setVisibility(View.GONE)
+                horizontalScrollView2!!.visibility = View.VISIBLE
+                horizontalScrollView1!!.visibility = View.GONE
             }
         }
 
         btnPose.setOnClickListener{
             // 포즈 선택시 위에 메뉴바 표시
-            if (horizontalScrollView1!!.getVisibility() == View.VISIBLE) {
-                horizontalScrollView1!!.setVisibility(View.GONE)
+            if (horizontalScrollView1!!.visibility == View.VISIBLE) {
+                horizontalScrollView1!!.visibility = View.GONE
             } else {
-                horizontalScrollView1!!.setVisibility(View.VISIBLE)
-                horizontalScrollView2!!.setVisibility(View.GONE)
+                horizontalScrollView1!!.visibility = View.VISIBLE
+                horizontalScrollView2!!.visibility = View.GONE
             }
         }
 
@@ -547,11 +548,20 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
 
         if(locationScene != null) locationScene!!.pause()
         arSceneView!!.pause()
+
+        if (mCamera != null) {
+            mCamera!!.stopPreview()
+            mCamera!!.release()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         arSceneView!!.destroy()
+        if (mCamera != null) {
+            mCamera!!.release()
+            mCamera = null
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
