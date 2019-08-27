@@ -101,7 +101,7 @@
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:textColor="@drawable/style_textcolor_darkpink"
-                    android:background="@drawable/style_auth_button"
+                    android:background="@drawable/style_normal_button"
                     android:text="친구 추가"/>
         </LinearLayout>
     </LinearLayout>

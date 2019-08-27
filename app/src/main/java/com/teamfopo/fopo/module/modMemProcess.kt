@@ -6,6 +6,7 @@ import com.google.gson.JsonParser
 import okhttp3.*
 
 data class MyInfoVO(val mem_nick: String, val mem_email: String, val mem_phone: String, val mem_profile: Int)
+data class InfoChangeVO(val status: String)
 
 class modMemProcess {
     inner class signUp : AsyncTask<String, Long, String>() {
@@ -80,4 +81,51 @@ class modMemProcess {
         }
     }
 
+
+    inner class infomodify : AsyncTask<String, Long, InfoChangeVO>() {
+        override fun onPreExecute() {
+            super.onPreExecute()
+        }
+
+        override fun doInBackground(vararg params: String?): InfoChangeVO {
+            var mem_no = params[0]
+            var profile = params[1]
+            var mem_nick = params[2]
+            var mem_newpw = params[3]
+            var mem_phone = params[4]
+
+
+            var url = "http://106.10.51.32/ajax_process/member_process"
+            val requestBody: RequestBody = FormBody.Builder()
+                .add("type", "modify")
+                .add("mem_no", "$mem_no")
+                .add("profile", "$profile")
+                .add("mem_nick", "$mem_nick")
+                .add("mem_newpw", "$mem_newpw")
+                .add("mem_phone", "$mem_phone")
+                .build()
+
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
+
+            val response: Response = client.newCall(request).execute()
+            var str = response.body()?.string()!!
+
+            var gson = Gson() //오브젝트 생성
+
+            val parser = JsonParser()
+            val rootObj = parser.parse(str)
+
+            var post = gson.fromJson(rootObj, InfoChangeVO::class.java)//뭐가 들어가야 하지?
+
+            return post
+        }
+
+        override fun onPostExecute(result: InfoChangeVO?) {
+            super.onPostExecute(result)
+        }
+    }
 }

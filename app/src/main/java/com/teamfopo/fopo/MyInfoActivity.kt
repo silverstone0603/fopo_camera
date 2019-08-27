@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.PopupMenu
 import android.widget.Toast
+import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modImageResizeUtils
 import com.teamfopo.fopo.module.modMemProcess
 import kotlinx.android.synthetic.main.activity_my_info.*
@@ -39,6 +40,21 @@ class MyInfoActivity : AppCompatActivity() {
         editMyNick.setText(myInfo.mem_nick)
         txtEmail.text = myInfo.mem_email
         editPhone.setText(myInfo.mem_phone)
+
+        btnChange.setOnClickListener {
+            val mem_nick = editMyNick.text.toString()
+            val mem_newpw = editChangePassword.text.toString()
+            val mem_phone = editPhone.text.toString()
+
+            var InfoModify = modMemProcess().infomodify()
+            var result = InfoModify.execute("3", "$Profile", "$mem_nick","$mem_newpw","$mem_phone").get()
+
+            if ( result.status.equals("success") ) {
+                Toast.makeText(this, "내정보 변경 성공!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "내정보 변경 실패", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         imgProfile.setOnClickListener {v->
             val popup = PopupMenu(applicationContext, v)//v는 클릭된 뷰를 의미
