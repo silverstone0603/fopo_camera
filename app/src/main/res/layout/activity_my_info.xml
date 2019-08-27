@@ -92,8 +92,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="16sp"
-                                android:layout_marginTop="25dp"
+                                android:textColor="@color/colorPrimaryDark"
                                 android:textStyle="bold"
+                                android:layout_marginTop="25dp"
                                 android:layout_toRightOf="@+id/layImgProfile"
                                 android:text="FOPO 계정 아이디"/>
                         <TextView
@@ -102,6 +103,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="25sp"
                                 android:textStyle="normal"
+                                android:textColor="@color/colorTextNormal"
                                 android:layout_toRightOf="@+id/layImgProfile"
                                 android:layout_below="@+id/txtProfileDesc"
                                 android:text="admin"/>
@@ -111,7 +113,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textStyle="bold"
+                            android:textStyle="normal"
+                            android:textColor="@color/colorTextNormal"
                             android:text="닉네임" />
 
                     <EditText
@@ -125,7 +128,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textStyle="bold"
+                            android:textStyle="normal"
+                            android:textColor="@color/colorTextNormal"
                             android:text="변경할 비밀번호" />
 
                     <EditText
@@ -138,7 +142,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textStyle="bold"
+                            android:textStyle="normal"
+                            android:textColor="@color/colorTextNormal"
                             android:text="변경할 비밀번호 확인" />
 
                     <EditText
@@ -151,7 +156,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textStyle="bold"
+                            android:textStyle="normal"
+                            android:textColor="@color/colorTextNormal"
                             android:text="이메일" />
 
                     <TextView
@@ -165,7 +171,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textStyle="bold"
+                            android:textStyle="normal"
+                            android:textColor="@color/colorTextNormal"
                             android:text="전화번호" />
 
                     <EditText
