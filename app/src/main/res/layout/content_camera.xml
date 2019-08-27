@@ -47,18 +47,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-        <include android:id="@+id/vFilters"
-                 android:layout_height="wrap_content"
-                 android:layout_width="wrap_content"
-                 layout="@layout/layout_filter_lists"
-        />
-
-        <include android:id="@+id/vPose"
-                 android:layout_height="wrap_content"
-                 android:layout_width="wrap_content"
-                 layout="@layout/layout_pose_lists"
-        />
-
         <TextView
                 android:id="@+id/txtGPSInfo"
                 android:text="위도/경도/고도/높이"
@@ -140,6 +128,28 @@
                 android:layout_marginTop="0dp"
                 android:background="@drawable/img_gallery"
                 android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:gravity="center"
+        android:layout_marginBottom="95dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <include android:id="@+id/vFilters"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            layout="@layout/layout_filter_lists"
+            />
+
+        <include android:id="@+id/vPose"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            layout="@layout/layout_pose_lists"
+            />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

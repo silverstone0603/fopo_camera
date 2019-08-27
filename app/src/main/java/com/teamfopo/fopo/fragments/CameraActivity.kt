@@ -325,7 +325,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                 horizontalScrollView2 = viewCamera!!.findViewById(R.id.hscFilterLayout) as HorizontalScrollView
                 initButton()
                 dialog.cancel()
-                colorEffectFilter()
+                // colorEffectFilter()
             }
             .setNegativeButton("포포존 바로가기"){dialog, which ->
                 Log.d("ARCore","포포존 바로가기 선택하셨습니다.")
