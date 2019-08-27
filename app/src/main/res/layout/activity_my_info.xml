@@ -87,7 +87,7 @@
                                     android:textColor="@color/colorTextHighlight"
                                     android:gravity="center"
                                     android:layout_alignBottom="@id/imgProfile"
-                                    android:text="사진 변경"/>
+                                    android:text="프로필 사진"/>
                         </RelativeLayout>
                         <TextView
                                 android:id="@+id/txtProfileDesc"
