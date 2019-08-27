@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/style_border_underline"
@@ -28,7 +28,19 @@
                     android:textStyle="bold"
                     android:layout_gravity="center"
                     android:gravity="center"/>
-        </LinearLayout>
+
+            <Button
+                    android:layout_width="65dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/style_fopo_roundbtn"
+                    android:layout_alignRight="@id/txtMyInfoTitle"
+                    android:text="변경" />
+        </RelativeLayout>
 
         <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
 
@@ -45,33 +57,56 @@
                     android:useDefaultMargins="true"
                     android:columnCount="1">
 
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:text="프로필 사진" />
-
-                    <ImageView
-                        android:id="@+id/imgProfile"
-                        android:layout_width="65dp"
-                        android:layout_height="65dp"
-                        android:scaleType="fitXY"
-                        android:background="@drawable/ic_fopo_logo"
-                    />
-
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:text="아이디" />
-
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="18sp"
-                            android:text="sangwOn" />
+                    <RelativeLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                        <RelativeLayout
+                                android:id="@+id/layImgProfile"
+                                android:orientation="horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                            <ImageView
+                                    android:id="@+id/imgProfile"
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    android:scaleType="fitXY"
+                                    android:background="@drawable/ic_launcher_foreground"
+                            />
+                            <TextView
+                                    android:id="@+id/txtChangeProfile"
+                                    android:layout_width="100dp"
+                                    android:layout_height="20dp"
+                                    android:textSize="13sp"
+                                    android:textStyle="normal"
+                                    android:textAlignment="center"
+                                    android:background="#80FF0078"
+                                    android:textColor="@color/colorTextHighlight"
+                                    android:gravity="center"
+                                    android:layout_alignBottom="@id/imgProfile"
+                                    android:text="사진 변경"/>
+                        </RelativeLayout>
+                        <TextView
+                                android:id="@+id/txtProfileDesc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:paddingTop="20dp"
+                                android:paddingLeft="2dp"
+                                android:textStyle="bold"
+                                android:layout_toRightOf="@+id/layImgProfile"
+                                android:text="내 아이디"/>
+                        <TextView
+                                android:id="@+id/txtMyID"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="25sp"
+                                android:textStyle="normal"
+                                android:paddingLeft="2dp"
+                                android:layout_toRightOf="@+id/layImgProfile"
+                                android:layout_below="@+id/txtProfileDesc"
+                                android:text="admin"/>
+                    </RelativeLayout>
 
                     <TextView
                             android:layout_width="wrap_content"
@@ -85,19 +120,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:inputType="text"
-                            android:background="@drawable/custome_edit_text"/>
-
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:text="기존 비밀번호" />
-
-                    <EditText
-                            android:id="@+id/editExistingPassword"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
                             android:background="@drawable/custome_edit_text"/>
 
                     <TextView
@@ -138,7 +160,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="18sp"
-                            android:text="kswon0126@naver.com"/>
+                            android:text=""/>
 
                     <TextView
                             android:layout_width="wrap_content"
@@ -153,15 +175,6 @@
                             android:layout_height="40dp"
                             android:background="@drawable/custome_edit_text"/>
                 </GridLayout>
-
-                <Button
-                    android:layout_width="50dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="right"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/style_fopo_roundbtn"
-                    android:textColor="@android:color/white"
-                    android:text="변경" />
            </LinearLayout>
         </ScrollView>
 

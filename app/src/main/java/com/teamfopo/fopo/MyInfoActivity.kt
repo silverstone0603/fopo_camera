@@ -4,16 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
+import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
-import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modImageResizeUtils
 import com.teamfopo.fopo.module.modMemProcess
 import kotlinx.android.synthetic.main.activity_my_info.*
@@ -60,7 +56,7 @@ class MyInfoActivity : AppCompatActivity() {
                         }
                         R.id.itemProfileDelete -> {
                             Profile = null
-                            imgProfile.setImageResource(R.drawable.ic_fopo_logo)
+                            imgProfile.setImageResource(R.drawable.ic_launcher_foreground)
                         }
                         else -> {
                         }
