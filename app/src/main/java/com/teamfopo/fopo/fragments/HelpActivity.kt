@@ -35,5 +35,6 @@ class HelpActivity : Fragment() {
     fun initFragment(view: View){
         var webHelp = view.findViewById<WebView>(R.id.webHelp)
         webHelp.loadUrl("http://106.10.51.32/app/help")
+        webHelp.settings.javaScriptEnabled = true
     }
 }
