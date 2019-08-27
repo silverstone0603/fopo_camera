@@ -139,7 +139,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
 
         // 카메라 및 위치 권한 가져오기
         ARLocationPermissionHelper.requestPermission(this.activity)
-        
+
         // 거리 표시 레이아웃 추가
         try{
             Log.d("ARCore","거리 표시 레이아웃을 추가합니다.")
@@ -321,9 +321,11 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                 fopo_camera_view.visibility = View.VISIBLE
 
                 startCamera()
+                horizontalScrollView1 = viewCamera!!.findViewById(R.id.hscPoseLayout) as HorizontalScrollView
+                horizontalScrollView2 = viewCamera!!.findViewById(R.id.hscFilterLayout) as HorizontalScrollView
                 initButton()
-
                 dialog.cancel()
+                colorEffectFilter()
             }
             .setNegativeButton("포포존 바로가기"){dialog, which ->
                 Log.d("ARCore","포포존 바로가기 선택하셨습니다.")
@@ -468,11 +470,12 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         return c
     }
 
-    fun colorEffectFilter(v: View) {
+    fun colorEffectFilter() {
 
+        val v: View? = null
         try {
             val parameters: Camera.Parameters = mCamera?.parameters!!
-            when (v.id) {
+            when (v!!.id) {
                 R.id.rlNone -> {
                     parameters!!.colorEffect = Camera.Parameters.EFFECT_NONE
                     mCamera?.parameters = parameters
@@ -581,7 +584,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                 Toast.makeText(viewCamera!!.context, "사진 촬영 버튼을 누르셨습니다.", Toast.LENGTH_LONG).show()
             }else -> {
 
-            }
+        }
         }
     }
 
