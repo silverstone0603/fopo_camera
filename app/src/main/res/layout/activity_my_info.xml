@@ -37,9 +37,10 @@
                     android:layout_marginTop="10dp"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
-                    android:background="@drawable/style_fopo_roundbtn"
+                    android:background="@drawable/style_normal_button"
                     android:layout_alignRight="@id/txtMyInfoTitle"
-                    android:text="변경" />
+                    android:text="변경"
+                    style="?android:attr/borderlessButtonStyle"/>
         </RelativeLayout>
 
         <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content">

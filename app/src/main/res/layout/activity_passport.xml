@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnPassportCancel"
-                android:background="@drawable/style_auth_button"
+                android:background="@drawable/style_normal_button"
                 android:textColor="@drawable/style_textcolor_darkpink"
                 style="?android:attr/borderlessButtonStyle"
         />

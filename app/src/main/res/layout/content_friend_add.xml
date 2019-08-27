@@ -4,7 +4,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
              android:layout_margin="15dp"
-             tools:context=".FriendAddActivity">
+             tools:context=".MainActivity">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                         android:layout_height="30dp"
                         android:layout_marginRight="1dp"
                         android:textColor="@drawable/style_textcolor_darkpink"
-                        android:background="@drawable/style_auth_button"
+                        android:background="@drawable/style_normal_button"
                         android:text="찾기"/>
             </LinearLayout>
 

@@ -44,7 +44,7 @@
             android:textStyle="bold"
             android:layout_below="@+id/passwordInput"
             android:layout_toLeftOf="@+id/registerButon"
-            android:background="@drawable/style_auth_button"
+            android:background="@drawable/style_normal_button"
             android:textColor="@drawable/style_textcolor_darkpink"
             style="?android:attr/borderlessButtonStyle"/>
 

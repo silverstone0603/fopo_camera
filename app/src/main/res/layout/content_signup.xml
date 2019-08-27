@@ -124,7 +124,7 @@
             android:layout_marginTop="15dp"
             android:layout_below="@+id/radioGroup"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/style_auth_button"
+            android:background="@drawable/style_normal_button"
             android:textStyle="bold"
             android:textColor="@drawable/style_textcolor_darkpink"
             style="?android:attr/borderlessButtonStyle"/>

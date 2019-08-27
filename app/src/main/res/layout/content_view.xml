@@ -230,9 +230,10 @@
                     android:id="@+id/btnReply"
                     android:layout_width="53dp"
                     android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
                     android:text="등록"
-                    android:background="@drawable/style_fopo_roundbtn"
-                    android:textColor="@android:color/white"/>
+                    android:background="@drawable/style_normal_button"
+                    style="?android:attr/borderlessButtonStyle"/>
         </LinearLayout>
     </LinearLayout>
 
