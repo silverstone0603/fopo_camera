@@ -31,7 +31,7 @@
                         android:id="@+id/pose_frame1"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        app:srcCompat="@drawable/ic_frame3"
+                        app:srcCompat="@drawable/ic_frame1"
                         android:layout_centerHorizontal="true"
                 />
                 <TextView
@@ -295,6 +295,146 @@
                         android:layout_centerHorizontal="true"
                         android:textColor="@android:color/white"
                 />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/pose11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:onClick="Pose_Select"
+                android:clickable="true"
+                >
+
+                <ImageView
+                    android:id="@+id/pose_frame11"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/ic_frame11"
+                    android:layout_centerHorizontal="true"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="포즈11"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/pose_frame11"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@android:color/white"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/pose12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:onClick="Pose_Select"
+                android:clickable="true"
+                >
+
+                <ImageView
+                    android:id="@+id/pose_frame12"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/ic_frame12"
+                    android:layout_centerHorizontal="true"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="포즈12"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/pose_frame12"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@android:color/white"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/pose13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:onClick="Pose_Select"
+                android:clickable="true"
+                >
+
+                <ImageView
+                    android:id="@+id/pose_frame13"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/ic_frame10"
+                    android:layout_centerHorizontal="true"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="포즈13"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/pose_frame13"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@android:color/white"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/pose14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:onClick="Pose_Select"
+                android:clickable="true"
+                >
+
+                <ImageView
+                    android:id="@+id/pose_frame14"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/ic_frame14"
+                    android:layout_centerHorizontal="true"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="포즈14"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/pose_frame14"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@android:color/white"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/pose15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:onClick="Pose_Select"
+                android:clickable="true"
+                >
+
+                <ImageView
+                    android:id="@+id/pose_frame15"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/ic_frame15"
+                    android:layout_centerHorizontal="true"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="포즈10"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/pose_frame15"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@android:color/white"
+                    />
 
             </RelativeLayout>
 

@@ -50,6 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
+                android:paddingBottom="50dp"
                 android:orientation="vertical">
 
                 <GridLayout
@@ -68,7 +69,7 @@
                                 android:orientation="horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="5dp">
+                                android:layout_marginRight="10dp">
                             <ImageView
                                     android:id="@+id/imgProfile"
                                     android:layout_width="100dp"
@@ -96,9 +97,10 @@
                                 android:textSize="16sp"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:textStyle="bold"
+                                android:gravity="center|left"
                                 android:layout_marginTop="25dp"
                                 android:layout_toRightOf="@+id/layImgProfile"
-                                android:text="FOPO 계정 아이디"/>
+                                android:text="내 FOPO 아이디"/>
                         <TextView
                                 android:id="@+id/txtMyID"
                                 android:layout_width="wrap_content"
@@ -106,9 +108,10 @@
                                 android:textSize="25sp"
                                 android:textStyle="normal"
                                 android:textColor="@color/colorTextNormal"
+                                android:gravity="center|left"
                                 android:layout_toRightOf="@+id/layImgProfile"
                                 android:layout_below="@+id/txtProfileDesc"
-                                android:text="admin"/>
+                                android:text="{txtMyID}"/>
                     </RelativeLayout>
 
                     <TextView
@@ -123,6 +126,8 @@
                             android:id="@+id/editMyNick"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
                             android:inputType="text"
                             android:background="@drawable/custome_edit_text"/>
 
@@ -138,6 +143,9 @@
                             android:id="@+id/editChangePassword"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:inputType="textPassword"
                             android:background="@drawable/custome_edit_text"/>
 
                     <TextView
@@ -152,6 +160,9 @@
                             android:id="@+id/editChangePasswordCheck"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:inputType="textPassword"
                             android:background="@drawable/custome_edit_text"/>
 
                     <TextView
@@ -181,6 +192,8 @@
                             android:id="@+id/editPhone"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
                             android:background="@drawable/custome_edit_text"/>
                 </GridLayout>
            </LinearLayout>

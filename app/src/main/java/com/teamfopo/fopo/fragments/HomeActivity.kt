@@ -39,6 +39,7 @@ class HomeActivity : Fragment() {
     fun initFragment(view: View){
         var webHome = view.findViewById<WebView>(R.id.webHome)
         webHome.loadUrl("http://106.10.51.32/app/home")
+        webHome.settings.javaScriptEnabled = true
     }
 
 

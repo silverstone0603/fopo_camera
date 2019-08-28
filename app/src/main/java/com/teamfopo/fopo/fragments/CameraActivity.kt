@@ -30,6 +30,7 @@ import com.teamfopo.fopo.module.modDBMS
 import com.teamfopo.fopo.module.modProtocol
 import com.teamfopo.fopo.nodes.PointCloudNode
 import kotlinx.android.synthetic.main.content_camera.*
+import kotlinx.android.synthetic.main.layout_filter_lists.*
 import kotlinx.android.synthetic.main.layout_pose_lists.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -56,6 +57,7 @@ private const val ARG_PARAM2 = "param2"
  *
  */
 class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener {
+
     // Fragment(), View.OnClickListener, Scene.OnTouchListener, Scene.OnPeekTouchListener, Scene.OnUpdateListener
 
     private var installRequested: Boolean = false
@@ -139,7 +141,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
 
         // 카메라 및 위치 권한 가져오기
         ARLocationPermissionHelper.requestPermission(this.activity)
-
+        
         // 거리 표시 레이아웃 추가
         try{
             Log.d("ARCore","거리 표시 레이아웃을 추가합니다.")
@@ -325,7 +327,6 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                 horizontalScrollView2 = viewCamera!!.findViewById(R.id.hscFilterLayout) as HorizontalScrollView
                 initButton()
                 dialog.cancel()
-                colorEffectFilter()
             }
             .setNegativeButton("포포존 바로가기"){dialog, which ->
                 Log.d("ARCore","포포존 바로가기 선택하셨습니다.")
@@ -366,6 +367,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
     */
 
     private fun initButton() {
+        val parameters: Camera.Parameters = mCamera?.parameters!!
+
         btnCapture?.setOnClickListener {
             myCameraPreview?.takePicture()
             // horizontalScrollView1!!.setVisibility(View.GONE)
@@ -395,57 +398,147 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         pose1.setOnClickListener {
             m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
             mAttacher = PhotoViewAttacher(m_imageview)
-            if(fraPoseSet!!.getVisibility() == View.VISIBLE) {
-                fraPoseSet.setImageResource(R.drawable.ic_frame1)
-                myCameraPreview?.setFrameId(R.drawable.ic_frame1)
-            } else {
-                fraPoseSet.setImageBitmap(null)
-            }
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
+            fraPoseSet.setImageResource(R.drawable.ic_frame1)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame1)
         }
 
         pose2.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
             fraPoseSet.setImageResource(R.drawable.ic_frame2)
             myCameraPreview?.setFrameId(R.drawable.ic_frame2)
         }
 
         pose3.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
             fraPoseSet.setImageResource(R.drawable.ic_frame3)
             myCameraPreview?.setFrameId(R.drawable.ic_frame3)
         }
 
         pose4.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
             fraPoseSet.setImageResource(R.drawable.ic_frame4)
             myCameraPreview?.setFrameId(R.drawable.ic_frame4)
         }
 
         pose5.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
             fraPoseSet.setImageResource(R.drawable.ic_frame5)
             myCameraPreview?.setFrameId(R.drawable.ic_frame5)
         }
 
         pose6.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
             fraPoseSet.setImageResource(R.drawable.ic_frame6)
             myCameraPreview?.setFrameId(R.drawable.ic_frame6)
         }
 
         pose7.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
             fraPoseSet.setImageResource(R.drawable.ic_frame7)
             myCameraPreview?.setFrameId(R.drawable.ic_frame7)
         }
 
         pose8.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
             fraPoseSet.setImageResource(R.drawable.ic_frame8)
             myCameraPreview?.setFrameId(R.drawable.ic_frame8)
         }
 
         pose9.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
             fraPoseSet.setImageResource(R.drawable.ic_frame9)
             myCameraPreview?.setFrameId(R.drawable.ic_frame9)
         }
 
         pose10.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
             fraPoseSet.setImageResource(R.drawable.ic_frame10)
             myCameraPreview?.setFrameId(R.drawable.ic_frame10)
+        }
+
+        pose11.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
+            fraPoseSet.setImageResource(R.drawable.ic_frame11)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame11)
+        }
+
+        pose12.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
+            fraPoseSet.setImageResource(R.drawable.ic_frame12)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame12)
+        }
+
+        pose13.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
+            fraPoseSet.setImageResource(R.drawable.ic_frame13)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame13)
+        }
+
+        pose14.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
+            fraPoseSet.setImageResource(R.drawable.ic_frame14)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame14)
+        }
+
+        pose15.setOnClickListener {
+            m_imageview = viewCamera!!.findViewById(R.id.fraPoseSet)
+            mAttacher = PhotoViewAttacher(m_imageview)
+            mAttacher!!.setScaleType(ImageView.ScaleType.FIT_XY)
+            fraPoseSet.setImageResource(R.drawable.ic_frame15)
+            myCameraPreview?.setFrameId(R.drawable.ic_frame15)
+        }
+
+        rlNone.setOnClickListener {
+            parameters!!.colorEffect = Camera.Parameters.EFFECT_NONE
+            mCamera?.parameters = parameters
+            Toast.makeText(this.context, "기본필터 선택", Toast.LENGTH_LONG).show()
+            str_filter = "기본필터"
+        }
+
+        rlMono.setOnClickListener {
+            parameters!!.colorEffect = Camera.Parameters.EFFECT_MONO
+            mCamera?.parameters = parameters
+            Toast.makeText(this.context, "흑백필터 선택", Toast.LENGTH_LONG).show()
+            str_filter = "흑백필터"
+        }
+        rlNegative.setOnClickListener {
+            parameters!!.colorEffect = Camera.Parameters.EFFECT_MONO
+            mCamera?.parameters = parameters
+            Toast.makeText(this.context, "네거티브필터 선택", Toast.LENGTH_LONG).show()
+            str_filter = "네거티브필터"
+        }
+        rlSepia.setOnClickListener {
+            parameters!!.colorEffect = Camera.Parameters.EFFECT_MONO
+            mCamera?.parameters = parameters
+            Toast.makeText(this.context, "세피아필터 선택", Toast.LENGTH_LONG).show()
+            str_filter = "세피아필터"
         }
     }
 
@@ -470,12 +563,10 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         return c
     }
 
-    fun colorEffectFilter() {
-
-        val v: View? = null
+     /*fun colorEffectFilter(v: View) {
         try {
             val parameters: Camera.Parameters = mCamera?.parameters!!
-            when (v!!.id) {
+            when (v.id) {
                 R.id.rlNone -> {
                     parameters!!.colorEffect = Camera.Parameters.EFFECT_NONE
                     mCamera?.parameters = parameters
@@ -504,7 +595,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         } catch (ex: Exception) {
             Log.d(TAG, ex.message)
         }
-    }
+    }*/
 
 
     override fun onUpdate(frameTime: FrameTime?) {
@@ -579,12 +670,11 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
     }
 
     override fun onClick(v: View?) {
+        val parameters: Camera.Parameters = mCamera?.parameters!!
         when (v?.id) {
             R.id.btnCapture -> {
                 Toast.makeText(viewCamera!!.context, "사진 촬영 버튼을 누르셨습니다.", Toast.LENGTH_LONG).show()
-            }else -> {
-
-        }
+            }
         }
     }
 
