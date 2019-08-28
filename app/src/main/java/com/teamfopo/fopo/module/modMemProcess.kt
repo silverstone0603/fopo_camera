@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonParser
 import okhttp3.*
 
-data class MyInfoVO(val mem_nick: String, val mem_email: String, val mem_phone: String, val mem_profile: Int)
+data class MyInfoVO(val mem_nick: String, val mem_email: String, val mem_phone: String, val mem_picfile: Int)
 data class InfoChangeVO(val status: String)
 
 class modMemProcess {
