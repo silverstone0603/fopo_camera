@@ -22,6 +22,8 @@ import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.Scene
+import com.google.ar.sceneform.math.Quaternion
+import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.teamfopo.fopo.R
@@ -135,7 +137,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         }
         while(true){
             if(protMain!!.isFinish()) break
-            // else Thread.sleep(1000)
+            else Thread.sleep(100)
         }
         Log.d("ARCore","FOPO 서버로부터 포포존 정보를 성공적으로 가져왔습니다.")
 
@@ -253,12 +255,17 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
                                             // 3D marker meter 높이 설정
                                             locationMarker.height = -0.6F
 
+                                            // 3D marker 회전
+                                            // locationMarker.node.localRotation = Quaternion.axisAngle(Vector3(0f, 0f, 0f), 60f)
+                                            // locationMarker.node.localRotation.set(Vector3(0f, 0f, 0f), 60f)
+
                                             // 3D marker 추가
                                             locationScene!!.mLocationMarkers.add(locationMarker)
 
                                             Log.d("ARCore", "위도 및 경도 : " + latitude.toString() + " / " + longitude.toString())
                                         }
                                         Log.d("ARCore","포포존 정보 추가가 완료되었습니다.")
+                                        hideLoadingMessage()
                                     } catch (e: JSONException) {
                                         e.printStackTrace()
                                     }
