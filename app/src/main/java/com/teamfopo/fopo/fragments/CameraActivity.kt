@@ -137,7 +137,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         }
         while(true){
             if(protMain!!.isFinish()) break
-            else Thread.sleep(100)
+            // else Thread.sleep(100)
         }
         Log.d("ARCore","FOPO 서버로부터 포포존 정보를 성공적으로 가져왔습니다.")
 
