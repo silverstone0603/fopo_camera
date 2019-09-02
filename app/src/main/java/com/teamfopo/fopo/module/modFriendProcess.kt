@@ -1,5 +1,6 @@
 package com.teamfopo.fopo.module
 
+import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.util.Log
 import com.google.gson.Gson
@@ -8,7 +9,7 @@ import com.google.gson.reflect.TypeToken
 import com.google.vr.dynamite.client.f
 import okhttp3.*
 
-data class FriendsVO(var mem_no: Int, var mem_nick: String, var art_cnt: Int)
+data class FriendsVO(var mem_no: Int, var mem_nick: String, var art_cnt: Int, var mem_picfile: Int, var bmProfile: Bitmap)
 data class UserVO(var mem_no: Int, var mem_nick: String, var art_cnt: Int, var status: Int)
 data class FriendArticleVO(var mem_no: Int)
 

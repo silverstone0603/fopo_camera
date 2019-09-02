@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="member" type="com.teamfopo.fopo.module.FriendsVO"/>
     </data>
@@ -16,6 +16,7 @@
         <ImageView
             android:layout_width="55dp"
             android:layout_height="55dp"
+            app:imgRes="@{member.bmProfile}"
             android:background="@drawable/ic_fopo_logo"/>
 
         <LinearLayout

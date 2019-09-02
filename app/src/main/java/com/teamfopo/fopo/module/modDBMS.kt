@@ -17,6 +17,7 @@ class modDBMS(context: Context)
 
         //멤버 테이블 생성
         db?.execSQL("CREATE TABLE member (id TEXT PRIMARY KEY, nick TEXT, token TEXT, mem_no TEXT, lastlogin TEXT);")
+
         //파일목록 테이블 생성
         //db?.execSQL("CREATE TABLE files (id TEXT PRIMARY KEY, token TEXT, regdate TEXT, lastlogin TEXT);")
 

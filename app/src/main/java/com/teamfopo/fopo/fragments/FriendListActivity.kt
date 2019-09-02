@@ -2,6 +2,8 @@ package com.teamfopo.fopo.fragments
 
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -18,11 +20,13 @@ import com.teamfopo.fopo.R
 import com.teamfopo.fopo.ViewActivity
 import com.teamfopo.fopo.databinding.ItemMemberBinding
 import com.teamfopo.fopo.module.FriendsVO
+import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modFriendProcess
 
 class FriendListActivity : Fragment() {
-    lateinit var memberlist: List<FriendsVO>
-
+    companion object {
+        lateinit var memberlist: List<FriendsVO>
+    }
     lateinit var viewRoot: View
 
     override fun onCreateView(
@@ -44,6 +48,22 @@ class FriendListActivity : Fragment() {
 
         var getFriendList = modFriendProcess().getFriends()
         memberlist = getFriendList.execute().get()
+
+        for ( i in 0..memberlist.size - 1 ) {
+            if (memberlist.get(i).mem_picfile != 0) {
+                var bm: Bitmap
+                var getBoardImage = modBoardProcess().GetImage()
+                bm = getBoardImage.execute(memberlist.get(i).mem_picfile).get()
+
+                memberlist.get(i).bmProfile = bm
+                //System.out.println("asdasd" + memberlist.get(i).mem_picfile)
+            } else {
+                var context = this
+                var drawable = resources.getDrawable(R.drawable.img_logo)
+                memberlist.get(i).bmProfile = (drawable as BitmapDrawable).bitmap
+
+            }
+        }
 
         var txtFriendCount: TextView = viewRoot.findViewById(R.id.txtFriendCount)
         txtFriendCount.setText("친구 " + memberlist.size + "명")
@@ -91,10 +111,15 @@ class MemberAdapter(var items: List<FriendsVO>,
             if (result.equals("success")) {
                 Toast.makeText(MainActivity.mContext,"${items[viewHolder.adapterPosition].mem_nick} 언팔로우", Toast.LENGTH_SHORT).show()
 
-                var getFriendList = modFriendProcess().getFriends()
-                items = getFriendList.execute().get()
+                items.drop(viewHolder.adapterPosition)
+                this.notifyItemRemoved(viewHolder.adapterPosition)
+                this.notifyItemRangeChanged(viewHolder.adapterPosition, itemCount)
+
+                //var getFriendList = modFriendProcess().getFriends()
+                //items = getFriendList.execute().get()
 
                 this.notifyDataSetChanged()
+                
             }
         }
 
