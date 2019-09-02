@@ -31,18 +31,22 @@ class FOPOService : Service() {
     var AuthThread: Thread? = AuthThread()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        serviceIntent = intent
-        Context_FOPOService = application
+        try {
+            serviceIntent = intent
+            Context_FOPOService = application
 
-        var dbms = modDBMS(Context_FOPOService!!.applicationContext)
-        dataMemberVO = dbms.getMember()
+            var dbms = modDBMS(Context_FOPOService!!.applicationContext)
+            dataMemberVO = dbms.getMember()
 
-        val sps = PreferenceManager.getDefaultSharedPreferences(Context_FOPOService!!.applicationContext)
-        setting_push = sps.getBoolean("key_push", false)
+            val sps = PreferenceManager.getDefaultSharedPreferences(Context_FOPOService!!.applicationContext)
+            setting_push = sps.getBoolean("key_push", false)
 
-        AuthThread?.start()
+            AuthThread?.start()
 
-        return START_NOT_STICKY
+            return START_NOT_STICKY
+        }catch(e: Exception) {
+            return START_STICKY
+        }
     }
 
     override fun onDestroy() {
