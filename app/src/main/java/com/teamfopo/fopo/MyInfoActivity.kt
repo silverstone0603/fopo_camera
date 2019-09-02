@@ -3,6 +3,7 @@ package com.teamfopo.fopo
 import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,10 +11,12 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.PopupMenu
 import android.widget.Toast
+import com.teamfopo.fopo.module.FOPOService
 import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modImageResizeUtils
 import com.teamfopo.fopo.module.modMemProcess
 import kotlinx.android.synthetic.main.activity_my_info.*
+import kotlinx.android.synthetic.main.content_view.*
 import java.io.File
 
 class MyInfoActivity : AppCompatActivity() {
@@ -34,6 +37,8 @@ class MyInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_info)
 
+        val mem_id = FOPOService.dataMemberVO!!.mem_id
+
         var getMyInfo = modMemProcess().myInfo()
         var myInfo = getMyInfo.execute().get()
 
@@ -41,13 +46,26 @@ class MyInfoActivity : AppCompatActivity() {
         txtEmail.text = myInfo.mem_email
         editPhone.setText(myInfo.mem_phone)
 
+        txtMyID.text = "$mem_id"
+
+        if ( myInfo.mem_picfile != 0 ) {
+            var getSelectImage = modBoardProcess().GetImage()
+            var bitmap: Bitmap
+            bitmap = getSelectImage.execute(myInfo.mem_picfile).get()
+
+            imgProfile.setImageBitmap(bitmap)  //이미지 뿌려주기
+        }
+
+        Toast.makeText(this, "${myInfo.mem_picfile}", Toast.LENGTH_SHORT).show()
+
         btnChange.setOnClickListener {
             val mem_nick = editMyNick.text.toString()
             val mem_newpw = editChangePassword.text.toString()
             val mem_phone = editPhone.text.toString()
+            val mem_no = FOPOService.dataMemberVO!!.mem_no
 
             var InfoModify = modMemProcess().infomodify()
-            var result = InfoModify.execute("3", "$Profile", "$mem_nick","$mem_newpw","$mem_phone").get()
+            var result = InfoModify.execute("$mem_no", "$Profile", "$mem_nick","$mem_newpw","$mem_phone").get()
 
             if ( result.status.equals("success") ) {
                 Toast.makeText(this, "내정보 변경 성공!", Toast.LENGTH_SHORT).show()
