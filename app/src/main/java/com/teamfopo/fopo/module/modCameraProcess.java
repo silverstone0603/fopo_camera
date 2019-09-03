@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.hardware.Camera.*;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -16,13 +17,14 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import java.io.*;
+import java.util.Calendar;
 
 @SuppressLint("ViewConstructor")
 public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callback {
-
-    private final String TAG = "MyTag";
+    private final String TAG = "modCameraProcess";
 
     private SurfaceHolder mHolder;
 
@@ -33,6 +35,24 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
     private Camera.CameraInfo mCameraInfo;
 
     private int mDisplayOrientation;
+
+    String mRootPath;
+    static final String PICFOLDER = "FOPO";
+    boolean blIsTakePhoto;
+
+    // 포커싱 성공하면 촬영 허가
+    AutoFocusCallback mAutoFocus = new AutoFocusCallback() {
+        public void onAutoFocus(boolean success, Camera camera) {
+            blIsTakePhoto = success;
+        }
+    };
+
+    AutoFocusMoveCallback mAutoFocusMove = new AutoFocusMoveCallback() {
+        @Override
+        public void onAutoFocusMoving(boolean success, Camera camera) {
+            blIsTakePhoto = success;
+        }
+    };
 
     public modCameraProcess(Context context, Camera camera , int cameraId) {
         super(context);
@@ -96,6 +116,17 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
             parameters.setPictureSize(m_resWidth, m_resHeight);
             mCamera.setParameters(parameters);
             mCamera.startPreview();
+            mCamera.autoFocus(mAutoFocus);
+            mCamera.setAutoFocusMoveCallback(mAutoFocusMove);
+
+            mRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    "/" + PICFOLDER;
+            File fRoot = new File(mRootPath);
+            if (fRoot.exists() == false) {
+                if (fRoot.mkdir() == false) {
+                    Log.d(TAG,"사진 폴더 생성에 실패 했습니다.");
+                }
+            }
 
         } catch (IOException e) {
             Log.d(TAG, "Error setting camera preview: " + e.getMessage());
@@ -186,9 +217,19 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
     /**
      *  이미지 캡처
      */
-    public void takePicture(){
-        setFrameId(0);
-        mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
+    public boolean takePicture(){
+        try{
+            mCamera.autoFocus(mAutoFocus);
+            if(blIsTakePhoto == true) {
+                setFrameId(0);
+                mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
+                return true;
+            }else {
+                return false;
+            }
+        }catch(Exception e){
+            return false;
+        }
     }
 
     /**
@@ -209,7 +250,31 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
 
     private Camera.PictureCallback rawCallback = new Camera.PictureCallback() {
         public void onPictureTaken(byte[] data, Camera camera) {
+            /*
+            Calendar calendar = Calendar.getInstance();
+            String FileName = String.format("FOPO-%02d%02d%02d-%02d%02d%02d.jpg",
+                    calendar.get(Calendar.YEAR) % 100, calendar.get(Calendar.MONTH)+1,
+                    calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+            String path = mRootPath + "/" + FileName;
 
+            File file = new File(path);
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(data);
+                fos.flush();
+                fos.close();
+            } catch (Exception e) {
+                return;
+            }
+
+            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri uri = Uri.parse("file://" + path);
+            intent.setData(uri);
+            sendBroadcast(intent);
+
+            camera.startPreview();
+            */
         }
     };
 
@@ -274,39 +339,35 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
             FileOutputStream outStream = null;
 
             try {
+                Calendar calendar = Calendar.getInstance();
+                String FileName = String.format("FOPO-%02d%02d%02d-%02d%02d%02d.jpg",
+                        calendar.get(Calendar.YEAR) % 100, calendar.get(Calendar.MONTH)+1,
+                        calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
 
-                File path = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/FOPO");
-                if (!path.exists()) {
-                    path.mkdirs();
-                }
-
-                String fileName = String.format("%d.jpg", System.currentTimeMillis());
-                File outputFile = new File(path, fileName);
+                File outputFile = new File(mRootPath, FileName);
 
                 outStream = new FileOutputStream(outputFile);
                 outStream.write(data[0]);
                 outStream.flush();
                 outStream.close();
 
-                Log.d(TAG, "onPictureTaken - wrote bytes: " + data.length + " to "
+                Log.d(TAG, "사진 촬영(JPEG) - Bytes: " + data.length + " to "
                         + outputFile.getAbsolutePath());
 
-
                 mCamera.startPreview();
-
 
                 // 갤러리에 반영
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 mediaScanIntent.setData(Uri.fromFile(outputFile));
                 getContext().sendBroadcast(mediaScanIntent);
 
-
                 try {
                     mCamera.setPreviewDisplay(mHolder);
                     mCamera.startPreview();
-                    Log.d(TAG, "Camera preview started.");
+                    Log.d(TAG, "카메라 프리뷰가 시작되었습니다.");
                 } catch (Exception e) {
-                    Log.d(TAG, "Error starting camera preview: " + e.getMessage());
+                    Log.d(TAG, "카메라 프리뷰를 시작하는데 실패했습니다 : " + e.getMessage());
                 }
 
 
