@@ -2,34 +2,45 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="계정 관리" app:iconSpaceReserved="false">
+    <PreferenceCategory android:title="FOPO 계정" app:iconSpaceReserved="false">
 
         <PreferenceScreen
                 android:key="key_logout"
                 android:title="로그아웃"
+                android:summary="사용자 계정을 로그아웃합니다."
                 android:icon="@drawable/ic_directions_run_black_72dp"/>
 
         <PreferenceScreen
                 android:key="key_myinfo"
-                android:title="내정보"
+                android:title="내 정보"
+                android:summary="내 정보를 수정할 수 있습니다"
                 android:icon="@drawable/ic_person_black_72dp"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="추가 정보">
+    <PreferenceCategory android:title="알림 설정">
         <SwitchPreference
                 android:defaultValue="false"
                 android:key="key_push"
                 android:title="푸시 알림"
                 android:icon="@drawable/ic_notifications_black_72dp"/>
+    </PreferenceCategory>
 
+
+    <PreferenceCategory android:title="추가 정보">
         <Preference
-                android:summary="개발자에게 메일을 보냅니다"
                 android:title="메일 보내기"
+                android:summary="개발자에게 메일을 보냅니다"
                 android:icon="@drawable/ic_email_black_72dp">
             <intent
                     android:action="android.intent.action.SENDTO"
-                    android:data="mailto:kswon0126@naver.com" />
+                    android:data="mailto:test@test.com" />
         </Preference>
+
+        <PreferenceScreen
+                android:key="key_about"
+                android:title="어플리케이션 정보"
+                android:summary="FOPO 어플리케이션 정보를 봅니다."
+                android:icon="@drawable/ic_info_outline_black_72dp"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

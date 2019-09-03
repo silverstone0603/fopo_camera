@@ -87,6 +87,10 @@
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
+                android:name=".AboutActivity"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
                 android:name=".PassportActivity"
                 android:enabled="true"
                 android:exported="true"

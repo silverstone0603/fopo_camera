@@ -1,40 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:id="@+id/sv_root"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:scrollbarFadeDuration="0"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:scrollbarThumbVertical="@color/colorPrimaryDark"
-        android:scrollbarTrackVertical="@android:color/white"
-        android:scrollbarSize="2dp">
-
-        <LinearLayout
-                android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".AuthActivity">
+        <ScrollView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:id="@+id/sv_root"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@android:color/white"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:gravity="center"
-                android:layout_margin="40dp">
+                android:scrollbarFadeDuration="0"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarThumbVertical="@color/colorPrimaryDark"
+                android:scrollbarTrackVertical="@android:color/white"
+                android:scrollbarSize="2dp">
 
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="80dp"
-                        android:src="@drawable/ic_fopo_logo"
-                        android:layout_gravity="center" android:contentDescription="@string/app_name"/>
-
-                <FrameLayout
-                        android:id="@+id/fraLogin"
+                <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_gravity="center"/>
-        </LinearLayout>
-</ScrollView>
+                        android:background="@android:color/white"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        android:gravity="center"
+                        android:layout_margin="40dp">
 
+                        <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="80dp"
+                                android:src="@drawable/ic_fopo_logo"
+                                android:layout_gravity="center" android:contentDescription="@string/app_name"/>
+
+                        <FrameLayout
+                                android:id="@+id/fraLogin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_gravity="center"/>
+                </LinearLayout>
+        </ScrollView>
+</android.support.constraint.ConstraintLayout>

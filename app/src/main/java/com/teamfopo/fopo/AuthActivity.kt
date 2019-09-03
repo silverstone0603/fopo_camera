@@ -23,7 +23,6 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-        setScreen(0)
 
         modKeyboardUtils = modKeyboardUtils(window,
             onShowKeyboard = { keyboardHeight ->
@@ -31,6 +30,8 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
                     smoothScrollTo(scrollX, scrollY + keyboardHeight)
                 }
             })
+
+        setScreen(0)
     }
 
     override fun onDestroy() {
