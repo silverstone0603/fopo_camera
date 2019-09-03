@@ -320,7 +320,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         // AlertDialog 셋팅
         alertDialogBuilder
             .setMessage("선택하신 포토존에서 어떤 작업을 진행할까요?")
-            .setCancelable(false)
+            .setCancelable(true)
             .setPositiveButton("사진 촬영"){dialog, which ->
                 Log.d("ARCore","포포존 "+zone_no+"번에서 사진을 촬영합니다.")
                 camera_bottom_desc_layout.visibility = View.INVISIBLE
@@ -377,7 +377,11 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         val parameters: Camera.Parameters = mCamera?.parameters!!
 
         btnCapture?.setOnClickListener {
-            myCameraPreview?.takePicture()
+            if(myCameraPreview?.takePicture() == true){
+                Toast.makeText(viewCamera!!.context, "사진이 저장 되었습니다.", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(viewCamera!!.context, "초점이 맞지 않습니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
             // horizontalScrollView1!!.setVisibility(View.GONE)
             // horizontalScrollView2!!.setVisibility(View.GONE)
         }

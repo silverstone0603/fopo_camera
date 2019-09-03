@@ -110,7 +110,7 @@
                 android:layout_height="65dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="0dp"
-                android:background="@drawable/img_camera_shooting"
+                android:background="@drawable/ic_btn_capture"
                 android:layout_gravity="center"/>
         <ImageButton
                 android:id="@+id/btnPose"
