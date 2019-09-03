@@ -4,6 +4,7 @@ package com.teamfopo.fopo.fragments
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.teamfopo.fopo.FriendInformActivity
@@ -25,9 +27,9 @@ import com.teamfopo.fopo.module.modFriendProcess
 
 class FriendListActivity : Fragment() {
     companion object {
-        lateinit var memberlist: List<FriendsVO>
+        lateinit var memberlist: MutableList<FriendsVO>
+        lateinit var viewRoot: View
     }
-    lateinit var viewRoot: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,12 +58,10 @@ class FriendListActivity : Fragment() {
                 bm = getBoardImage.execute(memberlist.get(i).mem_picfile).get()
 
                 memberlist.get(i).bmProfile = bm
-                //System.out.println("asdasd" + memberlist.get(i).mem_picfile)
             } else {
                 var context = this
                 var drawable = resources.getDrawable(R.drawable.img_logo)
                 memberlist.get(i).bmProfile = (drawable as BitmapDrawable).bitmap
-
             }
         }
 
@@ -87,7 +87,7 @@ class FriendListActivity : Fragment() {
     }
 }
 
-class MemberAdapter(var items: List<FriendsVO>,
+class MemberAdapter(var items: MutableList<FriendsVO>,
                     private val clickListener: (member: FriendsVO) -> Unit) :
     RecyclerView.Adapter<MemberAdapter.MemberViewHolder>() {
 
@@ -111,15 +111,11 @@ class MemberAdapter(var items: List<FriendsVO>,
             if (result.equals("success")) {
                 Toast.makeText(MainActivity.mContext,"${items[viewHolder.adapterPosition].mem_nick} 언팔로우", Toast.LENGTH_SHORT).show()
 
-                items.drop(viewHolder.adapterPosition)
+                items.removeAt(viewHolder.adapterPosition)
                 this.notifyItemRemoved(viewHolder.adapterPosition)
-                this.notifyItemRangeChanged(viewHolder.adapterPosition, itemCount)
 
-                //var getFriendList = modFriendProcess().getFriends()
-                //items = getFriendList.execute().get()
-
-                this.notifyDataSetChanged()
-                
+                var txtFriendCount: TextView = FriendListActivity.viewRoot.findViewById(R.id.txtFriendCount)
+                txtFriendCount.setText("친구 " + getItemCount() + "명")
             }
         }
 

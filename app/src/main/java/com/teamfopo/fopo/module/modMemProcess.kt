@@ -51,10 +51,12 @@ class modMemProcess {
         }
 
         override fun doInBackground(vararg params: String?): MyInfoVO {
+            val mem_no = params[0]
+
             var url = "http://106.10.51.32/ajax_process/member_process"
             val requestBody: RequestBody = FormBody.Builder()
                 .add("type", "info")
-                .add("mem_no", "3")
+                .add("mem_no","$mem_no")
                 .build()
 
             val client = OkHttpClient()

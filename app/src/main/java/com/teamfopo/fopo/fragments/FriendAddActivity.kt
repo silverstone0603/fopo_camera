@@ -3,6 +3,9 @@ package com.teamfopo.fopo.fragments
 
 import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat.getSystemService
@@ -11,16 +14,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.teamfopo.fopo.MainActivity
 import com.teamfopo.fopo.R
-import com.teamfopo.fopo.module.FOPOService
-import com.teamfopo.fopo.module.FriendsVO
-import com.teamfopo.fopo.module.UserVO
-import com.teamfopo.fopo.module.modFriendProcess
+import com.teamfopo.fopo.module.*
 import kotlinx.android.synthetic.main.content_friend_add.*
 import kotlinx.android.synthetic.main.content_view.*
 import org.w3c.dom.Text
@@ -72,6 +69,26 @@ class FriendAddActivity : Fragment(), View.OnClickListener {
 
                 var findUser = modFriendProcess().findUser()
                 findUser_result = findUser.execute("$strUserID").get()
+
+                var bm: Bitmap
+                var imageView = viewRoot.findViewById(R.id.imgUserProfile) as ImageView
+                var drawable = context!!.getDrawable(R.drawable.background_rounding) as GradientDrawable
+
+                if (findUser_result.mem_picfile != 0) {
+                    var getBoardImage = modBoardProcess().GetImage()
+                    bm = getBoardImage.execute(findUser_result.mem_picfile).get()
+
+                    imageView.background = drawable
+                    imageView.clipToOutline = true
+                } else {
+                    var context = this
+                    var drawable = resources.getDrawable(R.drawable.img_logo)
+                    bm = (drawable as BitmapDrawable).bitmap
+
+                    imageView.background = null
+                }
+
+                imgUserProfile.setImageBitmap(bm)
 
                 if ( findUser_result.mem_no <= 0 ) {
                     llFoundFriend.visibility = View.INVISIBLE

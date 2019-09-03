@@ -10,12 +10,12 @@ import com.google.vr.dynamite.client.f
 import okhttp3.*
 
 data class FriendsVO(var mem_no: Int, var mem_nick: String, var art_cnt: Int, var mem_picfile: Int, var bmProfile: Bitmap)
-data class UserVO(var mem_no: Int, var mem_nick: String, var art_cnt: Int, var status: Int)
+data class UserVO(var mem_no: Int, var mem_nick: String, var mem_picfile: Int, var art_cnt: Int, var status: Int)
 data class FriendArticleVO(var mem_no: Int)
 
 class modFriendProcess {
-    inner class getFriends : AsyncTask<String, Long, List<FriendsVO>>() {
-        override fun doInBackground(vararg params: String?): List<FriendsVO> {
+    inner class getFriends : AsyncTask<String, Long, MutableList<FriendsVO>>() {
+        override fun doInBackground(vararg params: String?): MutableList<FriendsVO> {
             val url = "http://106.10.51.32/ajax_process/friend_process"
             //var mem_no = params[0]
             var mem_no = FOPOService.dataMemberVO!!.mem_no
@@ -40,8 +40,8 @@ class modFriendProcess {
             val rootObj = parser.parse(str.toString())
                 .getAsJsonObject().get("fri_list") //원하는 데이터까지 찾아 들어간다.
 
-            val turnsType = object : TypeToken<List<FriendsVO>>() {}.type
-            var post = gson.fromJson<List<FriendsVO>>(rootObj, turnsType)//뭐가 들어가야 하지?
+            val turnsType = object : TypeToken<MutableList<FriendsVO>>() {}.type
+            var post = gson.fromJson<MutableList<FriendsVO>>(rootObj, turnsType)//뭐가 들어가야 하지?
 
             return post
         }
@@ -77,7 +77,7 @@ class modFriendProcess {
             try {
                 var post = gson.fromJson(rootObj, UserVO::class.java)//뭐가 들어가야 하지?
                 return post
-            } catch (e: Exception) { return UserVO(0,"null",0, 1) }
+            } catch (e: Exception) { return UserVO(0,"null",0,0, 1) }
             finally {
             }
         }

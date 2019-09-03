@@ -38,9 +38,10 @@ class MyInfoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_my_info)
 
         val mem_id = FOPOService.dataMemberVO!!.mem_id
+        val mem_no = FOPOService.dataMemberVO!!.mem_no
 
         var getMyInfo = modMemProcess().myInfo()
-        var myInfo = getMyInfo.execute().get()
+        var myInfo = getMyInfo.execute("$mem_no").get()
 
         editMyNick.setText(myInfo.mem_nick)
         txtEmail.text = myInfo.mem_email
@@ -54,23 +55,27 @@ class MyInfoActivity : AppCompatActivity() {
             bitmap = getSelectImage.execute(myInfo.mem_picfile).get()
 
             imgProfile.setImageBitmap(bitmap)  //이미지 뿌려주기
+            Profile = WriteActivity.encode(bitmap)
         }
-
-        Toast.makeText(this, "${myInfo.mem_picfile}", Toast.LENGTH_SHORT).show()
 
         btnChange.setOnClickListener {
             val mem_nick = editMyNick.text.toString()
             val mem_newpw = editChangePassword.text.toString()
+            val mem_newpwCheck = editChangePasswordCheck.text.toString()
             val mem_phone = editPhone.text.toString()
             val mem_no = FOPOService.dataMemberVO!!.mem_no
 
-            var InfoModify = modMemProcess().infomodify()
-            var result = InfoModify.execute("$mem_no", "$Profile", "$mem_nick","$mem_newpw","$mem_phone").get()
+            if ( mem_newpw.equals(mem_newpwCheck) ) {
+                var InfoModify = modMemProcess().infomodify()
+                var result = InfoModify.execute("$mem_no", "$Profile", "$mem_nick","$mem_newpw","$mem_phone").get()
 
-            if ( result.status.equals("success") ) {
-                Toast.makeText(this, "내정보 변경 성공!", Toast.LENGTH_SHORT).show()
+                if ( result.status.equals("success") ) {
+                    Toast.makeText(this, "내정보 변경 성공!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "내정보 변경 실패", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                Toast.makeText(this, "내정보 변경 실패", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "입력한 비밀번호가 같지 않습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 

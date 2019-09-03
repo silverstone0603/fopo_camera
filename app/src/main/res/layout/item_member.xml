@@ -14,9 +14,11 @@
         android:layout_marginBottom="2dp">
 
         <ImageView
+            android:id="@+id/imgFriendProfile"
             android:layout_width="55dp"
             android:layout_height="55dp"
             app:imgRes="@{member.bmProfile}"
+            android:scaleType="fitXY"
             android:background="@drawable/ic_fopo_logo"/>
 
         <LinearLayout
