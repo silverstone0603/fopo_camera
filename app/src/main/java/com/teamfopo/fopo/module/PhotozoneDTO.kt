@@ -12,7 +12,7 @@ data class PhotozoneDTO(var zone_no: Int, var zone_placename: String, var zone_l
 class modPhotoProcess {
     inner class listPhotoZone : AsyncTask<String, Long, Array<PhotozoneDTO>>() {
         override fun doInBackground(vararg params: String?): Array<PhotozoneDTO> {
-            var url = "http://106.10.51.32/ajax_process/board_process"
+            var url = "http://106.10.51.32/process/board_process"
 
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","zone")

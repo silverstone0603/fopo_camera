@@ -20,7 +20,7 @@ class modAuthProcess {
         override fun doInBackground(vararg params: String?): modSessionToken {
             var mem_id = params[0]
             var mem_pw = params[1]
-            var url = "http://106.10.51.32/ajax_process/auth_process"
+            var url = "http://106.10.51.32/process/auth_process"
             val requestBody: RequestBody = FormBody.Builder()
                 .add("id", "$mem_id")
                 .add("pw", "$mem_pw")
@@ -53,7 +53,7 @@ class modAuthProcess {
 
     inner class web_auth : AsyncTask<String, Long, webLoginVO>() {
         override fun doInBackground(vararg params: String?): webLoginVO {
-            var url = "http://106.10.51.32/ajax_process/web_process"
+            var url = "http://106.10.51.32/process/web_process"
             var type = "web_auth"
             var mem_no = params[0]
             var sess_devicetype = params[1]
@@ -91,7 +91,7 @@ class modAuthProcess {
 
     inner class auth_check : AsyncTask<String, Long, AuthCheckVO>() {
         override fun doInBackground(vararg params: String?): AuthCheckVO {
-            var url = "http://106.10.51.32/ajax_process/web_process"
+            var url = "http://106.10.51.32/process/web_process"
             var type = "auth_check"
             var sess_no = params[0]
 
@@ -125,7 +125,7 @@ class modAuthProcess {
 
     inner class testim : AsyncTask<String, Long, String>() {
         override fun doInBackground(vararg params: String?): String {
-            var url = "http://106.10.51.32/ajax_process/web_process"
+            var url = "http://106.10.51.32/process/web_process"
             var type = "testim"
             var sess_no = params[0]
 
@@ -148,7 +148,7 @@ class modAuthProcess {
 
     inner class logout : AsyncTask<String, Long, String>() {
         override fun doInBackground(vararg params: String?): String {
-            var url = "http://106.10.51.32/ajax_process/web_process"
+            var url = "http://106.10.51.32/process/web_process"
             var type = "logout"
             var token = params[0]
 

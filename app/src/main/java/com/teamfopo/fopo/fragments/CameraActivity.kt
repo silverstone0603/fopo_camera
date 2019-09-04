@@ -132,7 +132,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener 
         // 데이터 가져오기
         Log.d("ARCore","토큰 값 : "+ modDBMS!!.getMember().token)
         GlobalScope.launch {
-            jsonString = protMain!!.getResultString("http://106.10.51.32/ajax_process/location_process", arrayOf("token"), arrayOf(modDBMS!!.getMember().token))
+            jsonString = protMain!!.getResultString("http://106.10.51.32/process/location_process", arrayOf("token"), arrayOf(modDBMS!!.getMember().token))
             Log.d("ARCore","가져온 값 : "+jsonString)
         }
         while(true){

@@ -16,7 +16,7 @@ data class FriendArticleVO(var mem_no: Int)
 class modFriendProcess {
     inner class getFriends : AsyncTask<String, Long, MutableList<FriendsVO>>() {
         override fun doInBackground(vararg params: String?): MutableList<FriendsVO> {
-            val url = "http://106.10.51.32/ajax_process/friend_process"
+            val url = "http://106.10.51.32/process/friend_process"
             //var mem_no = params[0]
             var mem_no = FOPOService.dataMemberVO!!.mem_no
 
@@ -49,7 +49,7 @@ class modFriendProcess {
 
     inner class findUser : AsyncTask<String, Long, UserVO>() {
         override fun doInBackground(vararg params: String?): UserVO {
-            val url = "http://106.10.51.32/ajax_process/friend_process"
+            val url = "http://106.10.51.32/process/friend_process"
             var mem_no = FOPOService.dataMemberVO!!.mem_no
             var mem_id = params[0]
 
@@ -85,7 +85,7 @@ class modFriendProcess {
 
     inner class addFriend : AsyncTask<String, Long, String>() {
         override fun doInBackground(vararg params: String?): String {
-            val url = "http://106.10.51.32/ajax_process/friend_process"
+            val url = "http://106.10.51.32/process/friend_process"
             val mem_no = FOPOService.dataMemberVO!!.mem_no
             val fri_no = params[0]
 
@@ -118,7 +118,7 @@ class modFriendProcess {
 
     inner class removeFriend : AsyncTask<String, Long, String>() {
         override fun doInBackground(vararg params: String?): String {
-            val url = "http://106.10.51.32/ajax_process/friend_process"
+            val url = "http://106.10.51.32/process/friend_process"
             val mem_no = FOPOService.dataMemberVO!!.mem_no
             val fri_no = params[0]
 

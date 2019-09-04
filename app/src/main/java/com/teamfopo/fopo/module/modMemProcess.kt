@@ -19,7 +19,7 @@ class modMemProcess {
             var mem_pw = params[1]
             var mem_nick = params[2]
             var mem_gender = params[3]
-            var url = "http://106.10.51.32/ajax_process/member_process"
+            var url = "http://106.10.51.32/process/member_process"
             val requestBody: RequestBody = FormBody.Builder()
                 .add("type", "signup")
                 .add("mem_id", "$mem_id")
@@ -53,7 +53,7 @@ class modMemProcess {
         override fun doInBackground(vararg params: String?): MyInfoVO {
             val mem_no = params[0]
 
-            var url = "http://106.10.51.32/ajax_process/member_process"
+            var url = "http://106.10.51.32/process/member_process"
             val requestBody: RequestBody = FormBody.Builder()
                 .add("type", "info")
                 .add("mem_no","$mem_no")
@@ -97,7 +97,7 @@ class modMemProcess {
             var mem_phone = params[4]
 
 
-            var url = "http://106.10.51.32/ajax_process/member_process"
+            var url = "http://106.10.51.32/process/member_process"
             val requestBody: RequestBody = FormBody.Builder()
                 .add("type", "modify")
                 .add("mem_no", "$mem_no")

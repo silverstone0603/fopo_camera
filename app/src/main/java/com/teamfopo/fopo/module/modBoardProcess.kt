@@ -19,7 +19,7 @@ class modBoardProcess {
 
         override fun doInBackground(vararg params: String?): Array<modListProcess> {
             var zone_no = params[0]
-            var url = "http://106.10.51.32/ajax_process/board_process"
+            var url = "http://106.10.51.32/process/board_process"
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","lists")
                 .add("zone_no", "$zone_no")
@@ -57,7 +57,7 @@ class modBoardProcess {
 
         override fun doInBackground(vararg params: String?): modViewProcess {
             var idx = params[0]
-            var url = "http://106.10.51.32/ajax_process/board_process"
+            var url = "http://106.10.51.32/process/board_process"
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","view")
                 .add("brd_no","$idx")
@@ -95,7 +95,7 @@ class modBoardProcess {
 
         override fun doInBackground(vararg params: Int?): Bitmap {
             var aa = params[0]
-            var url = "http://106.10.51.32/ajax_process/photo_process"
+            var url = "http://106.10.51.32/process/photo_process"
             val requestBody: RequestBody = FormBody.Builder()
                 .add("photo_type", "load")
                 .add("file_no", "$aa")
@@ -134,7 +134,7 @@ class modBoardProcess {
             var re_comment = params[4]
             var token = FOPOService.dataMemberVO!!.token
 
-            var url = "http://106.10.51.32/ajax_process/reply_process"
+            var url = "http://106.10.51.32/process/reply_process"
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","write")
                 .add("zone_no", "$zone_no")
@@ -170,7 +170,7 @@ class modBoardProcess {
         override fun doInBackground(vararg params: String?): Array<modReplyProcess> {
             var brd_no = params[0]
 
-            var url = "http://106.10.51.32/ajax_process/reply_process"
+            var url = "http://106.10.51.32/process/reply_process"
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","lists")
                 .add("brd_no", "$brd_no")
@@ -211,7 +211,7 @@ class modBoardProcess {
             var re_no = params[0]
             var token = FOPOService.dataMemberVO!!.token
 
-            var url = "http://106.10.51.32/ajax_process/reply_process"
+            var url = "http://106.10.51.32/process/reply_process"
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","deleted")
                 .add("re_no", "$re_no")
@@ -247,7 +247,7 @@ class modBoardProcess {
             var filedata = params[3]
             var token = FOPOService.dataMemberVO!!.token
 
-            var url = "http://106.10.51.32/ajax_process/board_process"
+            var url = "http://106.10.51.32/process/board_process"
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","write")
                 .add("mem_no", "$mem_no")
@@ -283,7 +283,7 @@ class modBoardProcess {
         override fun doInBackground(vararg params: String?): Array<modListProcess> {
             var mem_no = params[0]
 
-            var url = "http://106.10.51.32/ajax_process/board_process"
+            var url = "http://106.10.51.32/process/board_process"
             val requestBody : RequestBody = FormBody.Builder()
                 .add("type","f_lists")
                 .add("mem_no", "$mem_no")
