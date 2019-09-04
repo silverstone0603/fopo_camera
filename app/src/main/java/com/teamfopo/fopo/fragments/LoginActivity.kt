@@ -152,12 +152,10 @@ class LoginActivity : Fragment(), View.OnClickListener {
                     Toast.makeText(viewLogin!!.context, "요청한 작업을 처리 중이니 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
                     Log.d("AuthActivity", "ID : "+txtFindID.text+", Email : "+txtFindEmail.text)
                 }
-                // (viewFindPassword!!.parent as ViewGroup).removeAllViewsInLayout()
                 dialog.cancel()
             }
             .setNegativeButton("취소"){dialog, which ->
                 Log.d("AuthActivity","비밀번호 찾기 취소하셨습니다.")
-                // (viewFindPassword!!.parent as ViewGroup).removeAllViewsInLayout()
                 dialog.cancel()
             }
             .setOnCancelListener { dialog ->
