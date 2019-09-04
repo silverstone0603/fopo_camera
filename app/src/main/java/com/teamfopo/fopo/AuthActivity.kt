@@ -7,8 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.teamfopo.fopo.fragments.LoginActivity
-import com.teamfopo.fopo.fragments.SignUpActivity
+import com.teamfopo.fopo.fragments.*
 import com.teamfopo.fopo.module.modKeyboardUtils
 import kotlinx.android.synthetic.main.activity_auth.*
 

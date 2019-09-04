@@ -14,9 +14,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.teamfopo.fopo.module.FOPOService
-import com.teamfopo.fopo.module.modBoardProcess
-import com.teamfopo.fopo.module.modReplyProcess
-import com.teamfopo.fopo.module.modViewProcess
+import com.teamfopo.fopo.module.*
 import kotlinx.android.synthetic.main.content_view.*
 
 class ViewActivity : AppCompatActivity() {

@@ -19,9 +19,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
-import com.teamfopo.fopo.module.FOPOService
-import com.teamfopo.fopo.module.modBoardProcess
-import com.teamfopo.fopo.module.modImageResizeUtils
+import com.teamfopo.fopo.module.*
 import kotlinx.android.synthetic.main.activity_write.*
 import java.io.ByteArrayOutputStream
 import java.io.File

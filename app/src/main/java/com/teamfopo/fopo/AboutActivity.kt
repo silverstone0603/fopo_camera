@@ -8,18 +8,12 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
-import com.teamfopo.fopo.fragments.LoginActivity
-import com.teamfopo.fopo.fragments.SignUpActivity
 import com.teamfopo.fopo.module.modKeyboardUtils
 import kotlinx.android.synthetic.main.activity_auth.*
 
 class AboutActivity : AppCompatActivity(), View.OnClickListener{
 
     private lateinit var modKeyboardUtils: modKeyboardUtils
-
-    private var nowFragment: Int = 0
-    private val actLogin = LoginActivity()
-    private val actSignUp = SignUpActivity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

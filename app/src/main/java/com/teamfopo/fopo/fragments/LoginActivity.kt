@@ -1,11 +1,14 @@
 package com.teamfopo.fopo.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.HorizontalScrollView
 import android.widget.TextView
 import android.widget.Toast
 import com.teamfopo.fopo.AuthActivity
@@ -13,6 +16,8 @@ import com.teamfopo.fopo.R
 import com.teamfopo.fopo.module.modAuthProcess
 import com.teamfopo.fopo.module.modDBMS
 import com.teamfopo.fopo.module.modSysData
+import kotlinx.android.synthetic.main.activity_passport.*
+import kotlinx.android.synthetic.main.content_camera.*
 import kotlinx.android.synthetic.main.content_login.*
 import kotlinx.android.synthetic.main.content_signup.*
 import java.text.SimpleDateFormat
@@ -21,7 +26,11 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+
+
 class LoginActivity : Fragment(), View.OnClickListener {
+    private var viewLogin: View ?= null
+    private var viewFindPassword: View ?= null
 
     companion object {
         fun newInstance(): Fragment {
@@ -38,22 +47,27 @@ class LoginActivity : Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         // Inflate the layout for this fragment
-        var viewRoot: View = inflater!!.inflate(R.layout.content_login, container, false)
-        var btnLogin: Button = viewRoot.findViewById(R.id.btnLogin) as Button
-        var txtRegister: TextView = viewRoot.findViewById(R.id.txtRegister) as TextView
+        viewLogin = inflater!!.inflate(R.layout.content_login, container, false)
+        viewFindPassword = inflater!!.inflate(R.layout.dialog_findpassword, container, false)
 
-        btnLogin.setOnClickListener(this)
-        txtRegister.setOnClickListener(this)
+        initFragment()
 
-        //initFragment()
-
-        return viewRoot
+        return viewLogin
     }
 
-    //fun initFragment(){  }
+    fun initFragment(){
+        var btnLogin: Button = viewLogin!!.findViewById(R.id.btnLogin) as Button
+        var txtFindPassword: TextView = viewLogin!!.findViewById(R.id.txtFindPassword) as TextView
+        var txtRegister: TextView = viewLogin!!.findViewById(R.id.txtRegister) as TextView
+
+        btnLogin.setOnClickListener(this)
+        txtFindPassword.setOnClickListener(this)
+        txtRegister.setOnClickListener(this)
+    }
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            // 로그인 버튼
             R.id.btnLogin -> {
                 var mem_id = editUserID.text.toString()
                 var mem_pw = editPassword.text.toString()
@@ -100,17 +114,47 @@ class LoginActivity : Fragment(), View.OnClickListener {
                         Toast.makeText(context, "아이디 또는 비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
-                        Toast.makeText(context, "알 수 없는 오류가 발생 했습니다. FOPO팀에게 문의해주세요.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "알 수 없는 오류가 발생 했습니다. 고객 지원센터에 문의해주세요.", Toast.LENGTH_SHORT).show()
                     }
                 } //when 끝부분
-            } //R.id.loginButton 끝부분
-
-
-            //회원가입 버튼
+            }
+            // 비밀번호 찾기 버튼
+            R.id.txtFindPassword -> {
+                setNewPassword()
+            }
+            // 회원가입 버튼
             R.id.txtRegister -> {
                 (activity as AuthActivity).setScreen(1)
             }
 
-        } //when(v?.id) 끝부분
-    } //onClick끝부분
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
+    fun setNewPassword(){
+        var alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(viewLogin!!.context)
+
+        // AlertDialog 셋팅
+        alertDialogBuilder
+            .setView(viewFindPassword!!)
+            .setTitle("비밀번호 찾기")
+            .setCancelable(false)
+            .setPositiveButton("확인"){dialog, which ->
+                Log.d("AuthActivity","임시 비밀번호로 변경합니다.")
+                (viewFindPassword!!.parent as ViewGroup).removeAllViewsInLayout()
+                dialog.cancel()
+            }
+            .setNegativeButton("취소"){dialog, which ->
+                Log.d("AuthActivity","비밀번호 찾기 취소하셨습니다.")
+                (viewFindPassword!!.parent as ViewGroup).removeAllViewsInLayout()
+                dialog.cancel()
+            }
+
+        // 다이얼로그 생성 및 표시
+        var alertDialog: AlertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
 }
