@@ -26,16 +26,30 @@
         <FrameLayout
                 android:id="@+id/fopo_camera_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-        />
-
-        <ImageView
-                android:id="@+id/fraPoseSet"
-                android:scaleType="fitXY"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+        </FrameLayout>
 
     </RelativeLayout>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            <ImageView
+                    android:id="@+id/fraPoseSet"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="matrix"/>
+        </FrameLayout>
+
+    </LinearLayout>
 
     <LinearLayout
             android:orientation="horizontal"
@@ -110,7 +124,7 @@
                 android:layout_height="65dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="0dp"
-                android:background="@drawable/ic_btn_capture"
+                android:background="@drawable/img_camera_shooting"
                 android:layout_gravity="center"/>
         <ImageButton
                 android:id="@+id/btnPose"
@@ -131,25 +145,25 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:gravity="center"
-        android:layout_marginBottom="95dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:gravity="center"
+            android:layout_marginBottom="95dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
         <include android:id="@+id/vFilters"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            layout="@layout/layout_filter_lists"
-            />
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 layout="@layout/layout_filter_lists"
+        />
 
         <include android:id="@+id/vPose"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            layout="@layout/layout_pose_lists"
-            />
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 layout="@layout/layout_pose_lists"
+        />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
