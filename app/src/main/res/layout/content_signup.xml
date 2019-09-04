@@ -62,7 +62,7 @@
             android:layout_height="45dp"
             android:id="@+id/email"
             android:layout_centerHorizontal="true"
-            android:hint="이메일"
+            android:hint="이메일 주소"
             android:layout_below="@+id/nickName"
             android:background="@drawable/custome_edit_text"
             android:layout_marginTop="8dp"

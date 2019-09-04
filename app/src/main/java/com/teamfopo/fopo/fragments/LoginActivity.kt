@@ -7,10 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.HorizontalScrollView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.teamfopo.fopo.AuthActivity
 import com.teamfopo.fopo.R
 import com.teamfopo.fopo.module.modAuthProcess
@@ -57,12 +54,12 @@ class LoginActivity : Fragment(), View.OnClickListener {
 
     fun initFragment(){
         var btnLogin: Button = viewLogin!!.findViewById(R.id.btnLogin) as Button
-        var txtFindPassword: TextView = viewLogin!!.findViewById(R.id.txtFindPassword) as TextView
-        var txtRegister: TextView = viewLogin!!.findViewById(R.id.txtRegister) as TextView
+        var btnFindPassword: TextView = viewLogin!!.findViewById(R.id.txtFindPassword) as TextView
+        var btnRegister: TextView = viewLogin!!.findViewById(R.id.txtRegister) as TextView
 
         btnLogin.setOnClickListener(this)
-        txtFindPassword.setOnClickListener(this)
-        txtRegister.setOnClickListener(this)
+        btnFindPassword.setOnClickListener(this)
+        btnRegister.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -141,16 +138,31 @@ class LoginActivity : Fragment(), View.OnClickListener {
         alertDialogBuilder
             .setView(viewFindPassword!!)
             .setTitle("비밀번호 찾기")
-            .setCancelable(false)
+            .setCancelable(true)
             .setPositiveButton("확인"){dialog, which ->
                 Log.d("AuthActivity","임시 비밀번호로 변경합니다.")
-                (viewFindPassword!!.parent as ViewGroup).removeAllViewsInLayout()
+
+                // 입력된 정보 가져오기
+                var txtFindID: EditText = viewFindPassword!!.findViewById(R.id.txtDialogFindID) as EditText
+                var txtFindEmail: EditText = viewFindPassword!!.findViewById(R.id.txtDialogFindEmail) as EditText
+
+                if(txtFindID.text.isEmpty() || txtFindEmail.text.isEmpty()){
+                    Toast.makeText(viewLogin!!.context, "입력되지 않은 정보가 있습니다. 다시 한번 확인해주세요.", Toast.LENGTH_LONG).show()
+                }else{
+                    Toast.makeText(viewLogin!!.context, "요청한 작업을 처리 중이니 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
+                    Log.d("AuthActivity", "ID : "+txtFindID.text+", Email : "+txtFindEmail.text)
+                }
+                // (viewFindPassword!!.parent as ViewGroup).removeAllViewsInLayout()
                 dialog.cancel()
             }
             .setNegativeButton("취소"){dialog, which ->
                 Log.d("AuthActivity","비밀번호 찾기 취소하셨습니다.")
-                (viewFindPassword!!.parent as ViewGroup).removeAllViewsInLayout()
+                // (viewFindPassword!!.parent as ViewGroup).removeAllViewsInLayout()
                 dialog.cancel()
+            }
+            .setOnCancelListener { dialog ->
+                Log.d("AuthActivity","비밀번호 찾기 취소하셨습니다. (CancelListener)")
+                (viewFindPassword!!.parent as ViewGroup).removeAllViewsInLayout()
             }
 
         // 다이얼로그 생성 및 표시

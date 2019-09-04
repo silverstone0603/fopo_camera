@@ -34,8 +34,8 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
     }
 
     override fun onDestroy() {
-        modKeyboardUtils.detachKeyboardListeners()
         super.onDestroy()
+        modKeyboardUtils.detachKeyboardListeners()
     }
 
     // 뒤로가기 버튼 입력시간이 담길 long 객체
@@ -53,10 +53,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
     override fun onBackPressed() {
         if (nowFragment != 0) {
             setScreen(0)
-            Toast.makeText(
-                this,
-                "로그인 화면으로 되돌아갑니다.", Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(this, "로그인 화면으로 되돌아갑니다.", Toast.LENGTH_LONG).show()
         } else {
             // super.onBackPressed()
             // 다른 Fragment 에서 리스너를 설정했을 때 처리됩니다.
@@ -97,7 +94,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
         super.onWindowFocusChanged(hasFocus)
         //
         if (hasFocus) {
-            showSystemUI()
+            //showSystemUI()
         }
     }
 
@@ -129,6 +126,7 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
             .addToBackStack(null)
             // .disallowAddToBackStack()
             .commit()
+
         println("현재 다음 프레그먼트가 선택 되어 있습니다 : $nowFragment")
     }
 
