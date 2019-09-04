@@ -74,11 +74,11 @@ class SignUpActivity : Fragment(), View.OnClickListener {
 
                 when (memInfo) {
                     "true" -> {
-                        Toast.makeText(context, "환영합니다! 회원가입 성공~", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "FOPO 계정이 생성되었습니다.", Toast.LENGTH_SHORT).show()
                         (activity as AuthActivity).setScreen(0)
                     }
                     "false" -> {
-                        Toast.makeText(context, "회원가입 실패! FOPO TEAM에게 문의하세요", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "계정 생성 실패! 고객지원 센터에 문의하세요", Toast.LENGTH_SHORT).show()
                     }
                     "exist_id" -> {
                         Toast.makeText(context, "중복된 ID 입니다.", Toast.LENGTH_SHORT).show()
@@ -87,7 +87,7 @@ class SignUpActivity : Fragment(), View.OnClickListener {
                         Toast.makeText(context, "중복된 닉네임 입니다.", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
-                        Toast.makeText(context, "알수없는 오류! FOPO TEAM에게 문의하세요", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "알수없는 오류! 고객지원 센터에 문의하세요", Toast.LENGTH_SHORT).show()
                     }
                 } //when 끝부분
 
