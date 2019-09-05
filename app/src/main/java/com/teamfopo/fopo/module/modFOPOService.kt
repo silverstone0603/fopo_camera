@@ -99,7 +99,7 @@ class AuthThread: Thread() {
                     var dbms = modDBMS(Context_FOPOService!!.applicationContext)
                     dbms.clearMember()
 
-                    modNotificator.showNotification(false, true, "FOPO 알림", "자동 로그아웃 되었습니다.",0, Context_FOPOService!!.applicationContext, null)
+                    modNotificator.showNotification(false, true, "FOPO 알림", "자동 로그아웃 되었습니다.",1, Context_FOPOService!!.applicationContext, null)
                     android.os.Process.killProcess(android.os.Process.myPid())
                 } else {
                     var webLoginAuth = modAuthProcess().web_auth()
@@ -115,7 +115,7 @@ class AuthThread: Thread() {
                         notificationIntent.putExtra("sess_no", tempInfo.sess_no)
                         notificationIntent.putExtra("sess_verify", tempInfo.sess_verify)
 
-                        modNotificator.showNotification(false, true, "FOPO 로그인 인증", "다른 기기에서 로그인을 요청하였습니다.",0, Context_FOPOService!!.applicationContext, notificationIntent)
+                        modNotificator.showNotification(true, true, "FOPO 로그인 인증", "다른 기기에서 로그인을 요청하였습니다.",1, Context_FOPOService!!.applicationContext, notificationIntent)
                     }
                 }
             } catch (e: InterruptedException) {

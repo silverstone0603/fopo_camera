@@ -43,7 +43,6 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
             zone_no = arguments!!.getString("zone_no")
         }
 
-        Log.d("TESTTEST", "$zone_no")
         // Inflate the layout for this fragment
         viewRoot = inflater.inflate(R.layout.content_fopozone, container, false)
 

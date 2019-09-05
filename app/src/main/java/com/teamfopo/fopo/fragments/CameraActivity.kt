@@ -776,7 +776,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
     override fun onDestroy() {
         super.onDestroy()
         arSceneView!!.destroy()
-        if (mCamera != null) {
+        if (mCamera != null) { 
             mCamera!!.release()
             mCamera = null
         }
