@@ -10,9 +10,11 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.*;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.ArraySet;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -33,6 +35,14 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
 
     private Camera mCamera;
     private Camera.CameraInfo mCameraInfo;
+
+    // 사진 촬영시 EXIF 태그 정보
+    private Boolean blEXIF = false;
+    private String strEXIF_Model = "Android Device";
+    private String strEXIF_Software = "FOPO by FOPO TEAM";
+    private String strEXIF_Orientation;
+    private Double strEXIF_Latitude;
+    private Double strEXIF_Longitude;
 
     private int mDisplayOrientation;
 
@@ -232,6 +242,44 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
         }
     }
 
+
+    /**
+     *  이미지에 EXIF 정보 추가
+     */
+    public String[] getEXIFInfo(String filePath) throws IOException {
+        ExifInterface exif = new ExifInterface(filePath);
+        String[] arrDatas = {
+                exif.getAttribute(ExifInterface.TAG_MODEL),
+                exif.getAttribute(ExifInterface.TAG_SOFTWARE),
+                exif.getAttribute(ExifInterface.TAG_ORIENTATION),
+                exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE),
+                exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)
+        };
+        return arrDatas;
+    }
+
+    /**
+     *  클래스에 EXIF 정보 추가
+     */
+    public void setEXIF(Double latitude, Double longitude, String orientation) {
+        this.strEXIF_Latitude = latitude;
+        this.strEXIF_Longitude = longitude;
+        this.strEXIF_Orientation = orientation;
+    }
+
+    /**
+     *  이미지에 EXIF 정보 추가
+     */
+    public void setEXIFInfo(String filePath, Double latitude, Double longitude, String orientation) throws IOException {
+        ExifInterface exif = new ExifInterface(filePath);
+        exif.setAttribute(ExifInterface.TAG_MODEL, strEXIF_Model);
+        exif.setAttribute(ExifInterface.TAG_SOFTWARE, strEXIF_Software);
+        exif.setAttribute(ExifInterface.TAG_ORIENTATION, orientation);
+        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, latitude.toString());
+        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, longitude.toString());
+        exif.saveAttributes();
+    }
+
     /**
      *  이미지 캡처 시 배경 선택
      */
@@ -354,6 +402,11 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
 
                 Log.d(TAG, "사진 촬영(JPEG) - Bytes: " + data.length + " to "
                         + outputFile.getAbsolutePath());
+
+
+                // EXIF 정보 추가
+                setEXIFInfo(outputFile.getPath(), strEXIF_Latitude, strEXIF_Longitude, strEXIF_Orientation);
+                Log.d(TAG, "EXIF 수정할 사진 경로 :"+outputFile.getPath());
 
                 mCamera.startPreview();
 

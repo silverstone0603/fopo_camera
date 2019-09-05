@@ -266,7 +266,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
                                             var locationMarker: LocationMarker = LocationMarker(
                                                 longitude,
                                                 latitude,
-                                                getMarker(viewCamera!!.context, zone_no, title, address, time)
+                                                getMarker(viewCamera!!.context, latitude, longitude, zone_no, title, address, time)
                                             )
 
                                             // 3D marker emter 반경 설정
@@ -411,17 +411,17 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
         }
     }
 
-    private fun getMarker(viewRoot: Context, zone_no: Int, title: String, address: String, time: String): Node{
+    private fun getMarker(viewRoot: Context, latitude: Double, longtitude: Double, zone_no: Int, title: String, address: String, time: String): Node{
         var base: Node = Node()
         base.renderable = markerRenderable
         var c: Context = viewRoot
         base.setOnTapListener{v, event ->
-            preview(viewRoot, zone_no, title, address, time)
+            preview(viewRoot, latitude, longtitude, zone_no, title, address, time)
         }
         return base
     }
 
-    fun preview(viewRoot: Context, zone_no: Int, title: String, address: String, time: String){
+    fun preview(viewRoot: Context, latitude: Double, longtitude: Double, zone_no: Int, title: String, address: String, time: String){
         var alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(viewRoot)
 
         // 제목 생성
@@ -444,6 +444,8 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
                 horizontalScrollView2 = viewCamera!!.findViewById(R.id.hscFilterLayout) as HorizontalScrollView
                 photoView = viewCamera!!.findViewById(R.id.fraPoseSet) as ImageView
                 initButton()
+
+                myCameraPreview!!.setEXIF(latitude, longtitude, "")
 
                 dialog.cancel()
             }
