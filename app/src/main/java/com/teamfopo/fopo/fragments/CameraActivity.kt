@@ -2,12 +2,15 @@ package com.teamfopo.fopo.fragments
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.ComponentName
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.graphics.Matrix
 import android.hardware.Camera
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.util.Log
@@ -470,6 +473,25 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
         loadingMessageSnackbar = null
     }
 
+    fun callCamera() {
+        val i = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        try {
+            val pm = viewCamera!!.context.getPackageManager()
+
+            val mInfo = pm.resolveActivity(i, 0)
+
+            val intent = Intent()
+            intent.component = ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name)
+            intent.action = Intent.ACTION_MAIN
+            intent.addCategory(Intent.CATEGORY_LAUNCHER)
+
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.i("TAG", "Unable to launch camera: $e")
+        }
+
+    }
+
     private fun getDistanceView(): Node{
         var base: Node = Node()
         base.renderable = distanceRenderable
@@ -513,6 +535,10 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
                 horizontalScrollView1!!.visibility = View.VISIBLE
                 horizontalScrollView2!!.visibility = View.GONE
             }
+        }
+
+        btnGallery.setOnClickListener {
+            callCamera()
         }
 
         pose1.setOnClickListener {
