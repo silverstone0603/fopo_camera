@@ -92,10 +92,11 @@ class AuthActivity : AppCompatActivity(), View.OnClickListener{
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        //
+        /*
         if (hasFocus) {
-            //showSystemUI()
+            showSystemUI()
         }
+        */
     }
 
     fun showSystemUI() {
