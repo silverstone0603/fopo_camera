@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.teamfopo.fopo.*
 import com.teamfopo.fopo.MainActivity.Companion.mMenu
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class FopomapActivity : Fragment(), View.OnClickListener {
@@ -36,14 +38,19 @@ class FopomapActivity : Fragment(), View.OnClickListener {
 
         var navBottomView: BottomNavigationView = viewRoot.findViewById(R.id.bottom_navigation)
         navBottomView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        /*
-        var btnMap: Button = viewRoot.findViewById(R.id.btnMap) as Button
-        btnMap.setOnClickListener(this)
-        var btnWrite: Button = viewRoot.findViewById(R.id.btnWrite) as Button
-        btnWrite.setOnClickListener(this)
-        var btnFriend: Button = viewRoot.findViewById(R.id.btnFriend) as Button
-        btnFriend.setOnClickListener(this)*/
 
+        if (arguments != null) {
+            var movement = arguments!!.getString("movement")
+            var zone_no = arguments!!.getString("zone_no")
+
+            Log.d("TESTTEST", "$movement")
+
+            if (movement.equals("map")) {
+                setChildFragment(MapActivity())
+            } else if ( movement.equals("fopozone") ) {
+                setChildFragment(FopozoneActivity(), "$zone_no")
+            }
+        }
 
     initFragment()
 
@@ -55,8 +62,7 @@ class FopomapActivity : Fragment(), View.OnClickListener {
             AR Fragment 생성 부분
         */
 
-        setChildFragment(MapActivity())
-
+        //setChildFragment(MapActivity())
     }
 
     override fun onClick(v: View?) {
@@ -106,9 +112,33 @@ class FopomapActivity : Fragment(), View.OnClickListener {
         val childFt = childFragmentManager.beginTransaction()
 
         if (!child.isAdded) {
-            childFt.replace(R.id.fopomap_container, child)
+           childFt.replace(R.id.fopomap_container, child)
             childFt.addToBackStack(null)
             childFt.commit()
         }
+    }
+
+    fun setChildFragment(child: Fragment, zone_no: String) {
+        var bundle = Bundle()
+        bundle.putString("zone_no", "$zone_no")
+        child.arguments = bundle
+
+        setChildFragment(child)
+    }
+
+    fun testtest(zone_no: String) {
+        (activity as MainActivity).nav_view.setCheckedItem(R.id.nav_fopomap)
+        (activity as MainActivity).supportActionBar?.title = "포포맵"
+        (activity as MainActivity).setFragment(FopomapActivity())
+
+        var fragment: Fragment = FopozoneActivity()
+        var bundle = Bundle()
+        bundle.putString("zone_no", "$zone_no")
+        fragment.arguments = bundle
+        var fragmentManager = fragmentManager
+        var fragmentTransaction = fragmentManager!!.beginTransaction()
+        fragmentTransaction.replace(R.id.fopomap_container, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 }

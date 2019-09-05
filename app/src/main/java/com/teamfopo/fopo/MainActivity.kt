@@ -185,7 +185,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 supportActionBar?.title = "포포맵"
                 makeText(this@MainActivity, "포포맵을 선택했습니다.", LENGTH_SHORT).show()
 
-                setFragment(actFopomap)
+                setFragment(actFopomap, "map")
+
+                //FopomapActivity().setChildFragment(MapActivity())
                 // setFragment(actFopozone)
 
             }
@@ -211,12 +213,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //현재 보여지고 있는 프래그먼트를 가져옵니다.
         val mgrFragment = supportFragmentManager
         val getTopFragment = mgrFragment.findFragmentById(R.id.fraMain)
+
         mgrFragment.beginTransaction()
             .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
             .replace(R.id.fraMain, fragment)
             .addToBackStack(null)
             .commit()
         println("현재 다음 프레그먼트가 선택 되어 있습니다 : "+mgrFragment.toString())
+    }
+
+    fun setFragment(fragment: Fragment, movement: String = "", zone_no: String = "") {
+        var bundle = Bundle()
+        bundle.putString("movement", "$movement")
+        bundle.putString("zone_no", "$zone_no")
+        fragment.arguments = bundle
+
+        setFragment(fragment)
     }
 
 

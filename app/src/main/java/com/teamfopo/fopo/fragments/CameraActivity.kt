@@ -32,11 +32,13 @@ import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.ViewRenderable
+import com.teamfopo.fopo.MainActivity
 import com.teamfopo.fopo.R
 import com.teamfopo.fopo.module.modCameraProcess
 import com.teamfopo.fopo.module.modDBMS
 import com.teamfopo.fopo.module.modProtocol
 import com.teamfopo.fopo.nodes.PointCloudNode
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_camera.*
 import kotlinx.android.synthetic.main.layout_filter_lists.*
 import kotlinx.android.synthetic.main.layout_pose_lists.*
@@ -449,6 +451,11 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
             }
             .setNegativeButton("포포존 바로가기"){dialog, which ->
                 Log.d("ARCore","포포존 바로가기 선택하셨습니다.")
+
+                (activity as MainActivity).nav_view.setCheckedItem(R.id.nav_fopomap)
+                (activity as MainActivity).supportActionBar?.title = "포포맵"
+                (activity as MainActivity).setFragment(MainActivity().actFopomap, "fopozone")
+
                 dialog.cancel()
             }
 

@@ -17,7 +17,7 @@ class modAuthProcess {
             super.onPreExecute()
         }
 
-        override fun doInBackground(vararg params: String?): modSessionToken {
+            override fun doInBackground(vararg params: String?): modSessionToken {
             var mem_id = params[0]
             var mem_pw = params[1]
             var url = "http://106.10.51.32/process/auth_process"

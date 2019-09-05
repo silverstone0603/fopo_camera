@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,8 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
         if (arguments != null) {
             zone_no = arguments!!.getString("zone_no")
         }
+
+        Log.d("TESTTEST", "$zone_no")
         // Inflate the layout for this fragment
         viewRoot = inflater.inflate(R.layout.content_fopozone, container, false)
 
