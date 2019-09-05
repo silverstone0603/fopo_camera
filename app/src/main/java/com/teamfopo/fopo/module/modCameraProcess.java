@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.*;
+import android.location.Location;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -244,18 +245,23 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
 
 
     /**
-     *  이미지에 EXIF 정보 추가
+     *  이미지의 EXIF 정보 가져오기
      */
-    public String[] getEXIFInfo(String filePath) throws IOException {
-        ExifInterface exif = new ExifInterface(filePath);
-        String[] arrDatas = {
-                exif.getAttribute(ExifInterface.TAG_MODEL),
-                exif.getAttribute(ExifInterface.TAG_SOFTWARE),
-                exif.getAttribute(ExifInterface.TAG_ORIENTATION),
-                exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE),
-                exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)
-        };
-        return arrDatas;
+    public String[] getEXIFInfo(String filePath){
+        try {
+            Log.d(TAG, "EXIF 정보를 가져옵니다.");
+            ExifInterface exif = new ExifInterface(filePath);
+            String[] arrDatas = {
+                    exif.getAttribute(ExifInterface.TAG_MODEL),
+                    exif.getAttribute(ExifInterface.TAG_SOFTWARE),
+                    exif.getAttribute(ExifInterface.TAG_ORIENTATION),
+                    exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE),
+                    exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)
+            };
+            return arrDatas;
+        }catch(IOException e){
+            return null;
+        }
     }
 
     /**
@@ -270,15 +276,100 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
     /**
      *  이미지에 EXIF 정보 추가
      */
-    public void setEXIFInfo(String filePath, Double latitude, Double longitude, String orientation) throws IOException {
-        ExifInterface exif = new ExifInterface(filePath);
-        exif.setAttribute(ExifInterface.TAG_MODEL, strEXIF_Model);
-        exif.setAttribute(ExifInterface.TAG_SOFTWARE, strEXIF_Software);
-        exif.setAttribute(ExifInterface.TAG_ORIENTATION, orientation);
-        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, latitude.toString());
-        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, longitude.toString());
-        exif.saveAttributes();
+    public void setEXIFInfo(String filePath, Double latitude, Double longitude, String orientation){
+        if(!filePath.isEmpty() || filePath.equals("")) {
+            Log.d(TAG, "EXIF 정보를 추가합니다.");
+            String strlatitude = convertTagGPSFormat(latitude); // 위.경도의 실제값 그대로 Exif 정보에 쓸 수 없다. 규격이 있다. 때문에 규격대로 GPS정보를 인코딩 하는 과정이 필요한다.
+            String strlongtude = convertTagGPSFormat(longitude); //mCurLocation : Location 인스턴스 -> 37.45345과 같은 실제값을 넣어주어도 된다.
+
+            try {
+                Log.d(TAG, "EXIF 개체를 생성하여 정보를 추가합니다.");
+                ExifInterface exif = new ExifInterface(filePath);
+                exif.setAttribute(ExifInterface.TAG_MODEL, strEXIF_Model);
+                exif.setAttribute(ExifInterface.TAG_SOFTWARE, strEXIF_Software);
+                exif.setAttribute(ExifInterface.TAG_ORIENTATION, orientation);
+                exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, strlatitude);
+                exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, strlongtude);
+                exif.saveAttributes();
+                Log.d(TAG, "EXIF 정보를 추가를 완료했습니다.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
+    /**
+     *  이미지에 EXIF 정보 복사
+     */
+    public void copyExifInfo(Uri desUri, Uri srcUri){ // desUri -> Exif 값이 존재하는 이미지의 전체 경로, srcUri -> Exif 값이 없는 이미지의 전체 경로
+        if(desUri != null && srcUri != null){
+            try {
+                ExifInterface srcExif = new ExifInterface(srcUri.getPath()); // Exif 값이 존재하는 이미지로 ExifInterface 인스턴스 생성
+                ExifInterface desExif = new ExifInterface(desUri.getPath()); // Exif 값이 없는 이미지로 ExifInterface 인스턴스 생성
+
+                if(srcExif != null && desExif != null) {
+                    desExif.setAttribute(ExifInterface.TAG_DATETIME, srcExif.getAttribute(ExifInterface.TAG_DATETIME)); // 시간 기록
+                    desExif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, srcExif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)); // GPS 정보 기록
+                    desExif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, srcExif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE));
+                    desExif.saveAttributes(); // 저장
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     *  Double로된 값을 GPS 포맷으로 변환
+     */
+    public String convertTagGPSFormat(double coordinate) // 인코딩하는 과정으로 GPS 정보를 매개변수로 받음
+    {
+        String strlatitude = Location.convert(coordinate, Location.FORMAT_SECONDS); // 인코딩하여 포멧을 갖춘다.
+        String[] arrlatitude = strlatitude.split(":");
+        StringBuilder sb = new StringBuilder(); // 갖춘 포멧을 분리하여 새로운 포멧을 적용한다.
+        sb.append(arrlatitude[0]);
+        sb.append("/1,");
+        sb.append(arrlatitude[1]);
+        sb.append("/1,");
+        sb.append(arrlatitude[2]);
+        sb.append("/1");
+//        sb.append("/60,");
+//        sb.append(arrlatitude[2]);
+//        sb.append("/3600");
+
+        return sb.toString();
+    }
+
+    /**
+     *  EXIF 값을 디코딩
+     */
+    private Float convertToDegree(String stringDMS){
+        Float result = null;
+        String[] DMS = stringDMS.split(",", 3);
+
+        String[] stringD = DMS[0].split("/", 2);
+        Double D0 = new Double(stringD[0]);
+        Double D1 = new Double(stringD[1]);
+        Double FloatD = D0/D1;
+
+        String[] stringM = DMS[1].split("/", 2);
+        Double M0 = new Double(stringM[0]);
+        Double M1 = new Double(stringM[1]);
+        Double FloatM = M0/M1;
+
+        String[] stringS = DMS[2].split("/", 2);
+        Double S0 = new Double(stringS[0]);
+        Double S1 = new Double(stringS[1]);
+        Double FloatS = S0/S1;
+
+        result = new Float(FloatD + (FloatM/60) + (FloatS/3600));
+
+        return result;
+    };
 
     /**
      *  이미지 캡처 시 배경 선택
