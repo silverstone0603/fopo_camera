@@ -148,11 +148,14 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
     public void surfaceDestroyed(SurfaceHolder holder) {
         Log.d(TAG, "surfaceDestroyed");
         // empty. Take care of releasing the Camera preview in your activity.
-
-        if (mCamera != null) {
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
+        try{
+            if(mCamera != null){
+                mCamera.stopPreview();
+                mCamera.release();
+                mCamera = null;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 
