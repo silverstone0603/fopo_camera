@@ -763,13 +763,16 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
 
     override fun onPause() {
         super.onPause()
+        try{
+            if (locationScene != null) locationScene!!.pause()
+            arSceneView!!.pause()
 
-        if(locationScene != null) locationScene!!.pause()
-        arSceneView!!.pause()
-
-        if (mCamera != null) {
-            mCamera!!.stopPreview()
-            mCamera!!.release()
+            if (mCamera != null) {
+                mCamera!!.stopPreview()
+                mCamera!!.release()
+            }
+        }catch(e: Exception){
+            Log.d("CameraActivity","onPause 작업 중 오류가 발생 했습니다 : "+e.printStackTrace())
         }
     }
 

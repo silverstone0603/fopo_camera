@@ -36,7 +36,7 @@
             android:usesCleartextTraffic="true">
         <activity android:name=".MyInfoActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
         </activity>
         <activity
                 android:name=".FriendInformActivity"
@@ -64,7 +64,8 @@
 
         <activity
                 android:name=".SplashActivity"
-                android:theme="@style/SplashTheme">
+                android:theme="@style/SplashTheme"
+                android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -76,31 +77,36 @@
                 android:enabled="true"
                 android:exported="true"
                 android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
         </activity>
         <activity
                 android:name=".AuthActivity"
                 android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
         </activity>
         <activity
                 android:name=".ViewActivity"
                 android:theme="@style/AppTheme.NoActionBar"
-                android:windowSoftInputMode="stateAlwaysHidden">
+                android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
         </activity>
         <activity
                 android:name=".WriteActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
         </activity>
         <activity
                 android:name=".AboutActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
         </activity>
         <activity
                 android:name=".PassportActivity"
                 android:enabled="true"
                 android:exported="true"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
         </activity>
 
         <provider
