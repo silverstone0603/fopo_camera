@@ -43,8 +43,6 @@ class FopomapActivity : Fragment(), View.OnClickListener {
             var movement = arguments!!.getString("movement")
             var zone_no = arguments!!.getString("zone_no")
 
-            Log.d("TESTTEST", "$movement")
-
             if (movement.equals("map")) {
                 setChildFragment(MapActivity())
             } else if ( movement.equals("fopozone") ) {

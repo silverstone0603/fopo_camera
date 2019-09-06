@@ -250,9 +250,9 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
     /**
      *  이미지의 EXIF 정보 가져오기
      */
-    public String[] getEXIFInfo(String filePath){
+    static public String[] getEXIFInfo(String filePath){
         try {
-            Log.d(TAG, "EXIF 정보를 가져옵니다.");
+            Log.d("TESTTEST", "EXIF 정보를 가져옵니다.");
             ExifInterface exif = new ExifInterface(filePath);
             String[] arrDatas = {
                     exif.getAttribute(ExifInterface.TAG_MODEL),
@@ -350,7 +350,7 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
     /**
      *  EXIF 값을 디코딩
      */
-    private Float convertToDegree(String stringDMS){
+    static public Float convertToDegree(String stringDMS, int Degree){
         Float result = null;
         String[] DMS = stringDMS.split(",", 3);
 
@@ -370,7 +370,8 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
         Double FloatS = S0/S1;
 
         result = new Float(FloatD + (FloatM/60) + (FloatS/3600));
-
+        result = Float.parseFloat(String.format("%." + Degree + "f", result));
+        //double d = Double.parseDouble(String.format("%.3f", 1.4455555));
         return result;
     };
 

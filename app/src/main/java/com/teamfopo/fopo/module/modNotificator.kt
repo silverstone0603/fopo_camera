@@ -33,8 +33,8 @@ class modNotificator {
                              notificationIntent: Intent? = Intent(MainActivity.mContext, MainActivity::class.java),
                              SmallIcon: Int = com.teamfopo.fopo.R.drawable.ic_fopo_logo,
                              LargeIcon: Int = com.teamfopo.fopo.R.drawable.img_logo) {
-            val channelId = "channel"
-            val channelName = "Channel Name"
+            val channelId = "fopo_service"
+            val channelName = "Push 알림"
 
             val notifManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notifManager.cancel(Notification.FLAG_NO_CLEAR)

@@ -2,6 +2,7 @@ package com.teamfopo.fopo
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -10,17 +11,22 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v7.app.AppCompatActivity
 import android.util.Base64
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
+import com.teamfopo.fopo.fragments.CameraActivity
 import com.teamfopo.fopo.module.*
 import kotlinx.android.synthetic.main.activity_write.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -33,6 +39,7 @@ class WriteActivity : AppCompatActivity() {
     private var isPermission: Boolean? = true
     private var tempFile: File? = null
     private var image_bitmapToString: String? = null
+    private var zone_no: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +78,7 @@ class WriteActivity : AppCompatActivity() {
         var str_content = edit_oneLine.text.toString()
 
         var getImageUpload = modBoardProcess().Write()
-        var uploadResult = getImageUpload.execute(FOPOService.dataMemberVO!!.mem_no,"3","$str_content", "$getBitmapImageToString").get()
+        var uploadResult = getImageUpload.execute(FOPOService.dataMemberVO!!.mem_no,"$zone_no","$str_content", "$getBitmapImageToString").get()
 
         var brd_no = Integer.parseInt(uploadResult.trim())
 
@@ -98,7 +105,6 @@ class WriteActivity : AppCompatActivity() {
         }
 
         if (requestCode == PICK_FROM_ALBUM) {
-
             val photoUri = data!!.data
             Log.d(TAG, "PICK_FROM_ALBUM photoUri : " + photoUri!!)
 
@@ -120,6 +126,25 @@ class WriteActivity : AppCompatActivity() {
                 tempFile = File(cursor.getString(column_index))
                 Log.d(TAG, "tempFile Uri : " + Uri.fromFile(tempFile))
                 setImage()
+
+                val filepath = cursor.getString(column_index)
+
+                var arrDatas = modCameraProcess.getEXIFInfo("$filepath")
+
+                if ( arrDatas[0] != null && arrDatas[0].equals("Android Device") && arrDatas[1].equals("FOPO by FOPO TEAM") ) {
+
+                    val gps_latitude = modCameraProcess.convertToDegree("${arrDatas[3]}",4)
+                    val gps_longitude = modCameraProcess.convertToDegree("${arrDatas[4]}",3)
+
+                    var getZoneNumber = modBoardProcess().getZoneNumber()
+                    zone_no = getZoneNumber.execute("$gps_latitude", "$gps_longitude").get()
+
+                    Log.d("TESTA", "$zone_no")
+                    Log.d("TEST", "$gps_latitude")
+                    Log.d("TEST","$gps_longitude")
+                } else {
+                    showDialogBox("알림","포포앱에서 찍은 사진이 아닙니다.","확인", "")
+                }
             } finally {
                 cursor?.close()
             }
@@ -272,4 +297,18 @@ class WriteActivity : AppCompatActivity() {
         }
     }
 
+    fun showDialogBox(title: String, contents: String, strYes: String, strNo: String): Boolean {
+        var blSelect: Boolean = false
+        var builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.Theme_AppCompat_Light_Dialog_Alert))
+        builder.setTitle(title)
+        builder.setMessage(contents)
+        builder.setPositiveButton(strYes) { dialog, which ->
+            blSelect = true
+        }
+        builder.setNegativeButton(strNo) { dialog, which ->
+            blSelect = false
+        }
+        builder.show()
+        return blSelect
+    }
 }

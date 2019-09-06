@@ -274,7 +274,6 @@ class modBoardProcess {
         }
     }
 
-
     inner class getFriendArticles: AsyncTask<String, Long, Array<modListProcess>>() {
         override fun onPreExecute() {
             super.onPreExecute()
@@ -310,6 +309,35 @@ class modBoardProcess {
         }
 
         override fun onPostExecute(result: Array<modListProcess>?) {
+            super.onPostExecute(result)
+        }
+    }
+
+    inner class getZoneNumber: AsyncTask<String, Long, String>() {
+        override fun doInBackground(vararg params: String?): String {
+            var gps_latitude = params[0]
+            var gps_longitude = params[1]
+
+            var url = "http://106.10.51.32/process/board_process"
+            val requestBody: RequestBody = FormBody.Builder()
+                .add("type", "photozone")
+                .add("gps_latitude", "$gps_latitude")
+                .add("gps_longitude", "$gps_longitude")
+                .build()
+
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
+
+            val response: Response = client.newCall(request).execute()
+            var str = response.body()?.string()!!
+
+            return str
+        }
+
+        override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
         }
     }
