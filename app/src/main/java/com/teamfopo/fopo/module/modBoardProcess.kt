@@ -315,14 +315,14 @@ class modBoardProcess {
 
     inner class getZoneNumber: AsyncTask<String, Long, String>() {
         override fun doInBackground(vararg params: String?): String {
-            var gps_latitude = params[0]
-            var gps_longitude = params[1]
+            var tmpBrdNo = params[0]
+            //var gps_latitude = params[0]
+            //var gps_longitude = params[1]
 
             var url = "http://106.10.51.32/process/board_process"
             val requestBody: RequestBody = FormBody.Builder()
                 .add("type", "photozone")
-                .add("gps_latitude", "$gps_latitude")
-                .add("gps_longitude", "$gps_longitude")
+                .add("brd_no", "$tmpBrdNo")
                 .build()
 
             val client = OkHttpClient()

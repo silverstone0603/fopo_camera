@@ -20,7 +20,7 @@ import com.teamfopo.fopo.module.modListProcess
 
 class FopozoneActivity : Fragment(), View.OnClickListener {
 
-    private val TAG = "MainActivity"
+    private val TAG = "FopozoneActivity"
     private var trackableGestureDetector: GestureDetector? = null
     private var actLayoutInflater: LayoutInflater? = null
 
@@ -92,33 +92,38 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
         val inflater = actLayoutInflater!!.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         var glItem = viewRoot!!.findViewById(R.id.glBoardList) as GridLayout
 
-        for (i in 0..brdList.size-1) {
-            var test = brdList[i].brd_no
+        try {
+            for (i in 0..brdList.size - 1) {
+                var test = brdList[i].brd_no
 
-            //시스템 서비스에서 inflater객체 호출
-            // var context = parentFragment.context.getSystemService() as Context
-            inflater.inflate(R.layout.item_boardlist, glItem, true) //서브 xml을 메모리에 띄워 container에 추가한다
+                //시스템 서비스에서 inflater객체 호출
+                // var context = parentFragment.context.getSystemService() as Context
+                inflater.inflate(R.layout.item_boardlist, glItem, true) //서브 xml을 메모리에 띄워 container에 추가한다
 
-            //println(i)
-            //println(viewRoot.toString())
-            var imgBtnView = glItem.getChildAt(i + 1).findViewById(R.id.imgBtnView) as ImageButton
+                //println(i)
+                //println(viewRoot.toString())
+                var imgBtnView = glItem.getChildAt(i + 1).findViewById(R.id.imgBtnView) as ImageButton
 
-            var getBoardImage = modBoardProcess().GetImage()
-            var bm: Bitmap
-            bm = getBoardImage.execute(brdList[i].file_no).get()
-            imgBtnView.setImageBitmap(bm)
+                var getBoardImage = modBoardProcess().GetImage()
+                var bm: Bitmap
+                bm = getBoardImage.execute(brdList[i].file_no).get()
+                imgBtnView.setImageBitmap(bm)
 
-            imgBtnView.setOnClickListener {
-                Toast.makeText(context, "$test"+"번 글로 들어갑니다", Toast.LENGTH_SHORT).show()
+                imgBtnView.setOnClickListener {
+                    Toast.makeText(context, "$test" + "번 글로 들어갑니다", Toast.LENGTH_SHORT).show()
 
-                if(imgBtnView != null){
-                    val i = Intent(super.getContext(), ViewActivity::class.java)
-                    i.putExtra("m_select", test)
-                    startActivityForResult(i, 1)
+                    if (imgBtnView != null) {
+                        val i = Intent(super.getContext(), ViewActivity::class.java)
+                        i.putExtra("m_select", test)
+                        startActivityForResult(i, 1)
+                    }
+
                 }
 
             }
-
+        }catch(e: Exception){
+            Log.d(TAG, "ListView를 불러오는 도중 문제가 발생 했습니다 : "+e.printStackTrace())
+            Toast.makeText(viewRoot.context, "잘못된 사진 정보가 있어서 작업을 중단 했습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show()
         }
     }
 

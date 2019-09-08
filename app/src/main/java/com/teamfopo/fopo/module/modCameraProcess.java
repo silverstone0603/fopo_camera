@@ -42,6 +42,7 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
     private String strEXIF_Model = "Android Device";
     private String strEXIF_Software = "FOPO by FOPO TEAM";
     private String strEXIF_Orientation;
+    private String strEXIF_ZoneNo;
     private Double strEXIF_Latitude;
     private Double strEXIF_Longitude;
 
@@ -258,6 +259,7 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
                     exif.getAttribute(ExifInterface.TAG_MODEL),
                     exif.getAttribute(ExifInterface.TAG_SOFTWARE),
                     exif.getAttribute(ExifInterface.TAG_ORIENTATION),
+                    exif.getAttribute(ExifInterface.TAG_SUBJECT_LOCATION),
                     exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE),
                     exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)
             };
@@ -270,16 +272,17 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
     /**
      *  클래스에 EXIF 정보 추가
      */
-    public void setEXIF(Double latitude, Double longitude, String orientation) {
+    public void setEXIF(String orientation, String zone_no, Double latitude, Double longitude) {
         this.strEXIF_Latitude = latitude;
         this.strEXIF_Longitude = longitude;
         this.strEXIF_Orientation = orientation;
+        this.strEXIF_ZoneNo = zone_no;
     }
 
     /**
      *  이미지에 EXIF 정보 추가
      */
-    public void setEXIFInfo(String filePath, Double latitude, Double longitude, String orientation){
+    public void setEXIFInfo(String filePath, String orientation, String zone_no, Double latitude, Double longitude){
         if(!filePath.isEmpty() || filePath.equals("")) {
             Log.d(TAG, "EXIF 정보를 추가합니다.");
             String strlatitude = convertTagGPSFormat(latitude); // 위.경도의 실제값 그대로 Exif 정보에 쓸 수 없다. 규격이 있다. 때문에 규격대로 GPS정보를 인코딩 하는 과정이 필요한다.
@@ -291,6 +294,7 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
                 exif.setAttribute(ExifInterface.TAG_MODEL, strEXIF_Model);
                 exif.setAttribute(ExifInterface.TAG_SOFTWARE, strEXIF_Software);
                 exif.setAttribute(ExifInterface.TAG_ORIENTATION, orientation);
+                exif.setAttribute(ExifInterface.TAG_SUBJECT_LOCATION, strEXIF_ZoneNo);
                 exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, strlatitude);
                 exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, strlongtude);
                 exif.saveAttributes();
@@ -457,7 +461,6 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
 
                 Canvas canvas = new Canvas(bitmap);
                 canvas.drawBitmap(resizeBp, 0f, 0f,null);
-
             }
 
             //bitmap 을  byte array 로 변환
@@ -498,10 +501,9 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
                 Log.d(TAG, "사진 촬영(JPEG) - Bytes: " + data.length + " to "
                         + outputFile.getAbsolutePath());
 
-
                 // EXIF 정보 추가
-                setEXIFInfo(outputFile.getPath(), strEXIF_Latitude, strEXIF_Longitude, strEXIF_Orientation);
-                Log.d(TAG, "EXIF 수정할 사진 경로 :"+outputFile.getPath());
+                setEXIFInfo(outputFile.getPath(), strEXIF_Orientation, strEXIF_ZoneNo, strEXIF_Latitude, strEXIF_Longitude);
+                Log.d(TAG, "EXIF가 수정된 사진 경로 :"+outputFile.getPath());
 
                 mCamera.startPreview();
 

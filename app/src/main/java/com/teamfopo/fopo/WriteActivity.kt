@@ -133,15 +133,15 @@ class WriteActivity : AppCompatActivity() {
 
                 if ( arrDatas[0] != null && arrDatas[0].equals("Android Device") && arrDatas[1].equals("FOPO by FOPO TEAM") ) {
 
-                    val gps_latitude = modCameraProcess.convertToDegree("${arrDatas[3]}",4)
-                    val gps_longitude = modCameraProcess.convertToDegree("${arrDatas[4]}",3)
+                    //val gps_latitude = modCameraProcess.convertToDegree("${arrDatas[3]}",4)
+                    //val gps_longitude = modCameraProcess.convertToDegree("${arrDatas[4]}",3)
+
+                    val tmpBrdNo = arrDatas[3]
 
                     var getZoneNumber = modBoardProcess().getZoneNumber()
-                    zone_no = getZoneNumber.execute("$gps_latitude", "$gps_longitude").get()
+                    zone_no = getZoneNumber.execute("$tmpBrdNo").get()
 
                     Log.d("TESTA", "$zone_no")
-                    Log.d("TEST", "$gps_latitude")
-                    Log.d("TEST","$gps_longitude")
                 } else {
                     showDialogBox("알림","포포앱에서 찍은 사진이 아닙니다.","확인", "")
                 }

@@ -447,7 +447,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
                 photoView = viewCamera!!.findViewById(R.id.fraPoseSet) as ImageView
                 initButton()
 
-                myCameraPreview!!.setEXIF(latitude, longtitude, "")
+                myCameraPreview!!.setEXIF( "", zone_no.toString(), latitude, longtitude)
 
                 dialog.cancel()
             }
