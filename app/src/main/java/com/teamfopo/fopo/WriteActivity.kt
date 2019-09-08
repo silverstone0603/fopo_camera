@@ -143,7 +143,9 @@ class WriteActivity : AppCompatActivity() {
 
                     Log.d("TESTA", "$zone_no")
                 } else {
-                    showDialogBox("알림","포포앱에서 찍은 사진이 아닙니다.","확인", "")
+                    //showDialogBox("알림","FOPO로 촬영된 사진이 아닙니다.","확인", "")
+                    Toast.makeText(this,"FOPO로 촬영된 사진만 업로드할 수 있습니다.", Toast.LENGTH_LONG).show()
+                    finish()
                 }
             } finally {
                 cursor?.close()
