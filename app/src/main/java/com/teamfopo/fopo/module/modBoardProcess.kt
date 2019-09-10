@@ -7,7 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonParser
 import okhttp3.*
 
-data class modListProcess(var brd_no: Int, var file_no: Int)
+data class modListProcess(var zone_placename: String, var brd_no: Int, var file_no: Int)
 data class modViewProcess(var mem_nick: String, var file_no: Int, var brd_content: String, var brd_like: Int)
 data class modReplyProcess(var re_no: Int, var mem_no: Int, var mem_nick: String, var rre_no: Int, var re_comment: String, var re_date: String)
 

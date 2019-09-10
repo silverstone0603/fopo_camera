@@ -17,6 +17,7 @@ import com.teamfopo.fopo.R
 import com.teamfopo.fopo.ViewActivity
 import com.teamfopo.fopo.module.modBoardProcess
 import com.teamfopo.fopo.module.modListProcess
+import kotlinx.android.synthetic.main.content_fopozone.*
 
 class FopozoneActivity : Fragment(), View.OnClickListener {
 
@@ -52,9 +53,6 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
         initFragment(viewRoot)
 
         return viewRoot
-
-
-
     }
 
     fun initFragment(viewRoot: View){
@@ -82,6 +80,7 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
 
             activity!!.runOnUiThread{
                 // Main Thread가 처리
+                addTitle_textView.text = brdList[0].zone_placename
                 getListView(viewRoot, brdList)
             }
 
