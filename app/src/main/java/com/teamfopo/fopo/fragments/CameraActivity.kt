@@ -456,7 +456,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
 
                 (activity as MainActivity).nav_view.setCheckedItem(R.id.nav_fopomap)
                 (activity as MainActivity).supportActionBar?.title = "포포맵"
-                (activity as MainActivity).setFragment(MainActivity().actFopomap, "fopozone")
+                (activity as MainActivity).setFragment(MainActivity().actFopomap, "fopozone", "$zone_no")
 
                 dialog.cancel()
             }

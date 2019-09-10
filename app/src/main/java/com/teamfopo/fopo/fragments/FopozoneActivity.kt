@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.Toast
+import com.google.a.b.a.a.a.e
 import com.teamfopo.fopo.R
 import com.teamfopo.fopo.ViewActivity
 import com.teamfopo.fopo.module.modBoardProcess
@@ -121,7 +122,7 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
 
             }
         }catch(e: Exception){
-            Log.d(TAG, "ListView를 불러오는 도중 문제가 발생 했습니다 : "+e.printStackTrace())
+            Log.d(TAG, "ListView를 불러오는 도중 문제가 발생 했습니다 : "+ e.printStackTrace())
             Toast.makeText(viewRoot.context, "잘못된 사진 정보가 있어서 작업을 중단 했습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show()
         }
     }
