@@ -164,7 +164,7 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
         Log.d("ARCore","FOPO 서버로부터 포포존 정보를 성공적으로 가져왔습니다.")
 
         // 카메라 및 위치 권한 가져오기
-        ARLocationPermissionHelper.requestPermission(this.activity)
+        ARLocationPermissionHelper.requestPermission(super.getActivity())
 
         // 거리 표시 레이아웃 추가
         try{
@@ -516,6 +516,14 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
     private fun initButton() {
         val parameters: Camera.Parameters = mCamera?.parameters!!
         initCameraFragment()
+        fopo_camera_view?.setOnClickListener{
+            if(myCameraPreview?.setFocus() == true){
+                Toast.makeText(viewCamera!!.context, "자동으로 초점을 조정했습니다.", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(viewCamera!!.context, "초점이 맞지 않습니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        }
+
         btnCapture?.setOnClickListener {
             if(myCameraPreview?.takePicture() == true){
                 Toast.makeText(viewCamera!!.context, "사진이 저장 되었습니다.", Toast.LENGTH_LONG).show();
@@ -674,6 +682,12 @@ class CameraActivity : Fragment(), View.OnClickListener, Scene.OnUpdateListener,
         myCameraPreview = modCameraProcess(this.context, mCamera ,CAMERA_FACING)
 
         fopo_camera_view.addView(myCameraPreview)
+
+        if(myCameraPreview?.setFocus() == true){
+            Toast.makeText(viewCamera!!.context, "자동 초점 모드를 활성화 하였습니다.", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(viewCamera!!.context, "사진 촬영 시 다시 자동으로 초점을 조정합니다.", Toast.LENGTH_LONG).show();
+        }
 
     }
 

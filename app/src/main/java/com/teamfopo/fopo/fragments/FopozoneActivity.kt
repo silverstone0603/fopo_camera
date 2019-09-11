@@ -14,6 +14,7 @@ import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.Toast
 import com.google.a.b.a.a.a.e
+import com.teamfopo.fopo.MainActivity
 import com.teamfopo.fopo.R
 import com.teamfopo.fopo.ViewActivity
 import com.teamfopo.fopo.module.modBoardProcess
@@ -76,15 +77,23 @@ class FopozoneActivity : Fragment(), View.OnClickListener {
 
     inner class ThreadClass: Thread() {
         override fun run() {
-            var getBoardList = modBoardProcess().GetList()
-            var brdList = getBoardList.execute(zone_no).get()
+            activity!!.runOnUiThread {
+                try {
+                    var getBoardList = modBoardProcess().GetList()
+                    var brdList = getBoardList.execute(zone_no).get()
 
-            activity!!.runOnUiThread{
-                // Main Thread가 처리
-                addTitle_textView.text = brdList[0].zone_placename
-                getListView(viewRoot, brdList)
+                    if (brdList.size > 0) {
+                        addTitle_textView.text = brdList[0].zone_placename
+                        getListView(viewRoot, brdList)
+                    } else {
+                        Log.d(TAG, "업로드된 사진이 없습니다.")
+                        addTitle_textView.text = "포포존에 사진이 없습니다."
+                    }
+                    viewRoot.invalidate()
+                } catch (e: Exception) {
+                    Log.d(TAG, "업로드된 사진이 없거나 다른 이유로 인해 오류가 발생했습니다 : " + e.printStackTrace())
+                }
             }
-
         }
     }
 

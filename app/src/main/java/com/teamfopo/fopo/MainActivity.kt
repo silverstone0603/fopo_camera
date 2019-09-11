@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
@@ -48,6 +49,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -96,6 +99,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val headerView = navView.getHeaderView(0)
         val txtNavNick = headerView.findViewById<View>(R.id.txtNavNick) as TextView
         txtNavNick.text = "${dataMemberVO!!.mem_nick}님, 안녕하세요!"
+
     }
 
     override fun onClick(v: View?) {
@@ -227,6 +231,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bundle.putString("zone_no", "$zone_no")
         fragment.arguments = bundle
 
+        actCamera.onStop()
         setFragment(fragment)
     }
 

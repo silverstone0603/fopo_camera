@@ -40,7 +40,7 @@ class modPhotoProcess {
 
         override fun onPostExecute(result: Array<PhotozoneDTO>?) {
             super.onPostExecute(result)
-            Log.d("ㅇㅇ","요청 성공쓰 ^^")
+            Log.d("PhotozoneDTO","데이터를 정상적으로 처리하였습니다.")
         }
     }
 }

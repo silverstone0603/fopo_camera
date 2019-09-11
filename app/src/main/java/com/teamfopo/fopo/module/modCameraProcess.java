@@ -232,6 +232,22 @@ public class modCameraProcess extends SurfaceView implements SurfaceHolder.Callb
     /**
      *  이미지 캡처
      */
+    public boolean setFocus(){
+        try{
+            mCamera.autoFocus(mAutoFocus);
+            if(blIsTakePhoto == true) {
+                return true;
+            }else {
+                return false;
+            }
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    /**
+     *  이미지 캡처
+     */
     public boolean takePicture(){
         try{
             mCamera.autoFocus(mAutoFocus);
