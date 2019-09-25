@@ -39,5 +39,5 @@ NAVER Cloud Platform (CentOS 7.2 64bit, MySQL Included)
 
 ------------------------------------------------------------------------------------
 
-FOPO Framework에 대한 자세한 내용은 FOPO Framework GitHub 페이지를 확인해주시면 감사하겠습니다.<br>
+FOPO Framework에 대한 자세한 내용은 <a href="https://github.com/silverstone0603/fopo_framework">FOPO Framework GitHub 페이지</a>를 확인해주시면 감사하겠습니다.<br>
 감사합니다.
